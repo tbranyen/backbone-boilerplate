@@ -1,0 +1,34 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>Your Application Test Suite</title>
+  <link rel="stylesheet" href="vendor/qunit.css" type="text/css" media="screen" />
+
+  <!-- Vendor deps, non-lib -->
+  <script src="../assets/js/libs/jquery.js"></script>
+  <script src="vendor/qunit.js"></script>
+  <script src="vendor/jslitmus.js"></script>
+
+  <!-- App dependencies, libs -->
+  
+  <script src="../assets/js/libs/underscore.js"></script>
+  <script src="../assets/js/libs/backbone.js"></script>
+  
+  <!-- Include your application load here! -->
+  <script src="../app/index.js"></script>
+  
+  <!-- load test modules -->
+  <script src="unit/core.js"></script>
+  
+</head>
+<body>
+  <div class="dataset-test">
+    <h1 id="qunit-header">Your Application Test Suite</h1>
+    <h2 id="qunit-banner"></h2>
+    <h2 id="qunit-userAgent"></h2>
+    <ol id="qunit-tests"></ol>
+    <br />
+    <h1 class="qunit-header">Speed Suite</h1>
+  </div>
+</body>
+</html>

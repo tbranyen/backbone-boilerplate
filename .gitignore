@@ -1,0 +1,4 @@
+dist/
+npm-debug.log
+node_modules/**/out
+node_modules/**/build
