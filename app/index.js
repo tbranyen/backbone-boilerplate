@@ -55,15 +55,22 @@ jQuery(function($) {
   // Defining the application router, you can attach sub routers here.
   var Router = Backbone.Router.extend({
     routes: {
-      "": "index"
+      "": "index",
+      ":hash": "index"
     },
 
-    index: function() {
+    index: function(hash) {
       var tutorial = new Example.Views.Tutorial();
 
       // Attach the tutorial to the DOM
       tutorial.render(function(el) {
         $("#main").html(el);
+
+        // Fix for hashes in pushState
+        if (hash) {
+          Backbone.history.navigate("", false);
+          location.hash = hash;
+        }
       });
     }
   });
@@ -77,7 +84,7 @@ jQuery(function($) {
 
   // All navigation that is relative should be passed through the navigate
   // method, to be processed by the router.
-  $(document).delegate("a", "click", function(evt) {
+  $(document).delegate("a:not([data-undeleg])", "click", function(evt) {
     // Get the anchor href and protcol
     var href = $(this).attr("href");
     var protocol = this.protocol + "//";

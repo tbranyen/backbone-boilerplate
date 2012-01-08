@@ -32,8 +32,8 @@ There are several ways to install and intimately enjoy the benefits Backbone
 Boilerplate provides.  The easiest is to download an archive and extract
 into your new application folder:
 
-* **[Download ZIP](https://github.com/tbranyen/backbone-boilerplate/zipball/build)**
-* **[Download TAR](https://github.com/tbranyen/backbone-boilerplate/tarball/build)**
+* **[Download ZIP](https://github.com/tbranyen/backbone-boilerplate/zipball/master)**
+* **[Download TAR](https://github.com/tbranyen/backbone-boilerplate/tarball/master)**
 
 If you would rather use git, you can simply:
 
@@ -126,7 +126,7 @@ inside `app/index.js` which attaches a click handler that monitors all links and
 will automatically route all *relative* urls through your Backbone application.
 
 It is designed to only route urls that are defined inside your `app.Router` and
-not Routers that many be defined elsewhere.
+not Routers that may be defined elsewhere.
 
 *Absolute* urls such as `http://google.com/` will be routed normally.  So if
 your application contains links to pages or files that you do not want to 

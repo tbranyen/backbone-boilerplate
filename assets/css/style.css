@@ -211,9 +211,30 @@ td { vertical-align: top; }
   font-size: 14px;
 }
 
+#main a {
+  color: #00CCFF;
+}
+
+#main a:hover {
+  color: #FE57A1;
+}
+
 #main img {
   width: 320px;
   height: auto;
+}
+
+#main p {
+  line-height: 28px;
+}
+
+#main ul.nested {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+#main ul li {
+  line-height: 28px;
 }
 
 #main header h1 {
@@ -232,20 +253,12 @@ td { vertical-align: top; }
   margin-bottom: 0;
   color: #00CCFF;
   display: inline-block;
+  font-size: 28px;
 }
 
 #main .topic {
   color: #CCC;
 }
-
-
-
-
-
-
-
-
-
 
 
 
