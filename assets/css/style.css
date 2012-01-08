@@ -203,12 +203,40 @@ td { vertical-align: top; }
 
 
 /* ==|== primary styles =====================================================
-   Author:
+   Author: Backbone Boilerplate <Change to your Name>
    ========================================================================== */
 
+#main {
+  margin: 40px;
+  font-size: 14px;
+}
 
+#main img {
+  width: 320px;
+  height: auto;
+}
 
+#main header h1 {
+  margin: 15px;
+  display: inline-block;
+  color: #333;
+}
 
+#main header h2:not(.congrats) {
+  color: #666;
+  margin: 0; padding: 0;
+}
+
+#main header .congrats {
+  padding-bottom: 0;
+  margin-bottom: 0;
+  color: #00CCFF;
+  display: inline-block;
+}
+
+#main .topic {
+  color: #CCC;
+}
 
 
 
