@@ -1,5 +1,4 @@
 dist/
 npm-debug.log
-node_modules/**/out
 .lock-wscript
-build/node_modules
+build/node_modules/grunt/node_modules/zlib.sync/build

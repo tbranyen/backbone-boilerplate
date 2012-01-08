@@ -6,22 +6,33 @@ config.init({
   },
 
   concat: {
-    "dist/debug/libs.js": ["assets/js/libs/*.js"],
-    "dist/debug/modules.js": ["app/modules/*.js"]
+
+    // The core library files
+    "dist/debug/js/libs.js": [
+      "assets/js/libs/jquery.js",
+      "assets/js/libs/underscore.js",
+      "assets/js/libs/backbone.js"
+    ],
+
+    // Application files
+    "dist/debug/js/app.js": ["app/*.js", "app/modules/*.js"],
+
+    // Any CSS files
+    "dist/debug/css/style.css": ["assets/css/*.css"]
   },
   
   jst: {
-    "dist/debug/templates.js": ["app/templates/*.html"]
+    "dist/debug/js/templates.js": ["app/templates/*.html"]
   },
 
   min: {
-    "dist/release/libs.min.js": ["dist/debug/libs.js"],
-    "dist/release/modules.min.js": ["dist/debug/modules.js"],
-    "dist/release/templates.min.js": ["dist/debug/templates.js"]
+    "dist/release/js/libs.js": ["dist/debug/js/libs.js"],
+    "dist/release/js/app.js": ["dist/debug/js/app.js"],
+    "dist/release/js/templates.js": ["dist/debug/js/templates.js"]
   },
 
   mincss: {
-    "dist/release/style.css": ["assets/css/style.css"]
+    "dist/release/css/style.css": ["dist/debug/css/style.css"]
   },
 
   watch: {

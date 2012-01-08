@@ -15,20 +15,24 @@
 //
 (function(Example) {
 
-  Example.Model = Backbone.Model.extend({
-    /* ... */
+  Example.Model = Backbone.Model.extend({ /* ... */ });
+  Example.Collection = Backbone.Collection.extend({ /* ... */ });
+  Example.Router = Backbone.Router.extend({ /* ... */ });
+
+  // Render the template
+  Example.Views.Tutorial = Backbone.View.extend({
+    template: "app/templates/example.html",
+
+    render: function(done) {
+      var view = this;
+
+      namespace.fetchTemplate(this.template, function(tmpl) {
+        view.el.innerHTML = tmpl();
+
+        done(view.el);
+      });
+    }
   });
 
-  Example.Collection = Backbone.Collection.extend({
-    /* ... */
-  });
-
-  Example.Views.Detailed = Backbone.View.extend({
-    /* ... */
-  });
-
-  Example.Router = Backbone.Router.extend({
-    /* ... */
-  });
 
 })(namespace.module("example"));

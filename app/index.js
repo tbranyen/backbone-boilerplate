@@ -20,6 +20,23 @@ this.namespace = {
     };
   }(),
 
+  // This is useful when developing if you don't want to use a
+  // build process every time you change a template.
+  //
+  // Delete if you are using a different template loading method.
+  fetchTemplate: function(path, done) {
+    // Should be an instant synchronous way of getting the template, if it
+    // exists in the JST object.
+    if (this.JST && this.JST[path]) {
+      return done(this.JST[path]);
+    }
+
+    // Fetch it asynchronously if not available from JST
+    return $.get(path, function(contents) {
+      done(_.template(contents));
+    });
+  },
+
   // Keep active application instances namespaced under an app object.
   app: _.extend({}, Backbone.Events)
 };
@@ -31,6 +48,32 @@ jQuery(function($) {
 
   // Shorthand the application namespace
   var app = namespace.app;
+
+  // Include the example module
+  var Example = namespace.module("example");
+
+  // Defining the application router, you can attach sub routers here.
+  var Router = Backbone.Router.extend({
+    routes: {
+      "": "index"
+    },
+
+    index: function() {
+      var tutorial = new Example.Views.Tutorial();
+
+      // Attach the tutorial to the DOM
+      tutorial.render(function(el) {
+        $("#main").html(el);
+      });
+    }
+  });
+  
+  // Define your master router on the application namespace and trigger all
+  // navigation from this instance.
+  app.router = new Router();
+
+  // Trigger the initial route and enable HTML5 History API support
+  Backbone.history.start({ pushState: true });
 
   // All navigation that is relative should be passed through the navigate
   // method, to be processed by the router.
@@ -51,25 +94,4 @@ jQuery(function($) {
       app.router.navigate(href, true);
     }
   });
-
-  // Defining the application router, you can attach sub routers here, but
-  // typically if you're going to work with more than one router, you will
-  // use something like backbone.routemanager.
-  var Router = Backbone.Router.extend({
-    routes: {
-      "": "index"
-    },
-
-    index: function() {
-      //alert("Welcome to the homepage");
-    }
-  });
-  
-  // Define your master router on the application namespace and trigger all
-  // navigation from this instance.
-  app.router = new Router();
-
-  // Trigger the initial route and enable HTML5 History API support
-  Backbone.history.start({ pushState: true });
-
 });
