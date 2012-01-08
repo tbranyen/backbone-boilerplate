@@ -9,9 +9,7 @@ Organize your application in a logical filesystem, develop your
 Models/Collections/Views/Routers inside modules, and build knowing you have
 efficient code that will not bottleneck your users.
 
-Special Thanks to: [cowboy](http://github.com/cowboy),
-[iros](http://github.com/iros), [nimbupani](http://github.com/nimbupani) and
-[wookiehangover](http://github.com/wookiehangover)
+Special thanks [to the contributors](https://github.com/tbranyen/backbone-boilerplate/contributors)
 
 ## Provides ##
 
