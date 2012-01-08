@@ -9,7 +9,7 @@
 // For example: Renaming this to use the module name: Project
 //
 // Line 16: (function(Project) {
-// Line 34: })(namespace.module("project"));
+// Line 38: })(namespace.module("project"));
 //
 // Line 18: Project.Model = Backbone.Model.extend({
 //

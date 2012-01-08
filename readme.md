@@ -19,7 +19,8 @@ Special Thanks to: [cowboy](http://github.com/cowboy),
 * Elegant filesystem structure for
   + App code, assets, tests, and distribution
 * Snippets to make common tasks easier
-  + For modules, HTML5 History API/Hash navigation, and application events
+  + For modules, HTML5 History API/Hash navigation, loading templates and
+  application events
 * Very flexible and pluginable build process
   + Concatenate and minify all your libraries, application code, templates and
   CSS
