@@ -1,10 +1,6 @@
 var grunt = require("grunt");
 
-// Invoke the builder!
-grunt.tasks([], {
-
+grunt.cli({
   config: "build/config.js",
-
   tasks: ["build/tasks"]
-
-k);
+});
