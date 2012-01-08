@@ -2,7 +2,7 @@
 config.init({
 
   lint: {
-    files: ["build/config.js"]
+    files: ["build/config.js", "app/modules/*.js"]
   },
 
   concat: {
@@ -22,6 +22,11 @@ config.init({
 
   mincss: {
     "dist/release/style.css": ["assets/css/style.css"]
+  },
+
+  watch: {
+    files: ["assets/**/*", "app/**/*"],
+    tasks: "lint:files concat jst"
   }
 
 });

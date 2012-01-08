@@ -7,4 +7,4 @@ grunt.tasks([], {
 
   tasks: ["build/tasks"]
 
-});
+k);
