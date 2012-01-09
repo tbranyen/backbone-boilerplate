@@ -271,6 +271,9 @@ td { vertical-align: top; }
   color: #CCC;
 }
 
+#main .clues {
+  color: #FE57A1;
+}
 
 
 /* ==|== media queries ======================================================

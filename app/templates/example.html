@@ -20,6 +20,15 @@
     <li><a data-bypass href="#writing-app">Writing your application</a>
       <ul class="nested">
         <li><a data-bypass href="#cleaning">Cleaning out default files and code</a>
+        <ul class="nested">
+          <li><a data-bypass href="#git-history">Removing the Git history</a>
+          <li><a data-bypass href="#test-dir">Removing the test directory</a>
+          <li><a data-bypass href="#build-process">Removing the build process</a>
+          <li><a data-bypass href="#favicon">Changing the Favicon</a>
+          <li><a data-bypass href="#app-code">Removing default application code</a>
+          <li><a data-bypass href="#default-routes">Removing the default routes</a>
+          <li><a data-bypass href="#default-assets">Removing default assets</a>
+        </ul>
         <li><a data-bypass href="#namespace">Setting your namespace</a>
         <li><a data-bypass href="#modules">Creating a module</a>
         <li><a data-bypass href="#templates">Working with templates</a>
@@ -86,11 +95,13 @@
   will need to clean out all the existing defaults that are in the boilerplate are necessary to display this tutorial.
   </p>
 
+  <p class="clues"><b>Strongly recommend you read through this tutorial before cleaning out any files that may hold clues on how to use the Boilerplate.</b></p>
+
   <h3 id="cleaning">Cleaning out default files and code</h3>
   <p>There are several places where customization may be required.</p>
 
   <ul>
-    <li><h4>Removing the Git history</h4>
+    <li><h4 id="git-history">Removing the Git history</h4>
       <p>If you cloned the Backbone Boilerplate with Git, you should delete the git directory and then initialize your own Git history:
 
       <pre><code>
@@ -99,10 +110,10 @@
       </code></pre>
       </p>
 
-    <li><h4>Removing the test directory</h4>
+    <li><h4 id="test-dir">Removing the test directory</h4>
       <p>If you are not planning on testing your application with QUnit you should delete this directory.</p>
 
-    <li><h4>Removing the build process</h4>
+    <li><h4 id="build-process">Removing the build process</h4>
       <p>If you are not planning on using the provided build tool, delete the <code>build</code> folder.  It contains a lot of unnecessary code and
       Node.js modules that you will not need.  You should also clear out the commented out script tags inside of <code>index.html</code>:
       
@@ -121,14 +132,14 @@
       </code></pre>
       </p>
 
-    <li><h4>Changing the Favicon</h4>
+    <li><h4 id="favicon">Changing the Favicon</h4>
       <p>At the root level of the project simply change the <code>favicon.ico</code> file to point to your own branded icon.</p>
 
-    <li><h4>Removing default application code</h4>
+    <li><h4 id="app-code">Removing default application code</h4>
       <p>This tutorial is rendered in the <code>app/modules/example.js</code> file and written in <code>app/modules/templates/example.html</code>
       both of these files are safe to remove.</p>
 
-    <li><h4>Removing the default routes</h4>
+    <li><h4 id="default-routes">Removing the default routes</h4>
       <p>Routes are defined in the <code>app/index.js</code> file.  Familiarize yourself with it's contents.  You'll notice the default router has two existing rotues and callback defined, reset it to:
 
       <pre><code>
@@ -155,8 +166,8 @@
       </code></pre>
       </p>
   
-    <li><h4>Removing default assets</h4>
-      <p>The default styles for this tutorial are stored in <code>assets/css/style.css</code>.  You will probably want to remove these since they only make sense for this specific page.  They start on line 209.  With the following H5BP header:
+    <li><h4 class="default-assets">Removing default assets</h4>
+      <p>The default styles for this tutorial are stored in <code>assets/css/style.css</code>.  You will probably want to remove these since they only make sense for this specific page.  They start on <code>Line 209</code>.  With the following H5BP header:
 
       <pre><code>
     /* ==|== primary styles =====================================================
@@ -171,14 +182,26 @@
   </ul>
 
   <h3 id="namespace">Setting your namespace</h3>
-  <p>
+  <p>This is a very important starting step to creating your application.  This brands the application to your name and makes
+  it something identifiable to new developers.  To set your own namespace, simply open the <code>app/index.js</code> file and
+  make the following modifications:
+
+    First change the name of the namespace, this is defined on <code>Line 4</code>
     <pre><code>
-  mynamespace = {
-    a: function() {
-      
-    }
-  };
+  this.myapp = {
+    // Assist with code organization, by breaking up logical components of code
+    // into modules.
+    module: function() {
     </code></pre>
+    </p>
+
+    <p>Once you've set the name, you'll want to change the reference on <code>Line 50</code> to:
+    
+    <pre><code>
+  // Shorthand the application namespace
+  var app = this.myapp;
+    </code></pre>
+    </p>
   </p>
 
   <h3 id="modules">Creating a module</h3>
