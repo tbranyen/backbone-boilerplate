@@ -14,6 +14,9 @@ dir && site.use("/assets/css", express.static(dir + "/css"));
 site.use("/app", express.static("./app"));
 site.use("/assets", express.static("./assets"));
 
+// Serve favicon.ico
+site.use(express.favicon("./favicon.ico"));
+
 // Ensure all routes go home, client side app..
 site.get("*", function(req, res) {
   fs.createReadStream("./index.html").pipe(res);

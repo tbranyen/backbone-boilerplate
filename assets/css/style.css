@@ -212,14 +212,14 @@ td { vertical-align: top; }
 }
 
 #main pre {
-  border: 2px solid #FE57A1;
   min-width: 320px;
   border-radius: 10px;
-  color: #888;
-  font-weight: bold;
-  font-size: 14px;
+  color: #333;
+  font-weight: normal;
+  font-size: 12px;
   display: inline-block;
   padding-right: 40px;
+  background: #F8FAFC;
 }
 
 #main a {
