@@ -211,6 +211,17 @@ td { vertical-align: top; }
   font-size: 14px;
 }
 
+#main pre {
+  border: 2px solid #FE57A1;
+  min-width: 320px;
+  border-radius: 10px;
+  color: #888;
+  font-weight: bold;
+  font-size: 14px;
+  display: inline-block;
+  padding-right: 40px;
+}
+
 #main a {
   color: #00CCFF;
 }
