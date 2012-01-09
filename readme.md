@@ -19,7 +19,7 @@ Special thanks [to the contributors](https://github.com/tbranyen/backbone-boiler
 * Snippets to make common tasks easier
   + For modules, HTML5 History API/Hash navigation, loading templates and
   application events
-* Very flexible and pluginable build process
+* Very flexible and pluginable build process that works in Windows! 
   + Concatenate and minify all your libraries, application code, templates and
   CSS
   + Compiles underscore templates out of the box
@@ -147,23 +147,8 @@ all requests in your production server to achieve this same effect.
 
 ## Build Process ##
 
-*Version requirement: This build tool will only work on Node.js 0.6 and up.*
-
 The Backbone Boilerplate build process is a state-of-the-art task driven
 Node.js application that utilizes @cowboy's grunt project.
-
-**Unfortunately due to limitations with cross compiling Node.js native
-extensions, this build tool is only available for Mac OS X/Linux/Unix users.**
-
-Before you can use the build tool, you will need to run the NPM rebuild script
-for the native modules:
-
-``` bash
-cd build
-npm rebuild
-```
-
-Once this script finishes you are ready to go!
 
 To run the defaults, execute the following command from the project root,
 and *not from inside the build folder*.
