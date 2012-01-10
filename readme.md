@@ -51,6 +51,17 @@ If not, you can simply delete the build folder.
 Navigate to: http://nodejs.org/ and click Download.  Once you've downloaded
 scroll down to the Build section to see how to configure and use it.
 
+## Tutorial ##
+
+Once you have the boilerplate downloaded and extracted, run the following:
+
+``` bash
+node build/server
+```
+
+And launch your web browser to <code>http://localhost:8000/</code>, this will
+load up the tutorial.
+
 ## HTML5 Boilerplate ##
 
 This boilerplate started with an HTML5 Boilerplate base.  It has been stripped
