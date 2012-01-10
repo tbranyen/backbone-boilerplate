@@ -1,4 +1,7 @@
-// Add your custom task options here...
+// This is the main Backbone Boilerplate build configuration file.
+//
+// This is a JavaScript file, you can define any functions you would like in
+// here.
 config.init({
 
   lint: {
@@ -37,10 +40,19 @@ config.init({
 
   watch: {
     files: ["assets/**/*", "app/**/*"],
-    tasks: "lint:files concat jst"
+    tasks: "lint:files concat jst",
+
+    min: {
+      files: ["assets/**/*", "app/**/*"],
+      tasks: "default"
+    }
+  },
+
+  clean: {
+    folder: "dist/"
   }
 
 });
 
 // Run the following tasks...
-task.registerTask("default", "lint:files concat jst min mincss");
+task.registerTask("default", "clean lint:files concat jst min mincss");

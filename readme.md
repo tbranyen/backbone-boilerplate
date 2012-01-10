@@ -55,6 +55,17 @@ If not, you can simply delete the build folder.
 Navigate to: http://nodejs.org/ and click Download.  Once you've downloaded
 scroll down to the Build section to see how to configure and use it.
 
+## Tutorial ##
+
+Once you have the boilerplate downloaded and extracted, run the following:
+
+``` bash
+node build/server
+```
+
+And launch your web browser to <code>http://localhost:8000/</code>, this will
+load up the tutorial.
+
 ## HTML5 Boilerplate ##
 
 This boilerplate started with an HTML5 Boilerplate base.  It has been stripped
@@ -149,6 +160,18 @@ This will spawn up an HTTP server on port `8000`.  This server is intended
 for development and not production.  You should use url rewriting or forwarding
 all requests in your production server to achieve this same effect. 
 
+### Serving the built assets ###
+
+If you are using the build tool in conjunction with this development server
+you can optionally update the `index.html` file to remove the existing script
+tags and uncomment out the scripts tag at the bottom to load the `dist/debug`
+or `dist/release` assets.  You can achieve this by specifying either **debug**
+or **release** after the server command, like so:
+
+``` bash
+node build/server release
+```
+
 ## Build Process ##
 
 The Backbone Boilerplate build process is a state-of-the-art task driven
@@ -169,6 +192,25 @@ files inside the `dist/release` folder.
 To customize and configure the build tool, open `build/config.js` and tweak
 the settings.
 
+If you are perpetually working on the application and making many changes, you
+may find it convenient to have the build process watch your directory structure
+and automatically re-run the tasks after a file has changed.
+
+Use the following command to build to the debug folder:
+
+``` bash
+node build watch
+```
+
+Use the following command to build to the debug and release folders:
+
+``` bash
+node build watch:min
+```
+
+These watch commands can operate in parallel to the above development server
+for an efficient work process of editting files and testing the output.
+
 ### Additional Build Tasks ###
 
 The build process incorporates a plugin architecture that makes adding premade
@@ -179,6 +221,10 @@ or custom-built tasks very easy.
 To install a custom task, simply copy the JavaScript file into the `build/tasks`
 folder.  If the task is an archive simply extract it into the same folder.
 
+After the task has been loaded into the tasks directory, you will need to
+configure it in `build/config.js` per the task instructions.
+
 #### Creating custom tasks ####
 
-Tutorial coming Soon!
+Until proper tutorials and documentation have been created for Grunt, look
+at the `build/tasks/__template.js` file for inspiration =)

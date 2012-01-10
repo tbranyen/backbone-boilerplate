@@ -166,7 +166,7 @@
       </code></pre>
       </p>
   
-    <li><h4 class="default-assets">Removing default assets</h4>
+    <li><h4 id="default-assets">Removing default assets</h4>
       <p>The default styles for this tutorial are stored in <code>assets/css/style.css</code>.  You will probably want to remove these since they only make sense for this specific page.  They start on <code>Line 209</code>.  With the following H5BP header:
 
       <pre><code>
@@ -205,30 +205,139 @@
   </p>
 
   <h3 id="modules">Creating a module</h3>
-  <p>Placeholder</p>
+  <p>Following the Bocoup post on <a data-bypass target="_blank" href="http://weblog.bocoup.com/organizing-your-backbone-js-application-with-modules">Organizing Your Backbone.js Application With Modules</a> this boilerplate provides the same module definition structure.
+
+  Modules are placed in the <code>app/modules/</code> directory.  There is an example module
+  there named: <code>example.js</code>.  The actual module definition function is located
+  inside the <code>app/index.js</code> file.  You create and reference modules with the same
+  function call:  <code>namespace.module(&quot;&lt;module_name&gt;&quot;)</code>.
+
+  Typically a module contains a single Model/Collection/Router and many Views.
+  Therefore the returned module object is empty except for a Views object
+  property that can be used to attach many Views to, like:
+
+  <pre><code>
+  MyModule.Views.Detailed = Backbone.View.extend({ /* ... */ });
+
+  MyModule.Views.Main = Backbone.View.extend({ /* ... */ });
+  </code></pre>
+  </p>
+
+  <p>
+  Attaching Models/Collections/Routers happen on the same level of the module,
+  like so:
+
+  <pre><code>
+  MyModule.Model = Backbone.Model.extend({ /* ... */ });
+
+  MyModule.Router = Backbone.Router.extend({ /* ... */ });
+  </code></pre>
+  </p>
 
   <h3 id="templates">Working with templates</h3>
-  <p>Placeholder</p>
+  <p>Templates are a super useful way to separate concerns in your application.  Instead of generating markup from inside your JavaScript
+  application, you instead create it in a separate file and load it into your application.  There are numerous ways of loading in a
+  template, but this boilerplate has chosen the most performant way to build all your templates into a single file.</p>
+
+  <p>This tutorial itself is a template that exists in <code>app/templates/example.html</code>.  You can edit this file and hit refresh
+  in here to see the changes.  The boilerplate comes with a built in function to handle the loading of templates.  It's called:
+  
+  <pre><code>
+  namespace.fetchTemplate("app/templates/name.html", function(template) {
+    // Template here is a function, that accepts an object.  Identical to _.template.
+    console.log(template({ ... }));
+  });
+  </code></pre>
+  </p>
+
+  <p>By defining a custom function this will ensure that if you use the build tool or AJAX, that your templates will load consistently.
+  You can see it in action inside the <code>app/modules/example.js</code> module.</p>
+
+  <p>If you use the build process to compile your templates, it will automatically find all the HTML files inside the templates
+  directory and compile them into a templates.js file.  These are actual JavaScript template functions being compiled on the server, which
+  is different from Jammit and most other server-side builders that just invoke functions on page load.</p>
+
+  <p>You can access a compiled template like so:
+
+  <pre><code>
+  var template = window.JST["app/modules/example.html"];
+  template({ ... });
+  </code></pre>
+  </p>
 
   <h3 id="plugins">Working with libraries and plugins</h3>
-  <p>Placeholder</p>
+  <p>Libraries and plugins are easily added to the application, by placing them inside the <code>assets/js/libs/</code> directory.
+  If you have many plugins in your application, it may make sense to create a separate folder such as <code>assets/js/plugins/</code> 
+  for them.</p>
 </section>
 
 <section>
   <h2 id="custom-build">Using the build tool</h2>
-  <p>Placeholder</p>
+  <p>The Backbone Boilerplate build process is a state-of-the-art task driven
+  Node.js application that utilizes @cowboy's grunt project.
+
+  To run the defaults, execute the following command from the project root,
+  and *not from inside the build folder*.</p>
 
   <h3 id="running">Running with the defaults</h3>
-  <p>Placeholder</p>
+  <p>To run the defaults, execute the following command from the project root,
+  and *not from inside the build folder*.
+
+  <pre><code>
+  node build
+  </code></pre>
+  </p>
+
+  <p>
+  This will do a number of things for you.  First it will concatenate all your
+  libs, app code, and templates into separate files inside the `dist/debug`
+  folder.  It will then minify those files and your CSS into production ready
+  files inside the <code>dist/release</code> folder.</p>
 
   <h3 id="customizing">Customizing the build configuration</h3>
-  <p>Placeholder</p>
+  <p>To customize and configure the build tool, open `build/config.js` and tweak
+the settings.</p>
 
   <h3 id="server">Using the development server</h3>
-  <p>Placeholder</p>
+  <p>
+  While writing an application that leverages <code>pushState</code> you can run the
+  following command to run a server that will always resolve to the <code>index.html</code>
+
+  <pre><code>
+  node build/server
+  </code></pre>
+  </p>
+
+  <p>
+  This will spawn up an HTTP server on port <code>8000</code>.  This server is intended
+  for development and not production.  You should use url rewriting or forwarding
+  all requests in your production server to achieve this same effect.</p>
+
+  <h4>Serving the built assets</h4>
+
+  <p>If you are using the build tool in conjunction with this development server
+  you can optionally update the <code>index.html</code> file to remove the existing script
+  tags and uncomment out the scripts tag at the bottom to load the <code>dist/debug</code>
+  or <code>dist/release</code> assets.  You can achieve this by specifying either <b>debug</b>
+  or <b>release</b> after the server command, like so:
+
+  <pre><code>
+  node build/server release
+  </code></pre>
+  </p>
 
   <h3 id="adding-tasks">Adding new tasks</h3>
-  <p>Placeholder</p>
+  <p>To add a new task into the build system, you simply copy and paste the task JavaScript folder/file into the <code>build/tasks</code> folder
+  or extract the task archive into the same directory.  At the very least in order to run this task, you'll need to add it to the <code>build/config.js</code>
+  file.  The last line should look something like:
+
+  <pre><code>
+  task.registerTask("default", "clean lint:files concat jst min mincss new_module_here");
+  </code></pre>
+  </p>
+
+  It's possible the custom task will have additional setup instructions, so make
+  sure you read the README for any task.</p>
 </section>
 
 <section id="useful-resources">
