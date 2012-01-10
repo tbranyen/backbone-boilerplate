@@ -37,10 +37,20 @@ config.init({
 
   watch: {
     files: ["assets/**/*", "app/**/*"],
-    tasks: "lint:files concat jst"
+    tasks: "lint:files concat jst",
+
+    min: {
+      files: ["assets/**/*", "app/**/*"],
+      tasks: "default"
+    }
+  },
+
+  clean: {
+    folder: "dist/"
   }
 
 });
 
 // Run the following tasks...
-task.registerTask("default", "lint:files concat jst min mincss");
+task.registerTask("default", "clean lint:files concat jst min mincss");
+

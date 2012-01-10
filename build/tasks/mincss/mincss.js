@@ -2,21 +2,10 @@
 // TASKS
 // ============================================================================
 
-task.registerTask("mincss", "Compress down CSS files cleanly.", function(name) {
-  if (!name) {
-    // An argument wasn't passed. Run this task once for each CSS sub-prop.
-    return task.runAllProps("mincss");
-  }
-
-  // Any name with a possible "." has to be escaped!
-  var propname = "mincss." + config.escape(name);
-
-  // Fail if any required config properties have been omitted.
-  config.requires(propname);
-
+task.registerBasicTask("mincss", "Compress down CSS files cleanly.", function(data, name) {
   // Minify CSS.
   var errorcount = fail.errorcount;
-  var files = file.expand(config(propname));
+  var files = file.expand(data);
   file.write(name, task.helper('mincss', files));
 
   // Fail task if there were errors.
@@ -38,3 +27,4 @@ task.registerHelper("mincss", function(files) {
     return cleanCSS.process(file.read(filepath));
   }).join("") : "";
 });
+
