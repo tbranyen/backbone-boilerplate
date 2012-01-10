@@ -6,7 +6,7 @@ var path = require("path");
 
 task.registerBasicTask("clean", "Deletes out all contents in a directory", function(data, name) {
   var errorcount = fail.errorcount;
-  var folder = path.resolve(data.folder);
+  var folder = path.resolve(data);
 
   // Delete all files inside the folder
   task.helper("clean", folder);
