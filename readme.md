@@ -211,4 +211,5 @@ configure it in `build/config.js` per the task instructions.
 
 #### Creating custom tasks ####
 
-Tutorial coming Soon!
+Until proper tutorials and documentation have been created for Grunt, look
+at the `build/tasks/__template.js` file for inspiration =)
