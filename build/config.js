@@ -1,4 +1,7 @@
-// Add your custom task options here...
+// This is the main Backbone Boilerplate build configuration file.
+//
+// This is a JavaScript file, you can define any functions you would like in
+// here.
 config.init({
 
   lint: {
