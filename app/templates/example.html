@@ -207,6 +207,29 @@
   <h3 id="modules">Creating a module</h3>
   <p>Following the Bocoup post on <a data-bypass target="_blank" href="http://weblog.bocoup.com/organizing-your-backbone-js-application-with-modules">Organizing Your Backbone.js Application With Modules</a> this boilerplate provides the same module definition structure.
 
+  Modules are placed in the <code>app/modules/</code> directory.  There is an example module
+  there named: <code>example.js</code>.  The actual module definition function is located
+  inside the <code>app/index.js</code> file.  You create and reference modules with the same
+  function call:  <code>namespace.module(&quot;&lt;module_name&gt;&quot;)</code>.
+
+  Typically a module contains a single Model/Collection/Router and many Views.
+  Therefore the returned module object is empty except for a Views object
+  property that can be used to attach many Views to, like:
+
+  <pre><code>
+  MyModule.Views.Detailed = Backbone.View.extend({ /* ... */ });
+
+  MyModule.Views.Main = Backbone.View.extend({ /* ... */ });
+  </code></pre>
+
+  Attaching Models/Collections/Routers happen on the same level of the module,
+  like so:
+
+  <pre><code>
+  MyModule.Model = Backbone.Model.extend({ /* ... */ });
+
+  MyModule.Router = Backbone.Router.extend({ /* ... */ });
+  </code></pre>
   </p>
 
   <h3 id="templates">Working with templates</h3>
