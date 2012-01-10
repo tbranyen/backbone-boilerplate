@@ -19,7 +19,7 @@ Special thanks [to the contributors](https://github.com/tbranyen/backbone-boiler
 * Snippets to make common tasks easier
   + For modules, HTML5 History API/Hash navigation, loading templates and
   application events
-* Very flexible and pluginable build process
+* Very flexible and pluginable build process that works in Windows! 
   + Concatenate and minify all your libraries, application code, templates and
   CSS
   + Compiles underscore templates out of the box
@@ -145,25 +145,22 @@ This will spawn up an HTTP server on port `8000`.  This server is intended
 for development and not production.  You should use url rewriting or forwarding
 all requests in your production server to achieve this same effect. 
 
-## Build Process ##
+### Serving the built assets ###
 
-*Version requirement: This build tool will only work on Node.js 0.6 and up.*
+If you are using the build tool in conjunction with this development server
+you can optionally update the `index.html` file to remove the existing script
+tags and uncomment out the scripts tag at the bottom to load the `dist/debug`
+or `dist/release` assets.  You can achieve this by specifying either **debug**
+or **release** after the server command, like so:
+
+``` bash
+node build/server release
+```
+
+## Build Process ##
 
 The Backbone Boilerplate build process is a state-of-the-art task driven
 Node.js application that utilizes @cowboy's grunt project.
-
-**Unfortunately due to limitations with cross compiling Node.js native
-extensions, this build tool is only available for Mac OS X/Linux/Unix users.**
-
-Before you can use the build tool, you will need to run the NPM rebuild script
-for the native modules:
-
-``` bash
-cd build
-npm rebuild
-```
-
-Once this script finishes you are ready to go!
 
 To run the defaults, execute the following command from the project root,
 and *not from inside the build folder*.
@@ -180,6 +177,25 @@ files inside the `dist/release` folder.
 To customize and configure the build tool, open `build/config.js` and tweak
 the settings.
 
+If you are perpetually working on the application and making many changes, you
+may find it convenient to have the build process watch your directory structure
+and automatically re-run the tasks after a file has changed.
+
+Use the following command to build to the debug folder:
+
+``` bash
+node build watch
+```
+
+Use the following command to build to the debug and release folders:
+
+``` bash
+node build watch:min
+```
+
+These watch commands can operate in parallel to the above development server
+for an efficient work process of editting files and testing the output.
+
 ### Additional Build Tasks ###
 
 The build process incorporates a plugin architecture that makes adding premade
@@ -190,6 +206,10 @@ or custom-built tasks very easy.
 To install a custom task, simply copy the JavaScript file into the `build/tasks`
 folder.  If the task is an archive simply extract it into the same folder.
 
+After the task has been loaded into the tasks directory, you will need to
+configure it in `build/config.js` per the task instructions.
+
 #### Creating custom tasks ####
 
-Tutorial coming Soon!
+Until proper tutorials and documentation have been created for Grunt, look
+at the `build/tasks/__template.js` file for inspiration =)

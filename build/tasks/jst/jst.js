@@ -2,25 +2,15 @@
 // TASKS
 // ============================================================================
 
-task.registerTask("jst", "Compile underscore templates to JST file", function(name) {
-  if (!name) {
-    // An argument wasn't passed. Run this task once for each concat sub-prop.
-    return task.runAllProps("jst");
-  }
-
-  // Any name with a possible "." has to be escaped!
-  var propname = "jst." + config.escape(name);
+task.registerBasicTask("jst", "Compile underscore templates to JST file", function(data, name) {
   // If namespace is specified use that, otherwise fallback
   var namespace = config("jst.namespace") || "JST";
   // If template settings are available use those
   var templateSettings = config("jst.templateSettings") || null;
 
-  // Fail if any required config properties have been omitted.
-  config.requires(propname);
-
   // Create JST file.
   var errorcount = fail.errorcount;
-  var files = file.expand(config(propname));
+  var files = file.expand(data);
   file.write(name, task.helper('jst', files, namespace, templateSettings));
 
   // Fail task if there were errors.
@@ -84,3 +74,4 @@ task.registerHelper("jst", function(files, namespace, templateSettings) {
 
   return contents;
 });
+

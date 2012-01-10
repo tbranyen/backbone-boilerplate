@@ -56,6 +56,9 @@ As taken from Steven's post, modified to match the Modifications listed above:
     dateFormat(now, "UTC:h:MM:ss TT Z");
     // 10:46:21 PM UTC
 
+    // You can also get the ISO 8601 week of the year:
+    dateFormat(now, "W");
+    // 42
 ## License
 
 (c) 2007-2009 Steven Levithan [stevenlevithan.com][stevenlevithan], MIT license.
