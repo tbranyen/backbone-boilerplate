@@ -84,7 +84,7 @@ the namespace as well as initializing the main application Router.  **Make
 sure you change the namespace name here.**
 
 The static assets are placed inside the `assets` directory.  The H5BP files
-are already included here.  Place all new JavaScript libaries inside the
+are already included here.  Place all new JavaScript libraries inside the
 `assets/js/libs` directory.  If you are dealing with many jQuery plugins,
 you may want to create a separate `plugins` folder inside `assets/js`.
 
