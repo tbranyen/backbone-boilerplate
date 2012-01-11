@@ -92,7 +92,7 @@ jQuery(function($) {
   // All navigation that is relative should be passed through the navigate
   // method, to be processed by the router.  If the link has a data-bypass
   // attribute, bypass the delegation completely.
-  $(document).delegate("a:not([data-bypass])", "click", function(evt) {
+  $(document).on("click", "a:not([data-bypass])", function(evt) {
     // Get the anchor href and protcol
     var href = $(this).attr("href");
     var protocol = this.protocol + "//";
