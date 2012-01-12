@@ -13,6 +13,7 @@ dir && site.use("/assets/css", express.static(dir + "/css"));
 // Serve static files
 site.use("/app", express.static("./app"));
 site.use("/assets", express.static("./assets"));
+site.use("/dist", express.static("./dist"));
 
 // Serve favicon.ico
 site.use(express.favicon("./favicon.ico"));
