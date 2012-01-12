@@ -9,7 +9,11 @@ Organize your application in a logical filesystem, develop your
 Models/Collections/Views/Routers inside modules, and build knowing you have
 efficient code that will not bottleneck your users.
 
-Special thanks [to the contributors](https://github.com/tbranyen/backbone-boilerplate/contributors)
+Thanks to our [Contributors](https://github.com/tbranyen/backbone-boilerplate/contributors)!
+
+Special Thanks to: [cowboy](http://github.com/cowboy),
+[iros](http://github.com/iros), [nimbupani](http://github.com/nimbupani) and
+[wookiehangover](http://github.com/wookiehangover)
 
 ## Provides ##
 
@@ -80,7 +84,7 @@ the namespace as well as initializing the main application Router.  **Make
 sure you change the namespace name here.**
 
 The static assets are placed inside the `assets` directory.  The H5BP files
-are already included here.  Place all new JavaScript libaries inside the
+are already included here.  Place all new JavaScript libraries inside the
 `assets/js/libs` directory.  If you are dealing with many jQuery plugins,
 you may want to create a separate `plugins` folder inside `assets/js`.
 

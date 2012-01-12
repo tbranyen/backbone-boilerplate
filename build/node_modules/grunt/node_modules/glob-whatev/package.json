@@ -1,0 +1,30 @@
+{
+  "author": "\"Cowboy\" Ben Alman (http://benalman.com/)",
+  "name": "glob-whatev",
+  "description": "A quick and dirty file globbing utility based on minimatch.",
+  "version": "0.1.0",
+  "homepage": "http://github.com/cowboy/node-glob-whatev",
+  "bugs": "https://github.com/cowboy/node-glob-whatev/issues",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/cowboy/node-glob-whatev.git"
+  },
+  "licenses": {
+    "type": "MIT",
+    "url": "http://github.com/cowboy/node-glob-whatev/LICENSE-MIT"
+  },
+  "main": "lib/glob",
+  "engines": {
+    "node": "~0.6.6"
+  },
+  "keywords": [
+    "glob",
+    "wildcard",
+    "star",
+    "file"
+  ],
+  "dependencies": {
+    "minimatch": "~0.1.3"
+  },
+  "devDependencies": {}
+}
