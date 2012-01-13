@@ -1,5 +1,5 @@
 // This is the main Backbone Boilerplate build configuration file.
-//
+
 // This is a JavaScript file, you can define any functions you would like in
 // here.
 config.init({
@@ -54,17 +54,9 @@ config.init({
   },
 
   requirejs: {
-    use: {
-      backbone: {
-        deps: ["use!underscore", "jquery", "order!backbone"],
-        attach: "Backbone"
-      },
-
-      underscore: {
-        deps: ["underscore"],
-        attach: "_"
-      }
-    }
+    // Put any valid require.js configuration options here.
+    // There are already plenty of defaults baked in to
+    // get you going!
   }
 
 });
