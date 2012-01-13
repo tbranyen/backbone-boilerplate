@@ -65,6 +65,7 @@ task.registerHelper("jst", function(files, namespace, templateSettings) {
 
         "return ",
         underscoreTemplating(file.read(filepath)).replace("anonymous", ""),
+        "(data, _)",
 
       "};"].join("");
 
