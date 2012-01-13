@@ -9,13 +9,17 @@ config.init({
   },
 
   watch: {
-    files: "<lint:files>",
+    files: ["app/**/*", "assets/**/*"],
     tasks: "lint:files requirejs",
     
     min: {
       files: "<watch:files>",
-      tasks: "default min"
+      tasks: "default min mincss"
     }
+  },
+
+  mincss: {
+    "dist/release/style.css": ["assets/css/**/*.css"]
   },
 
   min: {
@@ -43,7 +47,8 @@ config.init({
       paths: {
         "app": "dist/release",
         "app/templates": "app/templates",
-        "assets/js/libs": "dist/release"
+        "assets/js/libs": "dist/release",
+        "assets/css": "dist/release"
       }
     }
   },
