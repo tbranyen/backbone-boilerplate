@@ -3,21 +3,23 @@ require.config({
   paths: {
     libs: "../assets/js/libs",
     jquery: "../assets/js/libs/jquery",
+    underscore: "../assets/js/libs/underscore",
+    backbone: "../assets/js/libs/backbone",
 
     order: "../assets/js/plugins/order",
     use: "../assets/js/plugins/use"
   },
 
   use: {
-    "libs/backbone": {
-      deps: ["use!libs/underscore", "jquery", "order!libs/backbone"],
+    "backbone": {
+      deps: ["use!underscore", "jquery", "order!backbone"],
       attach: function() {
         return this.Backbone.noConflict();
       }
     },
 
-    "libs/underscore": {
-      deps: ["libs/underscore"],
+    "underscore": {
+      deps: ["underscore"],
       attach: "_"
     }
   }
@@ -25,8 +27,8 @@ require.config({
 
 define("namespace", [
   "jquery",
-  "use!libs/underscore",
-  "use!libs/backbone"
+  "use!underscore",
+  "use!backbone"
 ],
 
 function($, _, Backbone) {
@@ -63,7 +65,7 @@ function($, _, Backbone) {
 require([
   "namespace",
   "jquery",
-  "use!libs/backbone",
+  "use!backbone",
   "modules/example"
 ],
 

@@ -2,8 +2,12 @@
 // TASKS
 // ============================================================================
 
-task.registerTask("server", "Run development server.", function(name) {
-  var options = config("server") || {};
+task.registerTask("server", "Run development server.", function(prop) {
+ var props = ["server"];
+  // If a prop was passed as the argument, use that sub-property of server.
+  if (prop) { props.push(prop); }
+
+  var options = config(props) || {};
 
   // Defaults set for server values
   var options = underscore.defaults(options, {

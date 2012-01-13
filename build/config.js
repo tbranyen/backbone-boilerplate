@@ -9,7 +9,7 @@ config.init({
   },
 
   watch: {
-    files: ["<lint:files>"],
+    files: "<lint:files>",
     tasks: "lint:files requirejs",
     
     min: {
@@ -28,24 +28,35 @@ config.init({
   },
 
   server: {
-    port: 8000,
+    debug: {
+      port: 8000,
 
-    paths: {
-      "app": "dist/debug"
+      paths: {
+        "app": "dist/debug",
+        "app/templates": "app/templates"
+      }
+    },
+
+    release: {
+      port: 8000,
+
+      paths: {
+        "app": "dist/release",
+        "app/templates": "app/templates",
+        "assets/js/libs": "dist/release"
+      }
     }
   },
 
   requirejs: {
     use: {
-      "libs/backbone": {
-        deps: ["use!libs/underscore", "jquery", "order!libs/backbone"],
-        attach: function() {
-          return this.Backbone.noConflict();
-        }
+      backbone: {
+        deps: ["use!underscore", "jquery", "order!backbone"],
+        attach: "Backbone"
       },
 
-      "libs/underscore": {
-        deps: ["libs/underscore"],
+      underscore: {
+        deps: ["underscore"],
         attach: "_"
       }
     }
@@ -54,4 +65,4 @@ config.init({
 });
 
 // Run the following tasks...
-task.registerTask("default", "clean lint requirejs min");
+task.registerTask("default", "clean lint requirejs");

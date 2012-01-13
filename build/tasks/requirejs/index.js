@@ -24,21 +24,23 @@ task.registerTask("requirejs", "require.js builder", function() {
     baseUrl: "app",
 
     // Root application module
-    name: "index",
+    name: "index"
+  });
 
-    // Default shims for popular libaries
-    use: {
-      backbone: {
-        deps: ["use!underscore", "jquery", "order!backbone"],
-        attach: function() {
-          return this.Backbone.noConflict();
-        }
-      },
+  options.use = options.use || {};
 
-      underscore: {
-        deps: ["underscore"],
-        attach: "_"
+  // Default shims for popular libaries
+  options.use = underscore.defaults(options.use, {
+    "backbone": {
+      deps: ["use!underscore", "jquery", "order!backbone"],
+      attach: function() {
+        return this.Backbone.noConflict();
       }
+    },
+
+    "underscore": {
+      deps: ["underscore"],
+      attach: "_"
     }
   });
 
@@ -49,6 +51,8 @@ task.registerTask("requirejs", "require.js builder", function() {
     // Core libraries
     libs: "../assets/js/libs",
     jquery: "../assets/js/libs/jquery",
+    underscore: "../assets/js/libs/underscore",
+    backbone: "../assets/js/libs/backbone",
 
     // Plugins
     order: "../assets/js/plugins/order",

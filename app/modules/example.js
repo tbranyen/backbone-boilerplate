@@ -1,7 +1,7 @@
 define([
   "namespace",
 
-  "use!libs/backbone"
+  "use!backbone"
 ],
 
 function(namespace, Backbone) {
