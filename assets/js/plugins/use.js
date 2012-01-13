@@ -41,42 +41,24 @@ define({
     // Read the current module configuration for any dependencies that are
     // required to run this particular non-AMD module.
     req(module.deps || [], function() {
-      var i;
-      var deps = {};
+      // Require this module
+      req([name], function() {
+        // Attach property
+        var attach = config.use[name].attach;
 
-      // This code looks for a map array to associate dependency variables,
-      // something like map: ["jQuery", "Backbone"] and then attaches them
-      // an object, instead of creating globals, then maps the returned
-      // dependency objects to those names.
-      if (module.map) {
-        for (i=0; i < module.map.length; i++) {
-          this[module.map[i]] = arguments[i];
+        // If doing a build don't care about loading
+        if (config.isBuild) { 
+          return load();
         }
-      }
 
-      // If doing a build don't care about loading
-      if (config.isBuild) { 
-        return load();
-      }
+        // Return the correct attached object
+        if (typeof attach == "function") {
+          return load(attach.apply(window, arguments));
+        }
 
-      // Ensure module gets correct dependencies
-      with (deps) {
-        // Require this module
-        // FIXME This is causing problems... it seems req executes outside the
-        // scope of the with wrapper.
-        req([name], function() {
-          // Attach property
-          var attach = config.use[name].attach;
-
-          // Return the correct attached object
-          if (typeof attach == "function") {
-            return load(attach.apply(window, arguments));
-          }
-
-          // Use window for now (maybe this?)
-          return load(window[attach]);
-        });
-      }
+        // Use window for now (maybe this?)
+        return load(window[attach]);
+      });
     });
   }
 });
