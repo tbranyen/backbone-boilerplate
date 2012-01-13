@@ -5,54 +5,53 @@
 config.init({
 
   lint: {
-    files: ["build/config.js", "app/modules/*.js"]
-  },
-
-  concat: {
-
-    // The core library files
-    "dist/debug/js/libs.js": [
-      "assets/js/libs/jquery.js",
-      "assets/js/libs/underscore.js",
-      "assets/js/libs/backbone.js"
-    ],
-
-    // Application files
-    "dist/debug/js/app.js": ["app/*.js", "app/modules/*.js"],
-
-    // Your CSS
-    "dist/debug/css/style.css": ["assets/css/*.css"]
-  },
-  
-  jst: {
-    "dist/debug/js/templates.js": ["app/templates/*.html"]
-  },
-
-  min: {
-    "dist/release/js/libs.js": ["dist/debug/js/libs.js"],
-    "dist/release/js/app.js": ["dist/debug/js/app.js"],
-    "dist/release/js/templates.js": ["dist/debug/js/templates.js"]
-  },
-
-  mincss: {
-    "dist/release/css/style.css": ["dist/debug/css/style.css"]
+    files: ["build/config.js", "app/**/*.js"]
   },
 
   watch: {
-    files: ["assets/**/*", "app/**/*"],
-    tasks: "lint:files concat jst",
-
+    files: ["<lint:files>"],
+    tasks: "lint:files requirejs",
+    
     min: {
-      files: ["assets/**/*", "app/**/*"],
-      tasks: "default"
+      files: "<watch:files>",
+      tasks: "default min"
     }
+  },
+
+  min: {
+    "dist/release/index.js": ["dist/debug/index.js"],
+    "dist/release/require.js": ["assets/js/libs/require.js"]
   },
 
   clean: {
     folder: "dist/"
+  },
+
+  server: {
+    port: 8000,
+
+    paths: {
+      "app": "dist/debug"
+    }
+  },
+
+  requirejs: {
+    use: {
+      "libs/backbone": {
+        deps: ["use!libs/underscore", "jquery", "order!libs/backbone"],
+        attach: function() {
+          return this.Backbone.noConflict();
+        }
+      },
+
+      "libs/underscore": {
+        deps: ["libs/underscore"],
+        attach: "_"
+      }
+    }
   }
 
 });
 
 // Run the following tasks...
-task.registerTask("default", "clean lint:files concat jst min mincss");
+task.registerTask("default", "clean lint requirejs min");

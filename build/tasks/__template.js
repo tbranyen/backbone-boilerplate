@@ -2,26 +2,25 @@
 // TASKS
 // ============================================================================
 
-//task.registerBasicTask("name", "description", function(data, name) {
-//  var errorcount = fail.errorcount;
-//  var files = file.expand(data);
-//
-//  // Do something potentially calling out to the registeredHelper below
-//  // Run the helper with task.helper("name", files);
-//
-//  // Fail task if there were errors.
-//  if (fail.errorcount > errorcount) { return false; }
-//
-//  // Otherwise, print a success message.
-//  log.writeln("File \"" + name + "\" created.");
-//});
+// task.registerBasicTask('concat', 'Concatenate files.', function(data, name) {
+//   // Concat specified files.
+//   var files = file.expand(data);
+//   file.write(name, task.helper('concat', files));
+// 
+//   // Fail task if errors were logged.
+//   if (task.hadErrors()) { return false; }
+// 
+//   // Otherwise, print a success message.
+//   log.writeln('File "' + name + '" created.');
+// });
 
 // ============================================================================
 // HELPERS
 // ============================================================================
 
-//task.registerHelper("name", function(files) {
-//  // Do something in here and return a usable value in the task
-//  // Files will be an array of all the files defined in the configuration file.
-//});
-
+// Concat source files.
+// task.registerHelper('concat', function(files) {
+//   return files ? files.map(function(filepath) {
+//     return task.directive(filepath, file.read);
+//   }).join('\n') : '';
+// });
