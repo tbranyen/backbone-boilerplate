@@ -4,6 +4,10 @@
 // here.
 config.init({
 
+  clean: {
+    folder: "dist/"
+  },
+
   lint: {
     files: ["build/config.js", "app/**/*.js"]
   },
@@ -27,14 +31,8 @@ config.init({
     "dist/release/require.js": ["assets/js/libs/require.js"]
   },
 
-  clean: {
-    folder: "dist/"
-  },
-
   server: {
     debug: {
-      port: 8000,
-
       paths: {
         "app": "dist/debug",
         "app/templates": "app/templates"
@@ -42,8 +40,6 @@ config.init({
     },
 
     release: {
-      port: 8000,
-
       paths: {
         "app": "dist/release",
         "app/templates": "app/templates",
