@@ -4,7 +4,7 @@ define("namespace", [
   "use!backbone"
 ],
 
-function($, _, Backbone) {
+function($) {
   return {
     // This is useful when developing if you don't want to use a
     // build process every time you change a template.
