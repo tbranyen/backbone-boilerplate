@@ -2,20 +2,22 @@
 
 // Custom function to read in require.config settings
 function readRequireConfig(path) {
+  var _require = require;
   var obj;
   var config = require("fs").readFileSync(path).toString();
-  var dummy = {
-    require: {
-      config: function(_obj) {
-        obj = _obj;
-      }
+
+  // Patch over require since jshint complains about using with...
+  require = {
+    config: function(_obj) {
+      obj = _obj;
     }
   };
 
-  // Don't judge me
-  with (dummy) {
-    eval(config);
-  }
+  // Yes I know what this is doing...
+  eval(config);
+
+  // Restore require
+  require = _require;
 
   return obj || {};
 }
@@ -33,8 +35,9 @@ config.init({
   },
 
   jshint: {
-    evil: true,
-    with: true
+    options: {
+      evil: true
+    }
   },
 
   watch: {
