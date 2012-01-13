@@ -32,14 +32,13 @@ task.registerTask("requirejs", "require.js builder", function() {
   // Default shims for popular libaries
   options.use = underscore.defaults(options.use, {
     "backbone": {
-      deps: ["use!underscore", "jquery", "order!backbone"],
+      deps: ["use!underscore", "jquery"],
       attach: function() {
         return this.Backbone.noConflict();
       }
     },
 
     "underscore": {
-      deps: ["underscore"],
       attach: "_"
     }
   });

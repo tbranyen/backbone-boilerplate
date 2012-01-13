@@ -11,15 +11,14 @@ require.config({
   },
 
   use: {
-    "backbone": {
-      deps: ["use!underscore", "jquery", "order!backbone"],
+    backbone: {
+      deps: ["use!underscore", "jquery"],
       attach: function() {
         return this.Backbone.noConflict();
       }
     },
 
-    "underscore": {
-      deps: ["underscore"],
+    underscore: {
       attach: "_"
     }
   }
