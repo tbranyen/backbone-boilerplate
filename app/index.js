@@ -41,15 +41,15 @@ function($, _, Backbone) {
   exports.fetchTemplate = function(path, done) {
     // Should be an instant synchronous way of getting the template, if it
     // exists in the JST object.
-    this.JST = this.JST || {};
-    if (this.JST[path]) {
-      return done(this.JST[path]);
+    var JST = this.JST = this.JST || {};
+    if (JST[path]) {
+      return done(JST[path]);
     }
 
     // Fetch it asynchronously if not available from JST
     return $.get(path, function(contents) {
       var tmpl = _.template(contents);
-      this.JST[path] = tmpl;
+      JST[path] = tmpl;
       done(tmpl);
     });
   };
