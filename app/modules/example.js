@@ -1,6 +1,5 @@
 define([
   "namespace",
-
   "use!backbone"
 ],
 

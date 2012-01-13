@@ -1,29 +1,3 @@
-// Set the require.js configuration for your application.
-require.config({
-  paths: {
-    libs: "../assets/js/libs",
-    jquery: "../assets/js/libs/jquery",
-    underscore: "../assets/js/libs/underscore",
-    backbone: "../assets/js/libs/backbone",
-
-    order: "../assets/js/plugins/order",
-    use: "../assets/js/plugins/use"
-  },
-
-  use: {
-    backbone: {
-      deps: ["use!underscore", "jquery"],
-      attach: function() {
-        return this.Backbone.noConflict();
-      }
-    },
-
-    underscore: {
-      attach: "_"
-    }
-  }
-});
-
 define("namespace", [
   "jquery",
   "use!underscore",
@@ -31,37 +5,35 @@ define("namespace", [
 ],
 
 function($, _, Backbone) {
-  var exports = {};
+  return {
+    // This is useful when developing if you don't want to use a
+    // build process every time you change a template.
+    //
+    // Delete if you are using a different template loading method.
+    fetchTemplate: function(path, done) {
+      // Should be an instant synchronous way of getting the template, if it
+      // exists in the JST object.
+      var JST = this.JST = this.JST || {};
+      if (JST[path]) {
+        return done(JST[path]);
+      }
 
-  // This is useful when developing if you don't want to use a
-  // build process every time you change a template.
-  //
-  // Delete if you are using a different template loading method.
-  exports.fetchTemplate = function(path, done) {
-    // Should be an instant synchronous way of getting the template, if it
-    // exists in the JST object.
-    var JST = this.JST = this.JST || {};
-    if (JST[path]) {
-      return done(JST[path]);
-    }
+      // Fetch it asynchronously if not available from JST
+      return $.get(path, function(contents) {
+        var tmpl = _.template(contents);
+        JST[path] = tmpl;
+        done(tmpl);
+      });
+    },
 
-    // Fetch it asynchronously if not available from JST
-    return $.get(path, function(contents) {
-      var tmpl = _.template(contents);
-      JST[path] = tmpl;
-      done(tmpl);
-    });
+    // Create a custom object with a nested Views object
+    module: function(additionalProps) {
+      return _.extend({ Views: {} }, additionalProps);
+    },
+
+    // Keep active application instances namespaced under an app object.
+    app: _.extend({}, Backbone.Events)
   };
-
-  // Create a custom object with a nested Views object
-  exports.module = function(additionalProps) {
-    return _.extend({ Views: {} }, additionalProps);
-  };
-
-  // Keep active application instances namespaced under an app object.
-  exports.app = _.extend({}, Backbone.Events);
-
-  return exports;
 });
 
 require([
@@ -72,7 +44,6 @@ require([
 ],
 
 function (namespace, jQuery, Backbone, Example) {
-
   // Treat the jQuery ready function as the entry point to the application.
   // Inside this function, kick-off all initialization, everything up to this
   // point should be definitions.
@@ -139,6 +110,6 @@ function (namespace, jQuery, Backbone, Example) {
         app.router.navigate(href, true);
       }
     });
+
   });
-  
 });
