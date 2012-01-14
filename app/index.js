@@ -98,7 +98,7 @@ jQuery(function($) {
     var protocol = this.protocol + "//";
 
     // Ensure the protocol is not part of URL, meaning its relative.
-    if (href.slice(protocol.length) !== protocol) {
+    if (href.slice(0, protocol.length) !== protocol) {
       // Stop the default event to ensure the link will not cause a page
       // refresh.
       evt.preventDefault();
