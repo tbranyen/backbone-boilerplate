@@ -22,7 +22,7 @@ define({
   //     },
   //  
   //     "libs/backbone": {
-  //       deps: ["use!underscore", "jquery", "order!libs/backbone"],
+  //       deps: ["use!underscore", "jquery"],
   //       attach: function(_, $) {
   //         return this.Backbone.noConflict();
   //       }

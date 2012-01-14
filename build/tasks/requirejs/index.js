@@ -6,7 +6,7 @@ task.registerTask("requirejs", "require.js builder", function() {
   var options = config("requirejs") || {};
 
   // Merge passed options into defaults
-  options = underscore.defaults(options, {
+  options = underscore.extend({}, {
     // Do not optimize
     optimize: "none",
 
@@ -25,23 +25,15 @@ task.registerTask("requirejs", "require.js builder", function() {
 
     // Root application module
     name: "index"
-  });
+  }, options);
 
   options.use = options.use || {};
 
   // Default shims for popular libaries
-  options.use = underscore.defaults(options.use, {
-    "backbone": {
-      deps: ["use!underscore", "jquery"],
-      attach: function() {
-        return this.Backbone.noConflict();
-      }
-    },
-
-    "underscore": {
-      attach: "_"
-    }
-  });
+  options.use = underscore.extend({
+    backbone: { deps: ["use!underscore", "jquery"] },
+    underscore: { attach: "_" }
+  }, options.use);
 
   options.paths = options.paths || {};
 
@@ -54,7 +46,6 @@ task.registerTask("requirejs", "require.js builder", function() {
     backbone: "../assets/js/libs/backbone",
 
     // Plugins
-    order: "../assets/js/plugins/order",
     use: "../assets/js/plugins/use"
   });
 
@@ -71,5 +62,6 @@ task.registerTask("requirejs", "require.js builder", function() {
 
 // r.js!
 task.registerHelper("r.js", function(options, done) {
+  console.log(options);
   require("requirejs").optimize(options, done);
 });
