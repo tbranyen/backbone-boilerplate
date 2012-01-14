@@ -139,6 +139,7 @@ function (namespace, jQuery, Backbone, Example) {
         app.router.navigate(href, true);
       }
     });
+
   });
   
 });
