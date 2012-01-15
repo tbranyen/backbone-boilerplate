@@ -25,15 +25,20 @@ this.namespace = {
   //
   // Delete if you are using a different template loading method.
   fetchTemplate: function(path, done) {
+    window.JST = window.JST || {};
+
     // Should be an instant synchronous way of getting the template, if it
     // exists in the JST object.
-    if (this.JST && this.JST[path]) {
-      return done(this.JST[path]);
+    if (JST[path]) {
+      return done(JST[path]);
     }
 
     // Fetch it asynchronously if not available from JST
     return $.get(path, function(contents) {
-      done(_.template(contents));
+      var tmpl = _.template(contents);
+      JST[path] = tmpl;
+
+      done(tmpl);
     });
   },
 
