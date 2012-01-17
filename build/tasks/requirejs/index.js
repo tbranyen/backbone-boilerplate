@@ -62,6 +62,5 @@ task.registerTask("requirejs", "require.js builder", function() {
 
 // r.js!
 task.registerHelper("r.js", function(options, done) {
-  console.log(options);
   require("requirejs").optimize(options, done);
 });

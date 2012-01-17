@@ -56,5 +56,5 @@ node build server
 node build server:debug
 
 # Running the development server using release (minified files)
-node build server:production
+node build server:release
 ```
