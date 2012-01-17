@@ -10,9 +10,9 @@
 
 task.registerBasicTask("jst", "Compile underscore templates to JST file", function(data, name) {
   // If namespace is specified use that, otherwise fallback
-  var namespace = config("jst.namespace") || "JST";
+  var namespace = config("meta.jst.namespace") || "JST";
   // If template settings are available use those
-  var templateSettings = config("jst.templateSettings") || null;
+  var templateSettings = config("meta.jst.templateSettings") || null;
 
   // Create JST file.
   var files = file.expand(data);
