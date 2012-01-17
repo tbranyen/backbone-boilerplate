@@ -18,13 +18,20 @@ task.registerTask("server", "Run development server.", function(prop) {
     host: "127.0.0.1"
   });
 
-  options.paths = options.paths || {};
+  options.folders = options.folders || {};
 
-  // Ensure paths have correct defaults
-  options.paths = underscore.defaults(options.paths, {
+  // Ensure folders have correct defaults
+  options.folders = underscore.defaults(options.folders, {
     app: "./app",
     assets: "./assets",
     dist: "./dist"
+  });
+
+  options.files = options.files || {};
+
+  // Ensure files have correct defaults
+  options.files = underscore.defaults(options.files, {
+    "app/config.js": "app/config.js"
   });
 
   // Run the server
@@ -46,10 +53,19 @@ task.registerHelper("server", function(options) {
   var express = require("express");
   var site = express.createServer();
 
-  // Serve static files from folders
-  Object.keys(options.paths).sort().reverse().forEach(function(key) {
-    site.use("/" + key, express.static(options.paths[key]));
+  // Map static folders
+  Object.keys(options.folders).sort().reverse().forEach(function(key) {
+    site.use("/" + key, express.static(options.folders[key]));
   });
+
+  // Map static files
+  if (typeof options.files == "object") {
+    Object.keys(options.files).sort().reverse().forEach(function(key) {
+      site.get("/" + key, function(req, res) {
+        return res.sendfile(options.files[key]);
+      });
+    });
+  }
 
   // Serve favicon.ico
   site.use(express.favicon(options.favicon));

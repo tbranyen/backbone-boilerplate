@@ -61,14 +61,18 @@ config.init({
 
   server: {
     debug: {
-      paths: {
+      folders: {
         "app": "dist/debug",
         "app/templates": "app/templates"
       }
     },
 
     release: {
-      paths: {
+      files: {
+        "app/config.js": "app/config.js"
+      },
+
+      folders: {
         "app": "dist/release",
         "app/templates": "app/templates",
         "assets/js/libs": "dist/release",
