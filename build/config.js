@@ -1,27 +1,3 @@
-// This is the main Backbone Boilerplate build configuration file.
-
-// Custom function to read in require.config settings
-function readRequireConfig(path) {
-  var _require = require;
-  var obj;
-  var config = require("fs").readFileSync(path).toString();
-
-  // Patch over require since jshint complains about using with...
-  require = {
-    config: function(_obj) {
-      obj = _obj;
-    }
-  };
-
-  // Yes I know what this is doing...
-  eval(config);
-
-  // Restore require
-  require = _require;
-
-  return obj || {};
-}
-
 // This is a JavaScript file, you can define any functions you would like in
 // here.
 config.init({
@@ -79,9 +55,7 @@ config.init({
         "assets/css": "dist/release"
       }
     }
-  },
-
-  requirejs: readRequireConfig("app/config.js")
+  }
 
 });
 

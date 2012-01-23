@@ -7,6 +7,9 @@ task.registerTask("requirejs", "require.js builder", function() {
 
   // Merge passed options into defaults
   options = underscore.extend({}, {
+    // Include the main configuration file
+    mainConfigFile: "app/index.js",
+
     // Do not optimize
     optimize: "none",
 

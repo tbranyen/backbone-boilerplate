@@ -1,3 +1,31 @@
+// Set the require.js configuration for your application.
+require.config({
+  paths: {
+    // JavaScript folders
+    libs: "../assets/js/libs",
+    plugins: "../assets/js/plugins",
+
+    // Libraries
+    jquery: "../assets/js/libs/jquery",
+    underscore: "../assets/js/libs/underscore",
+    backbone: "../assets/js/libs/backbone",
+
+    // Shim Plugin
+    use: "../assets/js/plugins/use"
+  },
+
+  use: {
+    backbone: {
+      deps: ["use!underscore", "jquery"],
+      attach: "Backbone"
+    },
+
+    underscore: {
+      attach: "_"
+    }
+  }
+});
+
 define("namespace", [
   "jquery",
   "use!underscore",
@@ -13,7 +41,7 @@ function($) {
     fetchTemplate: function(path, done) {
       // Should be an instant synchronous way of getting the template, if it
       // exists in the JST object.
-      var JST = this.JST = this.JST || {};
+      var JST = window.JST = window.JST || {};
       if (JST[path]) {
         return done(JST[path]);
       }
