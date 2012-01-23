@@ -18,7 +18,7 @@ config.init({
     ],
 
     // Application files
-    "dist/debug/js/app.js": ["app/*.js", "app/modules/*.js"],
+    "dist/debug/js/app.js": ["app/namespace.js", "app/modules/*.js", "app/index.js"],
 
     // Your CSS
     "dist/debug/css/style.css": ["assets/css/*.css"]
