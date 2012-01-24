@@ -18,14 +18,14 @@ config.init({
     ],
 
     // Application files
-    "dist/debug/js/app.js": ["app/namespace.js", "app/modules/*.js", "app/index.js"],
+    "dist/debug/js/app.js": ["app/namespace.js", "app/modules/**/*.js", "app/index.js"],
 
     // Your CSS
-    "dist/debug/css/style.css": ["assets/css/*.css"]
+    "dist/debug/css/style.css": ["assets/css/**/*.css"]
   },
-  
+
   jst: {
-    "dist/debug/js/templates.js": ["app/templates/*.html"]
+    "dist/debug/js/templates.js": ["app/templates/**/*.html"]
   },
 
   min: {
