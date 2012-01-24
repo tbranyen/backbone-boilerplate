@@ -5,7 +5,7 @@
 config.init({
 
   lint: {
-    files: ["build/config.js", "app/modules/*.js"]
+    files: ["build/config.js", "app/**/*.js"]
   },
 
   concat: {
