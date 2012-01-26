@@ -63,7 +63,7 @@ Once you have the boilerplate downloaded and extracted, run the following:
 node build/server
 ```
 
-And launch your web browser to <code>http://localhost:8000/</code>, this will
+And launch your web browser to `http://localhost:8000/`, this will
 load up the tutorial.
 
 ## HTML5 Boilerplate ##
