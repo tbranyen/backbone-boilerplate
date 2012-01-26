@@ -10,10 +10,12 @@ config.init({
     files: ["build/config.js", "app/**/*.js"]
   },
 
-  jshint: {
-    options: {
-      evil: true
-    }
+  jst: {
+    "dist/debug/templates.js": ["app/templates/**/*.html"]
+  },
+
+  concat: {
+    "dist/debug/index.js": ["dist/debug/templates.js", "dist/debug/index.js"]
   },
 
   watch: {
@@ -60,4 +62,4 @@ config.init({
 });
 
 // Run the following tasks...
-task.registerTask("default", "clean lint requirejs");
+task.registerTask("default", "clean lint jst requirejs concat");
