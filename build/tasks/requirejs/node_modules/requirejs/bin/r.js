@@ -1,5 +1,5 @@
 /**
- * @license r.js 1.0.4+ 20120124 7pm Copyright (c) 2010-2011, The Dojo Foundation All Rights Reserved.
+ * @license r.js 1.0.4+ 20120125 8:40pm Copyright (c) 2010-2011, The Dojo Foundation All Rights Reserved.
  * Available via the MIT or new BSD license.
  * see: http://github.com/jrburke/requirejs for details
  */
@@ -20,7 +20,7 @@ var requirejs, require, define;
 
     var fileName, env, fs, vm, path, exec, rhinoContext, dir, nodeRequire,
         nodeDefine, exists, reqMain, loadedOptimizedLib,
-        version = '1.0.4+ 20120124 7pm',
+        version = '1.0.4+ 20120125 8:40pm',
         jsSuffixRegExp = /\.js$/,
         commandOption = '',
         useLibLoaded = {},
@@ -2959,6 +2959,14 @@ define('lang', function () {
 
         isArray: Array.isArray ? Array.isArray : function (it) {
             return lang.ostring.call(it) === "[object Array]";
+        },
+
+        isFunction: function(it) {
+            return lang.ostring.call(it) === "[object Function]";
+        },
+
+        isRegExp: function(it) {
+            return it && it instanceof RegExp;
         },
 
         /**
@@ -6933,6 +6941,8 @@ define('parse', ['uglifyjs/index'], function (uglify) {
      * @param {String} fileContents
      *
      * @returns {Object} a config object. Will be null if no config.
+     * Can throw an error if the config in the file cannot be evaluated in
+     * a build context to valid JavaScript.
      */
     parse.findConfig = function (fileName, fileContents) {
         /*jslint evil: true */
@@ -6947,14 +6957,8 @@ define('parse', ['uglifyjs/index'], function (uglify) {
 
             if (!foundConfig && configNode) {
                 jsConfig = parse.nodeToString(configNode);
-                if (jsConfig) {
-                    try {
-                        foundConfig = eval('(' + jsConfig + ')');
-                    } catch (e)  {
-                        foundConfig = null;
-                    }
-                    return foundConfig;
-                }
+                foundConfig = eval('(' + jsConfig + ')');
+                return foundConfig;
             }
             return undefined;
         }, null, parse.parseConfigNode);
@@ -8876,7 +8880,8 @@ function (lang,   logger,   file,          parse,    optimize,   pragma,
         if (config.paths) {
             for (prop in config.paths) {
                 if (config.paths.hasOwnProperty(prop)) {
-                    config.paths[prop] = build.makeAbsPath(config.paths[prop], config.baseUrl);
+                    config.paths[prop] = build.makeAbsPath(config.paths[prop],
+                                              (config.baseUrl || absFilePath));
                 }
             }
         }
@@ -8898,11 +8903,16 @@ function (lang,   logger,   file,          parse,    optimize,   pragma,
      * nested config, like paths, correctly.
      */
     function mixConfig(target, source) {
-        var prop;
+        var prop, value;
 
         for (prop in source) {
             if (source.hasOwnProperty(prop)) {
-                if (build.nestedMix[prop]) {
+                //If the value of the property is a plain object, then
+                //allow a one-level-deep mixing of it.
+                value = source[prop];
+                if (typeof value === 'object' && value &&
+                    !lang.isArray(value) && !lang.isFunction(value) &&
+                    !lang.isRegExp(value)) {
                     if (!target[prop]) {
                         target[prop] = {};
                     }
@@ -8963,7 +8973,17 @@ function (lang,   logger,   file,          parse,    optimize,   pragma,
         mainConfigFile = config.mainConfigFile || (buildFileConfig && buildFileConfig.mainConfigFile);
         if (mainConfigFile) {
             mainConfigFile = build.makeAbsPath(mainConfigFile, absFilePath);
-            mainConfig = parse.findConfig(mainConfigFile, file.readFile(mainConfigFile));
+            try {
+                mainConfig = parse.findConfig(mainConfigFile, file.readFile(mainConfigFile));
+            } catch (configError) {
+                throw new Error('The config in mainConfigFile ' +
+                        mainConfigFile +
+                        ' cannot be used because it cannot be evaluated' +
+                        ' correctly while running in the optimizer. Try only' +
+                        ' using a config that is also valid JSON, or do not use' +
+                        ' mainConfigFile and instead copy the config values needed' +
+                        ' into a build file or command line arguments given to the optimizer.');
+            }
             if (mainConfig) {
                 //If no baseUrl, then use the directory holding the main config.
                 if (!mainConfig.baseUrl) {

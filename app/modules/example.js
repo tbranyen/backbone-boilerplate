@@ -1,6 +1,12 @@
 define([
   "namespace",
+
+  // Libs
   "use!backbone"
+
+  // Modules
+
+  // Plugins
 ],
 
 function(namespace, Backbone) {

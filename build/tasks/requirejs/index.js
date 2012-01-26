@@ -30,28 +30,6 @@ task.registerTask("requirejs", "require.js builder", function() {
     name: "index"
   }, options);
 
-  options.use = options.use || {};
-
-  // Default shims for popular libaries
-  options.use = underscore.extend({
-    backbone: { deps: ["use!underscore", "jquery"] },
-    underscore: { attach: "_" }
-  }, options.use);
-
-  options.paths = options.paths || {};
-
-  // Custom paths seem to be necessary for this boilerplate structure
-  options.paths = underscore.defaults(options.paths, {
-    // Core libraries
-    libs: "../assets/js/libs",
-    jquery: "../assets/js/libs/jquery",
-    underscore: "../assets/js/libs/underscore",
-    backbone: "../assets/js/libs/backbone",
-
-    // Plugins
-    use: "../assets/js/plugins/use"
-  });
-
   // Run the r.js helper
   task.helper("r.js", options, function(response) {
     // Print out response
