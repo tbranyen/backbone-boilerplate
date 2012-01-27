@@ -28,8 +28,12 @@ require.config({
 
 require([
   "namespace",
+
+  // Libs
   "jquery",
   "use!backbone",
+
+  // Modules
   "modules/example"
 ],
 
@@ -88,7 +92,7 @@ function (namespace, jQuery, Backbone, Example) {
       var protocol = this.protocol + "//";
 
       // Ensure the protocol is not part of URL, meaning its relative.
-      if (href.slice(0, protocol.length) !== protocol) {
+      if (href && href.slice(0, protocol.length) !== protocol) {
         // Stop the default event to ensure the link will not cause a page
         // refresh.
         evt.preventDefault();

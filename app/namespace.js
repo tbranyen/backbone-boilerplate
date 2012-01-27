@@ -1,10 +1,11 @@
 define([
+  // Libs
   "jquery",
   "use!underscore",
   "use!backbone"
 ],
 
-function($) {
+function($, _, Backbone) {
   return {
     // This is useful when developing if you don't want to use a
     // build process every time you change a template.
