@@ -49,7 +49,7 @@ This will download the latest boilerplate into your application directory
 and clean out all the unnecessary git remnants.
 
 If you would like to use the *ahem* awesome bundled build tool, you will
-need to install Node.js for your platform.  Don't worry its super easy now!
+need to install Node.js for your platform.  Don't worry! It's super easy now!
 If not, you can simply delete the build folder.
 
 Navigate to: http://nodejs.org/ and click Download.  Once you've downloaded
@@ -134,7 +134,7 @@ MyModule.Router = Backbone.Router.extend({ /* ... */ });
 
 ## HTML5 History and Hash Based Navigation ##
 
-Out the box Backbone Boilerplate enables `pushState`.  It also supplys a script
+Out the box Backbone Boilerplate enables `pushState`.  It also supplies a script
 inside `app/index.js` which attaches a click handler that monitors all links and
 will automatically route all *relative* urls through your Backbone application.
 
@@ -174,8 +174,9 @@ node build/server release
 
 ## Build Process ##
 
-The Backbone Boilerplate build process is a state-of-the-art task driven
-Node.js application that utilizes @cowboy's grunt project.
+The Backbone Boilerplate build process is a state-of-the-art, task-driven
+Node.js application that utilizes [@cowboy's](http://github.com/cowboy/)
+[grunt](https://github.com/cowboy/grunt) project.
 
 To run the defaults, execute the following command from the project root,
 and *not from inside the build folder*.
