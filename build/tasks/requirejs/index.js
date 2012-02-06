@@ -7,9 +7,6 @@ task.registerTask("requirejs", "require.js builder", function() {
 
   // Merge passed options into defaults
   options = underscore.extend({}, {
-    // Include the main configuration file
-    mainConfigFile: "app/index.js",
-
     // Do not optimize
     optimize: "none",
 
@@ -18,16 +15,6 @@ task.registerTask("requirejs", "require.js builder", function() {
 
     // Ensure modules are inserted
     skipModuleInsertion: false,
-
-    // Output directory
-    out: "dist/debug/index.js",
-
-    // Where modules live
-    dir: ".",
-    baseUrl: "app",
-
-    // Root application module
-    name: "index"
   }, options);
 
   // Run the r.js helper

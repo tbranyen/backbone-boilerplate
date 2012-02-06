@@ -1,9 +1,13 @@
+(function() {
+
+var buildMap = {};
+
 /* RequireJS Use Plugin v0.1.0
  * Copyright 2012, Tim Branyen (@tbranyen)
  * use.js may be freely distributed under the MIT license.
  */
 define({
-  version: "0.1.0",
+  version: "0.2.0",
 
   // Invoked by the AMD builder, passed the path to resolve, the require
   // function, done callback, and the configuration options.
@@ -38,13 +42,16 @@ define({
       return load();
     }
 
+    // Attach to the build map for use in the write method below.
+    buildMap[name] = { deps: module.deps || [], attach: module.attach };
+
     // Read the current module configuration for any dependencies that are
     // required to run this particular non-AMD module.
     req(module.deps || [], function() {
       // Require this module
       req([name], function() {
         // Attach property
-        var attach = config.use[name].attach;
+        attach = module.attach;
 
         // If doing a build don't care about loading
         if (config.isBuild) { 
@@ -60,5 +67,36 @@ define({
         return load(window[attach]);
       });
     });
+  },
+
+  write: function(pluginName, moduleName, write) {
+    var module = buildMap[moduleName];
+    var normalize = { attach: null, deps: "" };
+
+    // Normalize the attach to window[name] or function() { }
+    if (typeof attach == "function") {
+      normalize.attach = "return " + module.attach.toString() + ";";
+    } else {
+      normalize.attach = "return window['" + module.attach + "'];";
+    }
+
+    // Normalize the dependencies to have proper string characters
+    if (module.deps.length) {
+      normalize.deps = "'" + module.deps.toString().split(",").join("','") + "'";
+    }
+
+    // Write out the actual definition
+    write([
+      "define('", pluginName, "!", moduleName, "', ",
+        "[", normalize.deps, "],",
+
+        "function() {",
+          normalize.attach,
+        "}",
+
+      ");\n"
+    ].join(""));
   }
 });
+
+})();

@@ -15,7 +15,11 @@ config.init({
   },
 
   concat: {
-    "dist/debug/index.js": ["dist/debug/templates.js", "dist/debug/index.js"]
+    "dist/debug/require.js": [
+      "assets/js/libs/almond.js",
+      "dist/debug/templates.js",
+      "dist/debug/require.js"
+    ]
   },
 
   watch: {
@@ -35,15 +39,15 @@ config.init({
   },
 
   min: {
-    "dist/release/index.js": ["dist/debug/index.js"],
-    "dist/release/require.js": ["assets/js/libs/require.js"]
+    "dist/release/require.js": ["dist/debug/require.js"]
   },
 
   server: {
     debug: {
       folders: {
         "app": "dist/debug",
-        "app/templates": "app/templates"
+        "app/templates": "app/templates",
+        "assets/js/libs": "dist/debug"
       }
     },
 
@@ -59,6 +63,24 @@ config.init({
         "assets/css": "dist/release"
       }
     }
+  },
+
+  requirejs: {
+    // Include the main configuration file
+    mainConfigFile: "app/index.js",
+
+    // Output file
+    out: "dist/debug/require.js",
+
+    // Where modules live
+    dir: ".",
+    baseUrl: "app",
+
+    // Root application module
+    name: "index",
+
+    // Do not wrap everything in an IIFE
+    wrap: false
   }
 
 });
