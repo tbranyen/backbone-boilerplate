@@ -2,7 +2,6 @@
 // Inside this function, kick-off all initialization, everything up to this
 // point should be definitions.
 jQuery(function($) {
-
   // Shorthand the application namespace
   var app = namespace.app;
 
