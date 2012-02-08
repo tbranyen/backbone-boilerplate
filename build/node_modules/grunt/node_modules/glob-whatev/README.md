@@ -30,7 +30,9 @@ globsync.glob(globPattern [, minimatchOptions]) // some boolean
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [grunt](https://github.com/cowboy/grunt).
 
 ## Release History
-2012/01/11 - v0.1.0 - First official release.
+
+* 2012/01/23 - v0.1.1 - Fixed an issue with stat and locked files.
+* 2012/01/11 - v0.1.0 - First official release.
 
 ## License
 Copyright (c) 2012 "Cowboy" Ben Alman  
