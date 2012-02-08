@@ -1,5 +1,8 @@
 (function() {
 
+// Include the example module
+var Example = namespace.module("example");
+
 // Defining the application router, you can attach sub routers here.
 var Router = Backbone.Router.extend({
   routes: {
@@ -36,9 +39,6 @@ var Router = Backbone.Router.extend({
 jQuery(function($) {
   // Shorthand the application namespace
   var app = namespace.app;
-
-  // Include the example module
-  var Example = namespace.module("example");
 
   // Define your master router on the application namespace and trigger all
   // navigation from this instance.
