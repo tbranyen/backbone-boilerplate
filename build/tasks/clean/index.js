@@ -4,7 +4,7 @@ var path = require("path");
 // TASKS
 // ============================================================================
 
-task.registerBasicTask("clean", "Deletes out all contents in a directory", function(data, name) {
+task.registerBasicTask("clean","Deletes out all contents in a directory", function(data, name) {
   var folder = path.resolve(data);
 
   // Delete all files inside the folder
