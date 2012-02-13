@@ -2,14 +2,14 @@
 // (http://benalman.com/news/2010/11/immediately-invoked-function-expression/)
 // to assign your module reference to a local variable, in this case Example.
 //
-// Change line 16 'Example' to the name of your module, and change line 38 to
+// Change line 16 'Example' to the name of your module, and change line 41 to
 // the lowercase version of your module name.  Then change the namespace
 // for all the Models/Collections/Views/Routers to use your module name.
 //
 // For example: Renaming this to use the module name: Project
 //
 // Line 16: (function(Project) {
-// Line 38: })(namespace.module("project"));
+// Line 41: })(namespace.module("project"));
 //
 // Line 18: Project.Model = Backbone.Model.extend({
 //
@@ -30,7 +30,10 @@
       namespace.fetchTemplate(this.template, function(tmpl) {
         view.el.innerHTML = tmpl();
 
-        done(view.el);
+        // If a done function is passed, call it with the element
+        if (_.isFunction(done)) {
+          done(view.el);
+        }
       });
     }
   });
