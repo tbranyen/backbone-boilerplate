@@ -50,6 +50,10 @@ config.init({
 
   clean: {
     folder: "dist/"
+  },
+
+  qunit: {
+    files: ["test/**/*.html"]
   }
 
 });
