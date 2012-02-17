@@ -271,25 +271,33 @@
 
   <p>
   To bind a callback function to an event:
+
   <pre><code>
-  //binding an annonymous function to the event 'all' with a context of <code>this</code>.
-  namespace.app.on('all', function(){...}, this);
+  //binding an annonymous function to the event "all" with a context of <code>this</code>.
+  namespace.app.on("all", function(){...}, this);
   </code></pre>
   </p>
 
   <p>
   To remove a callback function (or many) from an event:
+
   <pre><code>
-  namespace.app.off('change', doSomething); // Removes just the doSomething callback.
-  namespace.app.off('change'); // Removes all 'change' events.
-  namespace.app.off(); // Removes all events from the namespace.app object.
+  // Removes just the doSomething callback.
+  namespace.app.off("change", doSomething);
+  
+  // Removes all "change" events.
+  namespace.app.off("change");
+  
+  // Removes all events from the namespace.app object. 
+  namespace.app.off(); 
   </code></pre>
   </p>
 
   <p>
-  To trigger an event:
+  To trigger the "change" event:
+
   <pre><code>
-  namespace.app.trigger('event', [*args]);
+  namespace.app.trigger("change", [*args]);
   </code></pre>
   </p>
 
