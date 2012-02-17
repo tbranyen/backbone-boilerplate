@@ -132,6 +132,16 @@ MyModule.Model = Backbone.Model.extend({ /* ... */ });
 MyModule.Router = Backbone.Router.extend({ /* ... */ });
 ```
 
+## Events ##
+
+Application wide events provide a convenient way for modules to communicate with each other. `namespace.app` references a copy of the Backbone.Events object, providing access to `.on()`, `.off()`, and `.trigger()`, that are documented in [Backbone.js Events](http://documentcloud.github.com/backbone/#Events)
+
+For example, to add a callback to the "all" event:
+
+```javascript
+namespace.app.on("all", function(){}, this);
+```
+
 ## HTML5 History and Hash Based Navigation ##
 
 Out the box Backbone Boilerplate enables `pushState`.  It also supplies a script
