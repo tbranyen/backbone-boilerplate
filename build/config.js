@@ -19,6 +19,11 @@ config.init({
       "build/config.js", "app/**/*.js"
     ]
   },
+  jshint: {
+    options: {
+      scripturl: true
+    }
+  },
 
   // The jst task compiles all application templates into JavaScript functions
   // with the underscore.js template function from 1.2.4.  You can change the
