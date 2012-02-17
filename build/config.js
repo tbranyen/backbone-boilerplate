@@ -19,6 +19,10 @@ config.init({
       "build/config.js", "app/**/*.js"
     ]
   },
+
+  // The jshint option for scripturl is set to lax, because the anchor
+  // override inside main.js needs to test for them so as to not accidentally
+  // route.
   jshint: {
     options: {
       scripturl: true
