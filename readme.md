@@ -2,8 +2,8 @@ Backbone Boilerplate
 ====================
 
 This boilerplate is the product of much research and frustration.  Existing
-boilerplates exist that modify Backbone core, don't have a build process, or
-are very prescriptive; this boilerplate changes that.
+boilerplates freely modify Backbone core, lack a build process, and are
+very prescriptive; this boilerplate changes that.
 
 Organize your application in a logical filesystem, develop your
 Models/Collections/Views/Routers inside modules, and build knowing you have
