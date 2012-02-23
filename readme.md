@@ -2,8 +2,8 @@ Backbone Boilerplate
 ====================
 
 This boilerplate is the product of much research and frustration.  Existing
-boilerplates exist that modify Backbone core, don't have a build process, or
-are very prescriptive; this boilerplate changes that.
+boilerplates freely modify Backbone core, lack a build process, and are
+very prescriptive; this boilerplate changes that.
 
 Organize your application in a logical filesystem, develop your
 Models/Collections/Views/Routers inside modules, and build knowing you have
@@ -130,6 +130,16 @@ like so:
 MyModule.Model = Backbone.Model.extend({ /* ... */ });
 
 MyModule.Router = Backbone.Router.extend({ /* ... */ });
+```
+
+## Events ##
+
+Application wide events provide a convenient way for modules to communicate with each other. `namespace.app` references a copy of the Backbone.Events object, providing access to `.on()`, `.off()`, and `.trigger()`, that are documented in [Backbone.js Events](http://documentcloud.github.com/backbone/#Events)
+
+For example, to add a callback to the "all" event:
+
+```javascript
+namespace.app.on("all", function(){}, this);
 ```
 
 ## HTML5 History and Hash Based Navigation ##

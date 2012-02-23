@@ -32,6 +32,7 @@
         <li><a data-bypass href="#namespace">Setting your namespace</a>
         <li><a data-bypass href="#modules">Creating a module</a>
         <li><a data-bypass href="#templates">Working with templates</a>
+        <li><a data-bypass href="#events">Working with Application Wide Events</a>
         <li><a data-bypass href="#plugins">Working with libraries and plugins</a>
       </ul>
     <li><a data-bypass href="#custom-build">Using the build tool</a>
@@ -262,6 +263,41 @@
   <pre><code>
   var template = window.JST["app/modules/example.html"];
   template({ ... });
+  </code></pre>
+  </p>
+
+  <h3 id="events">Working with Application Wide Events</h3>
+  <p>Application wide events provide a convenient way for modules to communicate with each other. <code>namespace.app</code> references a copy of the Backbone.Events object. <a href="http://documentcloud.github.com/backbone/#Events">More information on Backbone Events</a></p>
+
+  <p>
+  To bind a callback function to an event:
+
+  <pre><code>
+  //binding an annonymous function to the event "all" with a context of <code>this</code>.
+  namespace.app.on("all", function(){...}, this);
+  </code></pre>
+  </p>
+
+  <p>
+  To remove a callback function (or many) from an event:
+
+  <pre><code>
+  // Removes just the doSomething callback.
+  namespace.app.off("change", doSomething);
+  
+  // Removes all "change" events.
+  namespace.app.off("change");
+  
+  // Removes all events from the namespace.app object. 
+  namespace.app.off(); 
+  </code></pre>
+  </p>
+
+  <p>
+  To trigger the "change" event:
+
+  <pre><code>
+  namespace.app.trigger("change", [*args]);
   </code></pre>
   </p>
 
