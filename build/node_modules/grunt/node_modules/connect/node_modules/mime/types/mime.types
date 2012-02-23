@@ -26,7 +26,9 @@ application/atomsvc+xml				atomsvc
 # application/auth-policy+xml
 # application/batch-smtp
 # application/beep+xml
+# application/calendar+xml
 # application/cals-1840
+# application/ccmp+xml
 application/ccxml+xml				ccxml
 application/cdmi-capability			cdmia
 application/cdmi-container			cdmic
@@ -83,6 +85,7 @@ application/hyperstudio				stk
 # application/index.obj
 # application/index.response
 # application/index.vnd
+application/inkml+xml				ink inkml
 # application/iotp
 application/ipfix				ipfix
 # application/ipp
@@ -147,6 +150,7 @@ application/oda					oda
 application/oebps-package+xml			opf
 application/ogg					ogx
 application/onenote				onetoc onetoc2 onetmp onepkg
+application/oxps				oxps
 # application/parityfec
 application/patch-ops-error+xml			xer
 application/pdf					pdf
@@ -185,6 +189,10 @@ application/resource-lists-diff+xml		rld
 # application/riscos
 # application/rlmi+xml
 application/rls-services+xml			rs
+application/rpki-ghostbusters			gbr
+application/rpki-manifest			mft
+application/rpki-roa				roa
+# application/rpki-updown
 application/rsd+xml				rsd
 application/rss+xml				rss
 application/rtf					rtf
@@ -238,6 +246,7 @@ application/thraud+xml				tfi
 application/timestamped-data			tsd
 # application/tve-trigger
 # application/ulpfec
+# application/vcard+xml
 # application/vemmi
 # application/vividence.scriptfile
 # application/vnd.3gpp.bsf+xml
@@ -275,6 +284,7 @@ application/vnd.apple.installer+xml		mpkg
 application/vnd.apple.mpegurl			m3u8
 # application/vnd.arastra.swi
 application/vnd.aristanetworks.swi		swi
+application/vnd.astraea-software.iota		iota
 application/vnd.audiograph			aep
 # application/vnd.autopackage
 # application/vnd.avistar+xml
@@ -295,6 +305,7 @@ application/vnd.cloanto.rp9			rp9
 application/vnd.clonk.c4group			c4g c4d c4f c4p c4u
 application/vnd.cluetrust.cartomobile-config		c11amc
 application/vnd.cluetrust.cartomobile-config-pkg	c11amz
+# application/vnd.collection+json
 # application/vnd.commerce-battelle
 application/vnd.commonspace			csp
 application/vnd.contact.cmsg			cdbcmsg
@@ -312,6 +323,7 @@ application/vnd.ctc-posml			pml
 application/vnd.cups-ppd			ppd
 # application/vnd.cups-raster
 # application/vnd.cups-raw
+# application/vnd.curl
 application/vnd.curl.car			car
 application/vnd.curl.pcurl			pcurl
 # application/vnd.cybank
@@ -319,6 +331,7 @@ application/vnd.data-vision.rdz			rdz
 application/vnd.dece.data			uvf uvvf uvd uvvd
 application/vnd.dece.ttml+xml			uvt uvvt
 application/vnd.dece.unspecified		uvx uvvx
+application/vnd.dece.zip			uvz uvvz
 application/vnd.denovo.fcselayout-link		fe_launch
 # application/vnd.dir-bi.plate-dl-nosuffix
 application/vnd.dna				dna
@@ -358,6 +371,7 @@ application/vnd.ecowin.chart			mag
 # application/vnd.ecowin.seriesupdate
 # application/vnd.emclient.accessrequest+xml
 application/vnd.enliven				nml
+# application/vnd.eprints.data+xml
 application/vnd.epson.esf			esf
 application/vnd.epson.msf			msf
 application/vnd.epson.quickanime		qam
@@ -433,6 +447,7 @@ application/vnd.groove-injector			grv
 application/vnd.groove-tool-message		gtm
 application/vnd.groove-tool-template		tpl
 application/vnd.groove-vcard			vcg
+# application/vnd.hal+json
 application/vnd.hal+xml				hal
 application/vnd.handheld-entertainment+xml	zmm
 application/vnd.hbci				hbci
@@ -588,6 +603,7 @@ application/vnd.mseq				mseq
 # application/vnd.music-niff
 application/vnd.musician			mus
 application/vnd.muvee.style			msty
+application/vnd.mynfc				taglet
 # application/vnd.ncd.control
 # application/vnd.ncd.reference
 # application/vnd.nervana
@@ -636,6 +652,7 @@ application/vnd.oasis.opendocument.text-master		odm
 application/vnd.oasis.opendocument.text-template	ott
 application/vnd.oasis.opendocument.text-web		oth
 # application/vnd.obn
+# application/vnd.oftn.l10n+json
 # application/vnd.oipf.contentaccessdownload+xml
 # application/vnd.oipf.contentaccessstreaming+xml
 # application/vnd.oipf.cspg-hexbinary
@@ -665,12 +682,15 @@ application/vnd.olpc-sugar			xo
 # application/vnd.oma.bcast.sprov+xml
 # application/vnd.oma.bcast.stkm
 # application/vnd.oma.cab-address-book+xml
+# application/vnd.oma.cab-feature-handler+xml
 # application/vnd.oma.cab-pcc+xml
+# application/vnd.oma.cab-user-prefs+xml
 # application/vnd.oma.dcd
 # application/vnd.oma.dcdc
 application/vnd.oma.dd2+xml			dd2
 # application/vnd.oma.drm.risd+xml
 # application/vnd.oma.group-usage-list+xml
+# application/vnd.oma.pal+xml
 # application/vnd.oma.poc.detailed-progress-report+xml
 # application/vnd.oma.poc.final-report+xml
 # application/vnd.oma.poc.groups+xml
@@ -857,6 +877,7 @@ application/vnd.stardivision.impress		sdd
 application/vnd.stardivision.math		smf
 application/vnd.stardivision.writer		sdw vor
 application/vnd.stardivision.writer-global	sgl
+application/vnd.stepmania.package		smzip
 application/vnd.stepmania.stepchart		sm
 # application/vnd.street-stream
 application/vnd.sun.xml.calc			sxc
@@ -880,6 +901,7 @@ application/vnd.syncml.dm+xml			xdm
 # application/vnd.syncml.dm.notification
 # application/vnd.syncml.ds.notification
 application/vnd.tao.intent-module-archive	tao
+application/vnd.tcpdump.pcap			pcap cap dmp
 application/vnd.tmobile-livetv			tmo
 application/vnd.trid.tpt			tpt
 application/vnd.triscape.mxs			mxs
@@ -949,6 +971,7 @@ application/vnd.yamaha.openscoreformat.osfpvg+xml	osfpvg
 # application/vnd.yamaha.remote-setup
 application/vnd.yamaha.smaf-audio		saf
 application/vnd.yamaha.smaf-phrase		spf
+# application/vnd.yamaha.through-ngn
 # application/vnd.yamaha.tunnel-udpencap
 application/vnd.yellowriver-custom-menu		cmp
 application/vnd.zul				zir zirz
@@ -1096,6 +1119,7 @@ audio/basic					au snd
 # audio/dsr-es202050
 # audio/dsr-es202211
 # audio/dsr-es202212
+# audio/dv
 # audio/dvi4
 # audio/eac3
 # audio/evrc
@@ -1109,6 +1133,7 @@ audio/basic					au snd
 # audio/evrcwb0
 # audio/evrcwb1
 # audio/example
+# audio/fwdred
 # audio/g719
 # audio/g722
 # audio/g7221
@@ -1126,6 +1151,7 @@ audio/basic					au snd
 # audio/gsm-efr
 # audio/gsm-hr-08
 # audio/ilbc
+# audio/ip-mr_v2.5
 # audio/l16
 # audio/l20
 # audio/l24
@@ -1186,6 +1212,7 @@ audio/vnd.digital-winds				eol
 audio/vnd.dra					dra
 audio/vnd.dts					dts
 audio/vnd.dts.hd				dtshd
+# audio/vnd.dvb.file				dvb
 # audio/vnd.everad.plj
 # audio/vnd.hns.audio
 audio/vnd.lucent.voice				lvp
@@ -1337,6 +1364,7 @@ text/csv					csv
 # text/ecmascript
 # text/enriched
 # text/example
+# text/fwdred
 text/html					html htm
 # text/javascript
 text/n3						n3
@@ -1358,12 +1386,14 @@ text/troff					t tr roff man me ms
 text/turtle					ttl
 # text/ulpfec
 text/uri-list					uri uris urls
+text/vcard					vcard
 # text/vnd.abc
 text/vnd.curl					curl
 text/vnd.curl.dcurl				dcurl
 text/vnd.curl.scurl				scurl
 text/vnd.curl.mcurl				mcurl
 # text/vnd.dmclientscript
+text/vnd.dvb.subtitle				sub
 # text/vnd.esmertec.theme-descriptor
 text/vnd.fly					fly
 text/vnd.fmi.flexstor				flx
@@ -1443,6 +1473,7 @@ video/vnd.dece.video				uvv uvvv
 # video/vnd.directv.mpeg
 # video/vnd.directv.mpeg-tts
 # video/vnd.dlna.mpeg-tts
+video/vnd.dvb.file				dvb
 video/vnd.fvt					fvt
 # video/vnd.hns.video
 # video/vnd.iptvforum.1dparityfec-1010

@@ -41,3 +41,8 @@ application/x-mpegURL  m3u8
 # Why: See https://github.com/bentomas/node-mime/pull/6
 # Added by: mjrusso
 video/MP2T  ts
+
+# What: The FLAC lossless codec format
+# Why: Streaming and serving FLAC audio
+# Added by: jacobrask
+audio/flac  flac

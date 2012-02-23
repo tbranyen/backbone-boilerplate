@@ -48,6 +48,9 @@ exports.glob = function(pattern, options) {
   // efficient way.
   var filepaths = [];
   (function recurse(dirpath, depth) {
+    // Abort if, for whatever reason, dirpath doesn't exist.
+    if (!path.existsSync(dirpath)) { return; }
+    // Read directory contents.
     fs.readdirSync(dirpath).forEach(function(filepath) {
       var stat;
       // Make relative path absolute.

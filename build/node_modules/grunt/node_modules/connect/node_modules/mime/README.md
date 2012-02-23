@@ -1,6 +1,6 @@
 # mime
 
-Support for mapping between file extensions and MIME types.  This module uses the latest version of the Apache "mime.types" file (maps over 620 types to 800+ extensions).  It is also trivially easy to add your own types and extensions, should you need to do that.
+Comprehensive MIME type mapping API. Includes all 600+ types and 800+ extensions defined by the Apache project, plus additional types submitted by the node.js community.
 
 ## Install
 
@@ -11,30 +11,36 @@ Install with [npm](http://github.com/isaacs/npm):
 ## API - Queries
 
 ### mime.lookup(path)
-Get the mime type associated with a file. This is method is case-insensitive. Everything in path up to and including the last '/' or '.' is ignored, so you can pass it paths, filenames, or extensions, like so:
+Get the mime type associated with a file. Performs a case-insensitive lookup using the extension in `path` (the substring after the last '/' or '.').  E.g.
 
     var mime = require('mime');
 
     mime.lookup('/path/to/file.txt');         // => 'text/plain'
     mime.lookup('file.txt');                  // => 'text/plain'
-    mime.lookup('.txt');                      // => 'text/plain'
+    mime.lookup('.TXT');                      // => 'text/plain'
     mime.lookup('htm');                       // => 'text/html'
 
-### mime.extension(type) - lookup the default extension for type
+### mime.extension(type)
+Get the default extension for `type`
 
     mime.extension('text/html');                 // => 'html'
     mime.extension('application/octet-stream');  // => 'bin'
 
-### mime.charsets.lookup() - map mime-type to charset
+### mime.charsets.lookup()
+
+Map mime-type to charset
 
     mime.charsets.lookup('text/plain');        // => 'UTF-8'
 
 (The logic for charset lookups is pretty rudimentary.  Feel free to suggest improvements.)
 
-## API - Customizing
+## API - Defining Custom Types
 
 The following APIs allow you to add your own type mappings within your project.  If you feel a type should be included as part of node-mime, see [requesting new types](https://github.com/bentomas/node-mime/wiki/Requesting-New-Types).
-### mime.define() - Add custom mime/extension mappings
+
+### mime.define()
+
+Add custom mime/extension mappings
 
     mime.define({
         'text/x-some-format': ['x-sf', 'x-sft', 'x-sfml'],
@@ -43,8 +49,15 @@ The following APIs allow you to add your own type mappings within your project. 
     });
 
     mime.lookup('x-sft');                 // => 'text/x-some-format'
+
+The first entry in the extensions array is returned by `mime.extension()`. E.g.
+
     mime.extension('text/x-some-format'); // => 'x-sf'
 
-### mime.load(filepath) - Load mappings from an Apache ".types" format file
+### mime.load(filepath)
+
+Load mappings from an Apache ".types" format file
 
     mime.load('./my_project.types');
+
+The .types file format is simple -  See the `types` dir for examples.

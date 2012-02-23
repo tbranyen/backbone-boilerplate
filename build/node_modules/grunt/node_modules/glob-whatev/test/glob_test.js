@@ -31,7 +31,7 @@ function fileList(arr, prefix) {
 
 exports['globsync'] = {
   'relative': function(test) {
-    test.expect(9);
+    test.expect(11);
     test.deepEqual(globsync.glob('test/fixture/*'), fileList([0,1]), 'test/fixture/* should match');
     test.deepEqual(globsync.glob('test/fixture/*/*'), fileList([2,6]), 'test/fixture/* should match');
     test.deepEqual(globsync.glob('test/fixture/**'), fileList([0,1,2,3,4,5,6]), 'test/fixture/** should match');
@@ -41,6 +41,8 @@ exports['globsync'] = {
     test.deepEqual(globsync.glob('test/fixture/**/b??'), fileList([2,3]), 'test/fixture/**/b?? should match');
     test.deepEqual(globsync.glob('test/fixture/**/b???'), fileList([0,4,5,6]), 'test/fixture/**/b??? should match');
     test.deepEqual(globsync.glob('test/fixture/**/?oo'), fileList([1]), 'test/fixture/**/?oo should match');
+    test.deepEqual(globsync.glob('test/fixture/fail'), [], 'test/fixture/fail should match nothing (and not fail)');
+    test.deepEqual(globsync.glob('test/fixture/fail/*'), [], 'test/fixture/fail/* should match nothing (and not fail)');
     test.done();
   },
   'absolute': function(test) {
