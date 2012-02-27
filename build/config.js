@@ -94,10 +94,6 @@ config.init({
     },
 
     release: {
-      files: {
-        "app/config.js": "app/config.js"
-      },
-
       folders: {
         "app": "dist/release",
         "app/templates": "app/templates",
@@ -121,7 +117,7 @@ config.init({
     baseUrl: "app",
 
     // Root application module
-    name: "index",
+    name: "config",
 
     // Do not wrap everything in an IIFE
     wrap: false
