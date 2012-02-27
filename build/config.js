@@ -111,7 +111,7 @@ config.init({
   // other builders may be contributed as drop-in alternatives.
   requirejs: {
     // Include the main configuration file
-    mainConfigFile: "app/index.js",
+    mainConfigFile: "app/config.js",
 
     // Output file
     out: "dist/debug/require.js",
