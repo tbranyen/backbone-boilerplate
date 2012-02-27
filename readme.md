@@ -49,7 +49,7 @@ node build server
 And launch your web browser to `http://localhost:8000/`, this will
 load up the tutorial.
 
-### Using the server comamnds ###
+### Using the server commands ###
 
 The server has been completely refactored into a Grunt build task instead of a
 separate Node.js script.  This has many added benefits of which defining your
