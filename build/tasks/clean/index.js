@@ -1,23 +1,30 @@
-var path = require("path");
+/*
+ * Grunt Task File
+ * ---------------
+ *
+ * Task: Clean 
+ * Description: Remove the contents of a given folder
+ * Dependencies: rimraf
+ *
+ */
 
 // ============================================================================
 // TASKS
 // ============================================================================
 
-task.registerBasicTask("clean","Deletes out all contents in a directory", function(data, name) {
-  var folder = path.resolve(data);
+task.registerBasicTask("clean", "Remove the contents of a given folder", function(data, name) {
+  var folder = require("path").resolve(data);
 
   // Delete all files inside the folder
   task.helper("clean", folder);
-});
 
-// ============================================================================
-// HELPERS
-// ============================================================================
+  // Fail task if errors were logged.
+  if (task.hadErrors()) { return false; }
+
+  // Otherwise, print a success message.
+  log.writeln("Folder \"" + folder + "\" contents removed.");
+});
 
 task.registerHelper("clean", function(folder) {
-  var rimraf = require("rimraf");
-
-  rimraf.sync(folder);
+  require("rimraf").sync(folder);
 });
-

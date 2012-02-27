@@ -1,7 +1,7 @@
 {
   "name": "glob-whatev",
   "description": "A quick and dirty file globbing utility based on minimatch.",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "homepage": "http://github.com/cowboy/node-glob-whatev",
   "author": {
     "name": "\"Cowboy\" Ben Alman",

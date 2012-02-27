@@ -22,10 +22,8 @@ function encode (obj, indent) {
       obj = obj.trim()
       if (obj.indexOf("\n") !== -1) {
         return "|\n" + indent + obj.split(/\r?\n/).join("\n"+indent)
-      } else if (obj.indexOf(":") !== -1) {
-        return JSON.stringify(obj)
       } else {
-        return obj
+        return JSON.stringify(obj)
       }
 
     case "number":
@@ -45,14 +43,16 @@ function encode (obj, indent) {
 
       if (obj instanceof Date ||
           Object.prototype.toString.call(obj) === "[object Date]") {
-        return "[Date " + obj.toISOString() + "]"
+        return JSON.stringify("[Date " + obj.toISOString() + "]")
       }
 
       if (obj instanceof RegExp ||
-          Object.prototype.toString.call(obj) === "[object RegExp]" ||
-          obj instanceof Boolean ||
-          Object.prototype.toString.call(obj) === "[object Boolean]"
-         ) {
+          Object.prototype.toString.call(obj) === "[object RegExp]") {
+        return JSON.stringify(obj.toString())
+      }
+
+      if (obj instanceof Boolean ||
+          Object.prototype.toString.call(obj) === "[object Boolean]") {
         return obj.toString()
       }
 
@@ -115,13 +115,26 @@ function encode (obj, indent) {
 function decode (str) {
   var v = str.trim()
     , d
+    , dateRe = /^\[Date ([0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}(?::[0-9]{2})?(?:\.[0-9]{3})?(?:[A-Z]+)?)\]$/
+
   if (v === "~") return null
-  if (v.match(/^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}/)
-      && (d = Date.parse(v))) {
+
+  try {
+    var jp = JSON.parse(str)
+  } catch (e) {
+    var jp = ""
+  }
+
+  if (jp &&
+      typeof jp === "string" &&
+      (d = jp.match(dateRe)) &&
+      (d = Date.parse(d[1]))) {
     return new Date(d)
   }
-  if (v === "true" || v === "false") return JSON.parse(v)
+
+  if (typeof jp === "boolean") return jp
   if (v && !isNaN(v)) return parseInt(v, 10)
+
   // something interesting.
   var lines = str.split(/\r?\n/)
   // check if it's some kind of string or something.
@@ -219,7 +232,7 @@ function undent (lines) {
 }
 
 
-
+// XXX Turn this into proper tests.
 if (require.main === module) {
 var obj = [{"bigstring":new Error().stack}
           ,{ar:[{list:"of"},{some:"objects"}]}
@@ -231,6 +244,7 @@ Date.prototype.toJSON = function (k, val) {
   console.error(k, val, this)
   return this.toISOString() + " (it's a date)"
 }
+
 var enc = encode(obj)
   , dec = decode(enc)
   , encDec = encode(dec)

@@ -6,6 +6,8 @@ define([
 ],
 
 function($, _, Backbone) {
+  // Put application wide code here
+
   return {
     // This is useful when developing if you don't want to use a
     // build process every time you change a template.
@@ -23,8 +25,9 @@ function($, _, Backbone) {
       // Fetch it asynchronously if not available from JST
       return $.get(path, function(contents) {
         var tmpl = _.template(contents);
-        JST[path] = tmpl;
-        done(tmpl);
+
+        // Set the global JST cache and return the template
+        done(JST[path] = tmpl);
       });
     },
 
