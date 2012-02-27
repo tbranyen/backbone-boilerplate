@@ -5,40 +5,17 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width,initial-scale=1">
 
-  <link rel="stylesheet" href="/assets/css/style.css">
-
   <title>Backbone Boilerplate</title>
+
+  <!-- Application styles -->
+  <link rel="stylesheet" href="/assets/css/index.css">
 </head>
 
 <body>
   <!-- Main container -->
   <div role="main" id="main"></div>
 
-  <!--
-       Using the build tool? If yes, delete the following uncommented scripts and read
-       the comments starting on line 29.
-  -->
-
-  <!-- Libraries -->
-  <script src="/assets/js/libs/jquery.js"></script>
-  <script src="/assets/js/libs/underscore.js"></script>
-  <script src="/assets/js/libs/backbone.js"></script>
-
-  <!-- Application -->
-  <script src="/app/namespace.js"></script>
-  <script src="/app/modules/example.js"></script>
-  <script src="/app/index.js"></script>
-
-  <!--
-       If using the build tool you can uncomment the following lines and use
-       these instead.  They will toggle based on if you are using debug or
-       release.
-  -->
-
-  <!--
-  <script src="/assets/js/libs.js"></script>
-  <script src="/assets/js/templates.js"></script>
-  <script src="/assets/js/app.js"></script>
-  -->
+  <!-- Application source -->
+  <script data-main="app/index" src="/assets/js/libs/require.js"></script>
 </body>
 </html>

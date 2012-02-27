@@ -15,24 +15,14 @@ Special Thanks to: [cowboy](http://github.com/cowboy),
 [iros](http://github.com/iros), [nimbupani](http://github.com/nimbupani) and
 [wookiehangover](http://github.com/wookiehangover)
 
-## Provides ##
+## Experimental AMD/RequireJS Build ##
 
-* HTML5 Boilerplate foundation
-* Elegant filesystem structure for
-  + App code, assets, tests, and distribution
-* Snippets to make common tasks easier
-  + For modules, HTML5 History API/Hash navigation, loading templates and
-  application events
-* Very flexible and pluginable build process that works in Windows! 
-  + Concatenate and minify all your libraries, application code, templates and
-  CSS
-  + Compiles underscore templates out of the box
+This is a sandbox branch to mess with concepts and ideas of potentially
+bringing AMD modules to Backbone Boilerplate as a default standard.
 
-## Installation ##
+Please explore around and comment on if anything looks funky or strange.
 
-There are several ways to install and intimately enjoy the benefits Backbone
-Boilerplate provides.  The easiest is to download an archive and extract
-into your new application folder:
+### Using the build commands ###
 
 * **[Download ZIP](https://github.com/tbranyen/backbone-boilerplate/zipball/master)**
 * **[Download TAR](https://github.com/tbranyen/backbone-boilerplate/tarball/master)**
@@ -60,11 +50,35 @@ scroll down to the Build section to see how to configure and use it.
 Once you have the boilerplate downloaded and extracted, run the following:
 
 ``` bash
-node build/server
+node build server
 ```
 
 And launch your web browser to `http://localhost:8000/`, this will
 load up the tutorial.
+
+### Using the server comamnds ###
+
+The server has been completely refactored into a Grunt build task instead of a
+separate Node.js script.  This has many added benefits of which defining your
+server options inside the `build/config.js` is the best ^_^.
+
+Note: Using RequireJS and AMD you never need to update the `index.html` file
+to test in development/debug/release modes.  If your paths don't seem to be
+working, checking the mapping in `build/config.js` under the server section.
+
+There are lots of other cool settings you can use now for the server, such
+as `port`, `host` and changing the default `index.html` name.
+
+``` bash
+# Running the development server using the script loader (great for devving)
+node build server
+
+# Running the development server using debug (concatenated files)
+node build server:debug
+
+# Running the development server using release (minified files)
+node build server:release
+```
 
 ## HTML5 Boilerplate ##
 
@@ -192,50 +206,10 @@ To run the defaults, execute the following command from the project root,
 and *not from inside the build folder*.
 
 ``` bash
+# Default building with RequireJS outputs to dist/debug
 node build
+
+# Advanced building with minification
+node build default min
 ```
 
-This will do a number of things for you.  First it will concatenate all your
-libs, app code, and templates into separate files inside the `dist/debug`
-folder.  It will then minify those files and your CSS into production ready
-files inside the `dist/release` folder.
-
-To customize and configure the build tool, open `build/config.js` and tweak
-the settings.
-
-If you are perpetually working on the application and making many changes, you
-may find it convenient to have the build process watch your directory structure
-and automatically re-run the tasks after a file has changed.
-
-Use the following command to build to the debug folder:
-
-``` bash
-node build watch
-```
-
-Use the following command to build to the debug and release folders:
-
-``` bash
-node build watch:min
-```
-
-These watch commands can operate in parallel to the above development server
-for an efficient work process of editting files and testing the output.
-
-### Additional Build Tasks ###
-
-The build process incorporates a plugin architecture that makes adding premade
-or custom-built tasks very easy.
-
-#### Installing custom tasks ####
-
-To install a custom task, simply copy the JavaScript file into the `build/tasks`
-folder.  If the task is an archive simply extract it into the same folder.
-
-After the task has been loaded into the tasks directory, you will need to
-configure it in `build/config.js` per the task instructions.
-
-#### Creating custom tasks ####
-
-Until proper tutorials and documentation have been created for Grunt, look
-at the `build/tasks/__template.js` file for inspiration =)
