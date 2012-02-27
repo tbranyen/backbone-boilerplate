@@ -30,7 +30,10 @@ function(namespace, Backbone) {
       namespace.fetchTemplate(this.template, function(tmpl) {
         view.el.innerHTML = tmpl();
 
-        done(view.el);
+        // If a done function is passed, call it with the element
+        if (_.isFunction(done)) {
+          done(view.el);
+        }
       });
     }
   });

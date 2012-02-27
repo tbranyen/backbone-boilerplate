@@ -2,8 +2,8 @@ Backbone Boilerplate
 ====================
 
 This boilerplate is the product of much research and frustration.  Existing
-boilerplates exist that modify Backbone core, don't have a build process, or
-are very prescriptive; this boilerplate changes that.
+boilerplates freely modify Backbone core, lack a build process, and are
+very prescriptive; this boilerplate changes that.
 
 Organize your application in a logical filesystem, develop your
 Models/Collections/Views/Routers inside modules, and build knowing you have
@@ -24,10 +24,6 @@ Please explore around and comment on if anything looks funky or strange.
 
 ### Using the build commands ###
 
-<<<<<<< HEAD
-The build commands are very similar to the master branch, with the exception
-that minification is not on by default.
-=======
 * **[Download ZIP](https://github.com/tbranyen/backbone-boilerplate/zipball/master)**
 * **[Download TAR](https://github.com/tbranyen/backbone-boilerplate/tarball/master)**
 
@@ -54,11 +50,35 @@ scroll down to the Build section to see how to configure and use it.
 Once you have the boilerplate downloaded and extracted, run the following:
 
 ``` bash
-node build/server
+node build server
 ```
 
 And launch your web browser to `http://localhost:8000/`, this will
 load up the tutorial.
+
+### Using the server comamnds ###
+
+The server has been completely refactored into a Grunt build task instead of a
+separate Node.js script.  This has many added benefits of which defining your
+server options inside the `build/config.js` is the best ^_^.
+
+Note: Using RequireJS and AMD you never need to update the `index.html` file
+to test in development/debug/release modes.  If your paths don't seem to be
+working, checking the mapping in `build/config.js` under the server section.
+
+There are lots of other cool settings you can use now for the server, such
+as `port`, `host` and changing the default `index.html` name.
+
+``` bash
+# Running the development server using the script loader (great for devving)
+node build server
+
+# Running the development server using debug (concatenated files)
+node build server:debug
+
+# Running the development server using release (minified files)
+node build server:release
+```
 
 ## HTML5 Boilerplate ##
 
@@ -126,6 +146,16 @@ MyModule.Model = Backbone.Model.extend({ /* ... */ });
 MyModule.Router = Backbone.Router.extend({ /* ... */ });
 ```
 
+## Events ##
+
+Application wide events provide a convenient way for modules to communicate with each other. `namespace.app` references a copy of the Backbone.Events object, providing access to `.on()`, `.off()`, and `.trigger()`, that are documented in [Backbone.js Events](http://documentcloud.github.com/backbone/#Events)
+
+For example, to add a callback to the "all" event:
+
+```javascript
+namespace.app.on("all", function(){}, this);
+```
+
 ## HTML5 History and Hash Based Navigation ##
 
 Out the box Backbone Boilerplate enables `pushState`.  It also supplies a script
@@ -174,7 +204,6 @@ Node.js application that utilizes [@cowboy's](http://github.com/cowboy/)
 
 To run the defaults, execute the following command from the project root,
 and *not from inside the build folder*.
->>>>>>> master
 
 ``` bash
 # Default building with RequireJS outputs to dist/debug
@@ -184,26 +213,3 @@ node build
 node build default min
 ```
 
-### Using the server comamnds ###
-
-The server has been completely refactored into a Grunt build task instead of a
-separate Node.js script.  This has many added benefits of which defining your
-server options inside the `build/config.js` is the best ^_^.
-
-Note: Using RequireJS and AMD you never need to update the `index.html` file
-to test in development/debug/release modes.  If your paths don't seem to be
-working, checking the mapping in `build/config.js` under the server section.
-
-There are lots of other cool settings you can use now for the server, such
-as `port`, `host` and changing the default `index.html` name.
-
-``` bash
-# Running the development server using the script loader (great for devving)
-node build server
-
-# Running the development server using debug (concatenated files)
-node build server:debug
-
-# Running the development server using release (minified files)
-node build server:release
-```
