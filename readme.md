@@ -22,8 +22,6 @@ bringing AMD modules to Backbone Boilerplate as a default standard.
 
 Please explore around and comment on if anything looks funky or strange.
 
-### Using the build commands ###
-
 * **[Download ZIP](https://github.com/tbranyen/backbone-boilerplate/zipball/master)**
 * **[Download TAR](https://github.com/tbranyen/backbone-boilerplate/tarball/master)**
 
@@ -171,31 +169,6 @@ route through Backbone's router, make them absolute.
 
 In order to test `pushState` use the development server explained below.
 
-## Development server ##
-
-While writing an application that leverages `pushState` you can run the
-following command to run a server that will always resolve to the `index.html`
-
-``` bash
-node build/server
-```
-
-This will spawn up an HTTP server on port `8000`.  This server is intended
-for development and not production.  You should use url rewriting or forwarding
-all requests in your production server to achieve this same effect. 
-
-### Serving the built assets ###
-
-If you are using the build tool in conjunction with this development server
-you can optionally update the `index.html` file to remove the existing script
-tags and uncomment out the scripts tag at the bottom to load the `dist/debug`
-or `dist/release` assets.  You can achieve this by specifying either **debug**
-or **release** after the server command, like so:
-
-``` bash
-node build/server release
-```
-
 ## Build Process ##
 
 The Backbone Boilerplate build process is a state-of-the-art, task-driven
@@ -207,9 +180,8 @@ and *not from inside the build folder*.
 
 ``` bash
 # Default building with RequireJS outputs to dist/debug
-node build
+node build debug
 
 # Advanced building with minification
-node build default min
+node build release
 ```
-
