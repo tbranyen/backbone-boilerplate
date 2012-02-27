@@ -15,12 +15,7 @@ Special Thanks to: [cowboy](http://github.com/cowboy),
 [iros](http://github.com/iros), [nimbupani](http://github.com/nimbupani) and
 [wookiehangover](http://github.com/wookiehangover)
 
-## Experimental AMD/RequireJS Build ##
-
-This is a sandbox branch to mess with concepts and ideas of potentially
-bringing AMD modules to Backbone Boilerplate as a default standard.
-
-Please explore around and comment on if anything looks funky or strange.
+## Installation ##
 
 * **[Download ZIP](https://github.com/tbranyen/backbone-boilerplate/zipball/master)**
 * **[Download TAR](https://github.com/tbranyen/backbone-boilerplate/tarball/master)**
