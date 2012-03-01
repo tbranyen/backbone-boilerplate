@@ -112,10 +112,6 @@ config.init({
     // Output file
     out: "dist/debug/require.js",
 
-    // Where modules live
-    dir: ".",
-    baseUrl: "app",
-
     // Root application module
     name: "config",
 

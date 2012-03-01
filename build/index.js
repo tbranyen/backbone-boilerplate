@@ -12,4 +12,4 @@ grunt.cli({
   base: "./",
   config: "build/config.js",
   tasks: taskList
-}, function() { });
+}, function() {});
