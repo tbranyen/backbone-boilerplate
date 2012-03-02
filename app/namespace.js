@@ -22,13 +22,13 @@ function($, _, Backbone) {
         return done(JST[path]);
       }
 
-      // Fetch it asynchronously if not available from JST
+      // Fetch it asynchronously if not available from JST 
       return $.get(path, function(contents) {
         var tmpl = _.template(contents);
 
         // Set the global JST cache and return the template
         done(JST[path] = tmpl);
-      });
+      }, "text");
     },
 
     // Create a custom object with a nested Views object
