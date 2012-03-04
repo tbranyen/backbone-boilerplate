@@ -12,8 +12,9 @@ efficient code that will not bottleneck your users.
 Thanks to our [Contributors](https://github.com/tbranyen/backbone-boilerplate/contributors)!
 
 Special Thanks to: [cowboy](http://github.com/cowboy),
-[iros](http://github.com/iros), [nimbupani](http://github.com/nimbupani) and
-[wookiehangover](http://github.com/wookiehangover)
+[iros](http://github.com/iros), [nimbupani](http://github.com/nimbupani),
+[wookiehangover](http://github.com/wookiehangover), and
+[jugglinmike](http://github.com/jugglinmike)
 
 ## Installation ##
 
