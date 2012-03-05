@@ -15,20 +15,29 @@ function($, _, Backbone) {
     // Delete if you are using a different template loading method.
     fetchTemplate: function(path, done) {
       var JST = window.JST = window.JST || {};
+      var def = new $.Deferred();
 
       // Should be an instant synchronous way of getting the template, if it
       // exists in the JST object.
       if (JST[path]) {
-        return done(JST[path]);
+        done(JST[path]);
+
+        return def.resolve(JST[path]);
       }
 
       // Fetch it asynchronously if not available from JST 
-      return $.get(path, function(contents) {
+      $.get(path, function(contents) {
         var tmpl = _.template(contents);
 
         // Set the global JST cache and return the template
         done(JST[path] = tmpl);
+
+        // Resolve the template deferred
+        def.resolve(JST[path]);
       }, "text");
+
+      // Ensure a normalized return value (Promise)
+      return def.promise();
     },
 
     // Create a custom object with a nested Views object
