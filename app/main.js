@@ -47,7 +47,7 @@ function(namespace, $, Backbone, Example) {
   // Treat the jQuery ready function as the entry point to the application.
   // Inside this function, kick-off all initialization, everything up to this
   // point should be definitions.
-  $(function($) {
+  $(function() {
     // Define your master router on the application namespace and trigger all
     // navigation from this instance.
     app.router = new Router();
