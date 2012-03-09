@@ -22,7 +22,7 @@ function($, _, Backbone) {
       if (JST[path]) {
         if (_.isFunction(done)) {
         	done(JST[path]);
-		}
+		    }
 
         return def.resolve(JST[path]);
       }
@@ -33,8 +33,8 @@ function($, _, Backbone) {
 
         // Set the global JST cache and return the template
         if (_.isFunction(done)) {
-			done(JST[path]);
-		}
+			    done(JST[path]);
+		    }
 
         // Resolve the template deferred
         def.resolve(JST[path]);
