@@ -10,6 +10,6 @@ var taskList = fs.readdirSync(__dirname + "/tasks").filter(function(task) {
 
 grunt.cli({
   base: "./",
-  config: "build/config.js",
+  config: __dirname + "/config.js",
   tasks: taskList
 }, function() {});
