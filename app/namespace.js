@@ -20,17 +20,21 @@ function($, _, Backbone) {
       // Should be an instant synchronous way of getting the template, if it
       // exists in the JST object.
       if (JST[path]) {
-        done(JST[path]);
+        if (_.isFunction(done)) {
+        	done(JST[path]);
+		    }
 
         return def.resolve(JST[path]);
       }
 
       // Fetch it asynchronously if not available from JST 
       $.get(path, function(contents) {
-        var tmpl = _.template(contents);
+        JST[path] = _.template(contents);
 
         // Set the global JST cache and return the template
-        done(JST[path] = tmpl);
+        if (_.isFunction(done)) {
+			    done(JST[path]);
+		    }
 
         // Resolve the template deferred
         def.resolve(JST[path]);
