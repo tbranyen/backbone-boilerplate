@@ -71,11 +71,10 @@ function(namespace, $, Backbone, Example) {
       // refresh.
       evt.preventDefault();
 
-      // This uses the default router defined above, and not any routers
-      // that may be placed in modules.  To have this work globally (at the
-      // cost of losing all route events) you can change the following line
-      // to: Backbone.history.navigate(href, true);
-      app.router.navigate(href, true);
+      // `Backbone.history.navigate` is sufficient for all Routers and will
+      // trigger the correct events.  The Router's internal `navigate` method
+      // calls this anyways.
+      Backbone.history.navigate(href, true);
     }
   });
 
