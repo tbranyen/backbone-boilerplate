@@ -101,17 +101,23 @@ you may want to create a separate `plugins` folder inside `assets/js`.
 ```
 .
 ├── app
-│   ├── index.js
+│   ├── config.js
+│   ├── main.js
 │   ├── modules
+│   ├── namespace.js
 │   └── templates
 ├── assets
 │   ├── css
 │   ├── img
 │   └── js
+│       ├── libs
+│       └── plugins
 ├── build
 ├── favicon.ico
 ├── index.html
 └── test
+    ├── jasmine
+    └── qunit
 ```
 
 ## Modules ##
