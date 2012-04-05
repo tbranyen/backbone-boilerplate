@@ -9,7 +9,8 @@ Organize your application in a logical filesystem, develop your
 Models/Collections/Views/Routers inside modules, and build knowing you have
 efficient code that will not bottleneck your users.
 
-Thanks to our [Contributors](https://github.com/tbranyen/backbone-boilerplate/contributors)!
+Thanks to our
+[Contributors](https://github.com/backbone-boilerplate/backbone-boilerplate/contributors)!
 
 Special Thanks to: [cowboy](http://github.com/cowboy),
 [iros](http://github.com/iros), [nimbupani](http://github.com/nimbupani),
@@ -20,7 +21,7 @@ Special Thanks to: [cowboy](http://github.com/cowboy),
 
 View the Backbone Boilerplate documentation here:
 
-[GitHub Wiki](https://github.com/tbranyen/backbone-boilerplate/wiki)
+[GitHub Wiki](https://github.com/backbone-boilerplate/backbone-boilerplate/wiki)
 
 ## Build process ##
 
