@@ -28,17 +28,29 @@ function($, _, Backbone) {
       }
 
       // Fetch it asynchronously if not available from JST 
-      $.get(path, function(contents) {
-        JST[path] = _.template(contents);
+      $.ajax({
+        url: path,
 
-        // Set the global JST cache and return the template
-        if (_.isFunction(done)) {
-          done(JST[path]);
+        type: "get",
+
+        dataType: "text",
+        // make sure that template requests are never cached
+        cache: false,
+        // prevent global ajax event handlers from firing
+        global: false,
+
+        success: function(contents) {
+          JST[path] = _.template(contents);
+
+          // Set the global JST cache and return the template
+          if (_.isFunction(done)) {
+            done(JST[path]);
+          }
+
+          // Resolve the template deferred
+          def.resolve(JST[path]);
         }
-
-        // Resolve the template deferred
-        def.resolve(JST[path]);
-      }, "text");
+      });
 
       // Ensure a normalized return value (Promise)
       return def.promise();
