@@ -85,18 +85,27 @@ module.exports = function(grunt) {
     //  To learn more about using the server task, please refer to the code
     //  until documentation has been written.
     server: {
+      files: { "favicon.ico": "favicon.ico" },
+
       debug: {
+        files: { "favicon.ico": "favicon.ico" },
+
         folders: {
           "app": "dist/debug",
-          "app/templates": "app/templates",
           "assets/js/libs": "dist/debug"
         }
       },
 
       release: {
+        // These two options make it easier for deploying, by using whatever
+        // PORT is available in the environment and defaulting to any IP.
+        host: "0.0.0.0",
+        port: process.env.PORT || 8000,
+
+        files: { "favicon.ico": "favicon.ico" },
+
         folders: {
           "app": "dist/release",
-          "app/templates": "app/templates",
           "assets/js/libs": "dist/release",
           "assets/css": "dist/release"
         }
