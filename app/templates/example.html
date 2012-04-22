@@ -29,7 +29,7 @@
           <li><a data-bypass href="#default-routes">Removing the default routes</a>
           <li><a data-bypass href="#default-assets">Removing default assets</a>
         </ul>
-        <li><a data-bypass href="#namespace">Setting your namespace</a>
+        <li><a data-bypass href="#namespace">Namespace</a>
         <li><a data-bypass href="#modules">Creating a module</a>
         <li><a data-bypass href="#templates">Working with templates</a>
         <li><a data-bypass href="#events">Working with Application Wide Events</a>
@@ -80,7 +80,7 @@
   you may find help in one of these places:</p>
 
   <ul>
-    <li>IRC - #documentcloud on irc.freenode.net
+    <li>IRC - #backbone-boilerplate on irc.freenode.net
     <li><a target="blank" href="http://github.com/tbranyen/backbone-boilerplate/issues">GitHub Issues</a> - Please report if you've found an issue,
     bug, or controversial request.
   </ul>
@@ -115,22 +115,8 @@
       <p>If you are not planning on testing your application with QUnit you should delete this directory.</p>
 
     <li><h4 id="build-process">Removing the build process</h4>
-      <p>If you are not planning on using the provided build tool, delete the <code>build</code> folder.  It contains a lot of unnecessary code and
-      Node.js modules that you will not need.  You should also clear out the commented out script tags inside of <code>index.html</code>:
-      
-      <pre><code>
-    &lt;!--
-         If using the build tool you can uncomment the following lines and use
-         these instead.  They will toggle based on if you are using debug or
-         release.
-    --&gt;
-
-    &lt;!--
-    &lt;script src=&quot;/assets/js/libs.js&quot;&gt;&lt;/script&gt;
-    &lt;script src=&quot;/assets/js/templates.js&quot;&gt;&lt;/script&gt;
-    &lt;script src=&quot;/assets/js/app.js&quot;&gt;&lt;/script&gt;
-    --&gt;
-      </code></pre>
+      <p>If you are not planning on using the build tool, delete the
+      <code>grunt.js</code> file.  It contains configuration you will not need.
       </p>
 
     <li><h4 id="favicon">Changing the Favicon</h4>
@@ -182,27 +168,10 @@
      <p>You should delete the <code>assets/img/backbone.png</code> file if you are not planning on using it in your app.</p>
   </ul>
 
-  <h3 id="namespace">Setting your namespace</h3>
-  <p>This is a very important starting step to creating your application.  This brands the application to your name and makes
-  it something identifiable to new developers.  To set your own namespace, simply open the <code>app/namespace.js</code> file and
-  make the following modifications:
-
-    First change the name of the namespace, this is defined on <code>Line 4</code>
-    <pre><code>
-  this.myapp = {
-    // Assist with code organization, by breaking up logical components of code
-    // into modules.
-    module: function() {
-    </code></pre>
-    </p>
-
-    <p>Once you've set the name, you'll want to change the reference in <code>index.js</code> on <code>Line 7</code> to:
-    
-    <pre><code>
-  // Shorthand the application namespace
-  var app = this.myapp;
-    </code></pre>
-    </p>
+  <h3 id="namespace">Namespace</h3>
+  <p>The <code>namespace.js</code> file is very important since it contains logic that should
+  exist for every module in your application.  This also contains the <code>module</code>
+  shortcut function and <code>fetchTemplate</code> function.</p>
   </p>
 
   <h3 id="modules">Creating a module</h3>
