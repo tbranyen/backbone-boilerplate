@@ -27,16 +27,14 @@ function($, _, Backbone) {
         return def.resolve(JST[path]);
       }
 
-      // Fetch it asynchronously if not available from JST 
+      // Fetch it asynchronously if not available from JST, ensure that
+      // template requests are never cached and prevent global ajax event
+      // handlers from firing.
       $.ajax({
         url: path,
-
         type: "get",
-
         dataType: "text",
-        // make sure that template requests are never cached
         cache: false,
-        // prevent global ajax event handlers from firing
         global: false,
 
         success: function(contents) {
