@@ -31,7 +31,7 @@ function($, _, Backbone) {
       // template requests are never cached and prevent global ajax event
       // handlers from firing.
       $.ajax({
-        url: path,
+        url: "/" + path,
         type: "get",
         dataType: "text",
         cache: false,
