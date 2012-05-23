@@ -1,7 +1,7 @@
 define([
   // Libs
   "jquery",
-  "use!underscore",
+  "underscore",
   "use!backbone"
 ],
 
