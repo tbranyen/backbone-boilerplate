@@ -1,5 +1,5 @@
 /*!
- * Lo-Dash v0.2.0 <http://lodash.com>
+ * Lo-Dash v0.2.2 <http://lodash.com>
  * Copyright 2012 John-David Dalton <http://allyoucanleet.com/>
  * Based on Underscore.js 1.3.3, copyright 2009-2012 Jeremy Ashkenas, DocumentCloud Inc.
  * <http://documentcloud.github.com/underscore>
@@ -11,30 +11,6 @@
   /** Detect free variable `exports` */
   var freeExports = typeof exports == 'object' && exports &&
     (typeof global == 'object' && global && global == global.global && (window = global), exports);
-
-  /**
-   * Used to detect the JavaScript engine's argument length limit.
-   *
-   * The initial value of `argsLimit` is low enough not to cause uncatchable
-   * errors in Java and avoid locking up older browsers like Safari 3.
-   *
-   * Some engines have a limit on the number of arguments functions can accept
-   * before clipping the argument length or throwing an error.
-   * https://bugs.webkit.org/show_bug.cgi?id=80797
-   *
-   * For example Firefox's limits have been observed to be at least:
-   *   Firefox 2    - 35,535
-   *   Firefox 3.6  - 16,777,215
-   *   Firefox 4-7  - 523,264
-   *   Firefox >= 8 - Throws error
-   */
-  var argsLimit = 5e4;
-
-  try {
-    (function() {
-      argsLimit = arguments.length;
-    }).apply(null, Array(argsLimit));
-  } catch(e) { }
 
   /** Used to escape characters in templates */
   var escapes = {
@@ -200,7 +176,7 @@
      * @memberOf _.templateSettings
      * @type String
      */
-    'variable': 'object'
+    'variable': 'obj'
   };
 
   /*--------------------------------------------------------------------------*/
@@ -324,6 +300,11 @@
   var filterIteratorOptions = {
     'init': '[]',
     'inLoop': 'callback(collection[index], index, collection) && result.push(collection[index])'
+  };
+
+  /** Reusable iterator options for `find`  and `forEach` */
+  var forEachIteratorOptions = {
+    'top': 'if (thisArg) callback = bind(callback, thisArg)'
   };
 
   /** Reusable iterator options for `map`, `pluck`, and `values` */
@@ -473,6 +454,15 @@
   }
 
   /**
+   * A no-operation function.
+   *
+   * @private
+   */
+  function noop() {
+    // no operation performed
+  }
+
+  /**
    * Used by `template()` to replace "escape" template delimiters with tokens.
    *
    * @private
@@ -599,7 +589,8 @@
    * var even = _.find([1, 2, 3, 4, 5, 6], function(num) { return num % 2 == 0; });
    * // => 2
    */
-  var find = createIterator(baseIteratorOptions, {
+  var find = createIterator(baseIteratorOptions, forEachIteratorOptions, {
+    'init': '',
     'inLoop': 'if (callback(collection[index], index, collection)) return collection[index]'
   });
 
@@ -625,9 +616,7 @@
    * _([1, 2, 3]).forEach(function(num) { alert(num); }).join(',');
    * // => alerts each number in turn and returns '1,2,3'
    */
-  var forEach = createIterator(baseIteratorOptions, {
-    'top': 'if (thisArg) callback = bind(callback, thisArg)'
-  });
+  var forEach = createIterator(baseIteratorOptions, forEachIteratorOptions);
 
   /**
    * Produces a new array of values by mapping each value in the `collection`
@@ -1145,7 +1134,6 @@
    *
    * @static
    * @memberOf _
-   * @alias intersect
    * @category Arrays
    * @param {Array} [array1, array2, ...] Arrays to process.
    * @returns {Array} Returns a new array of unique values, in order, that are
@@ -1283,22 +1271,18 @@
         result = computed;
 
     if (!callback) {
-      // fast path for arrays of numbers
-      if (array[0] === +array[0] && length <= argsLimit) {
-        // some JavaScript engines have a limit on the number of arguments functions
-        // can accept before clipping the argument length or throwing an error
-        try {
-          return Math.max.apply(Math, array);
-        } catch(e) { }
+      while (++index < length) {
+        if (array[index] > result) {
+          result = array[index];
+        }
       }
-      if (!array.length) {
-        return result;
-      }
-    } else if (thisArg) {
+      return result;
+    }
+    if (thisArg) {
       callback = bind(callback, thisArg);
     }
     while (++index < length) {
-      current = callback ? callback(array[index], index, array) : array[index];
+      current = callback(array[index], index, array);
       if (current > computed) {
         computed = current;
         result = array[index];
@@ -1333,19 +1317,18 @@
         result = computed;
 
     if (!callback) {
-      if (array[0] === +array[0] && length <= argsLimit) {
-        try {
-          return Math.min.apply(Math, array);
-        } catch(e) { }
+      while (++index < length) {
+        if (array[index] < result) {
+          result = array[index];
+        }
       }
-      if (!array.length) {
-        return result;
-      }
-    } else if (thisArg) {
+      return result;
+    }
+    if (thisArg) {
       callback = bind(callback, thisArg);
     }
     while (++index < length) {
-      current = callback ? callback(array[index], index, array) : array[index];
+      current = callback(array[index], index, array);
       if (current < computed) {
         computed = current;
         result = array[index];
@@ -1546,9 +1529,6 @@
         result = [],
         seen = [];
 
-    if (length < 3) {
-      isSorted = true;
-    }
     while (++index < length) {
       computed = callback ? callback(array[index]) : array[index];
       if (isSorted
@@ -1701,33 +1681,41 @@
     }
     // use if `Function#bind` is faster
     else if (nativeBind) {
-      func = nativeBind.call.apply(nativeBind, arguments);
-      return function() {
-        return arguments.length ? func.apply(undefined, arguments) : func();
-      };
+      return nativeBind.call.apply(nativeBind, arguments);
     }
 
-    var partialArgs = slice.call(arguments, 2),
-        partialArgsLength = partialArgs.length;
+    var partialArgs = slice.call(arguments, 2);
 
-    return function() {
-      var result,
-          args = arguments;
+    function bound() {
+      // `Function#bind` spec
+      // http://es5.github.com/#x15.3.4.5
+      var args = arguments,
+          thisBinding = thisArg;
 
       if (!isFunc) {
         func = thisArg[methodName];
       }
-      if (partialArgsLength) {
-        if (args.length) {
-          partialArgs.length = partialArgsLength;
-          push.apply(partialArgs, args);
-        }
-        args = partialArgs;
+      if (partialArgs.length) {
+        args = args.length
+          ? concat.apply(partialArgs, args)
+          : partialArgs;
       }
-      result = args.length ? func.apply(thisArg, args) : func.call(thisArg);
-      partialArgs.length = partialArgsLength;
-      return result;
-    };
+      if (this instanceof bound) {
+        // get `func` instance if `bound` is invoked in a `new` expression
+        noop.prototype = func.prototype;
+        thisBinding = new noop;
+
+        // mimic the constructor's `return` behavior
+        // http://es5.github.com/#x13.2.2
+        var result = func.apply(thisBinding, args);
+        return objectTypes[typeof result] && result !== null
+          ? result
+          : thisBinding
+      }
+      return func.apply(thisBinding, args);
+    }
+
+    return bound;
   }
 
   /**
@@ -2758,8 +2746,7 @@
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
       .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#x27;')
-      .replace(/\//g,'&#x2F;');
+      .replace(/'/g, '&#x27;');
   }
 
   /**
@@ -3102,7 +3089,7 @@
    * @memberOf _
    * @type String
    */
-  lodash.VERSION = '0.2.0';
+  lodash.VERSION = '0.2.2';
 
   // assign static methods
   lodash.after = after;
@@ -3198,14 +3185,14 @@
   lodash.head = first;
   lodash.include = contains;
   lodash.inject = reduce;
-  lodash.intersect = intersection;
   lodash.methods = functions;
   lodash.select = filter;
   lodash.tail = rest;
   lodash.take = first;
   lodash.unique = uniq;
 
-  // add pseudo private template used and removed during the build process
+  // add pseudo privates used and removed during the build process
+  lodash._createIterator = createIterator;
   lodash._iteratorTemplate = iteratorTemplate;
 
   /*--------------------------------------------------------------------------*/
@@ -3267,7 +3254,22 @@
   /*--------------------------------------------------------------------------*/
 
   // expose Lo-Dash
-  if (freeExports) {
+  // some AMD build optimizers, like r.js, check for specific condition patterns like the following:
+  if (typeof define == 'function' && typeof define.amd == 'object' && define.amd) {
+    // Expose Lo-Dash to the global object even when an AMD loader is present in
+    // case Lo-Dash was injected by a third-party script and not intended to be
+    // loaded as a module. The global assignment can be reverted in the Lo-Dash
+    // module via its `noConflict()` method.
+    window._ = lodash;
+
+    // define as an anonymous module so, through path mapping, it can be
+    // referenced as the "underscore" module
+    define(function() {
+      return lodash;
+    });
+  }
+  // check for `exports` after `define` in case a build optimizer adds an `exports` object
+  else if (freeExports) {
     // in Node.js or RingoJS v0.8.0+
     if (typeof module == 'object' && module && module.exports == freeExports) {
       (module.exports = lodash)._ = lodash;
@@ -3277,21 +3279,8 @@
       freeExports._ = lodash;
     }
   }
-  // in a browser or Rhino
   else {
-    // Expose Lo-Dash to the global object even when an AMD loader is present in
-    // case Lo-Dash was injected by a third-party script and not intended to be
-    // loaded as a module. The global assignment can be reverted in the Lo-Dash
-    // module via its `noConflict()` method.
+    // in a browser or Rhino
     window._ = lodash;
-
-    // some AMD build optimizers, like r.js, check for specific condition patterns like the following:
-    if (typeof define == 'function' && typeof define.amd == 'object' && define.amd) {
-      // define as an anonymous module so, through path mapping, it can be
-      // referenced as the "underscore" module
-      define(function() {
-        return lodash;
-      });
-    }
   }
 }(this));
