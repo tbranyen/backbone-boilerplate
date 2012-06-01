@@ -2,7 +2,7 @@ define([
   // Libs
   "jquery",
   "lodash",
-  "use!backbone"
+  "backbone"
 ],
 
 function($, _, Backbone) {

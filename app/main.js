@@ -3,7 +3,7 @@ require([
 
   // Libs
   "jquery",
-  "use!backbone",
+  "backbone",
 
   // Modules
   "modules/example"

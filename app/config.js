@@ -17,10 +17,10 @@ require.config({
     use: "../assets/js/plugins/use"
   },
 
-  use: {
+  shim: {
     backbone: {
       deps: ["lodash", "jquery"],
-      attach: "Backbone"
+      exports: "Backbone"
     }
   }
 });
