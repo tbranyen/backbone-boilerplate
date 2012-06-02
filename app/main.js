@@ -4,10 +4,7 @@ require([
 
   // Libs
   "jquery",
-  "backbone",
-
-  // Modules
-  "modules/example"
+  "backbone"
 ],
 
 function(app, $, Backbone, Example) {
@@ -19,13 +16,7 @@ function(app, $, Backbone, Example) {
     },
 
     index: function() {
-      var tutorial = new Example.Views.Tutorial();
 
-      // Attach the tutorial to the DOM
-      tutorial.$el.appendTo("#main");
-
-      // Render the tutorial
-      tutorial.render();
     }
   });
 
