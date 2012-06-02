@@ -1,5 +1,5 @@
 define([
-  "namespace",
+  "app",
 
   // Libs
   "backbone"
@@ -9,10 +9,10 @@ define([
   // Plugins
 ],
 
-function(namespace, Backbone) {
+function(app, Backbone) {
 
   // Create a new module
-  var Example = namespace.module();
+  var Example = app.module();
 
   // Example extendings
   Example.Model = Backbone.Model.extend({ /* ... */ });
@@ -21,20 +21,14 @@ function(namespace, Backbone) {
 
   // This will fetch the tutorial template and render it.
   Example.Views.Tutorial = Backbone.View.extend({
-    template: "app/templates/example.html",
+    template: "app/templates/example",
 
     render: function(done) {
-      var view = this;
+      // Fetch the template.
+      var tmpl = app.fetchTemplate(this.template);
 
-      // Fetch the template, render it to the View element and call done.
-      namespace.fetchTemplate(this.template, function(tmpl) {
-        view.el.innerHTML = tmpl();
-
-        // If a done function is passed, call it with the element
-        if (_.isFunction(done)) {
-          done(view.el);
-        }
-      });
+      // Render into the View's element.
+      this.$el.html(tmpl());
     }
   });
 

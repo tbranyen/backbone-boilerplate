@@ -1,5 +1,5 @@
 /**
- * almond 0.1.0+ Copyright (c) 2011, The Dojo Foundation All Rights Reserved.
+ * almond 0.1.1 Copyright (c) 2011, The Dojo Foundation All Rights Reserved.
  * Available via the MIT or new BSD license.
  * see: http://github.com/jrburke/almond for details
  */
@@ -13,19 +13,9 @@ var requirejs, require, define;
     var defined = {},
         waiting = {},
         config = {},
+        defining = {},
         aps = [].slice,
         main, req;
-
-    function each(ary, func) {
-        if (ary) {
-            var i;
-            for (i = 0; i < ary.length; i += 1) {
-                if (func(ary[i], i, ary)) {
-                    break;
-                }
-            }
-        }
-    }
 
     /**
      * Given a relative module name, like ./something, normalize it to
@@ -39,7 +29,7 @@ var requirejs, require, define;
         var baseParts = baseName && baseName.split("/"),
             map = config.map,
             starMap = (map && map['*']) || {},
-            nameParts, nameSegment, mapValue, foundMap, i, j;
+            nameParts, nameSegment, mapValue, foundMap, i, j, part;
 
         //Adjust any relative paths.
         if (name && name.charAt(0) === ".") {
@@ -57,7 +47,7 @@ var requirejs, require, define;
                 name = baseParts.concat(name.split("/"));
 
                 //start trimDots
-                each(name, function (part, i) {
+                for (i = 0; (part = name[i]); i++) {
                     if (part === ".") {
                         name.splice(i, 1);
                         i -= 1;
@@ -75,7 +65,7 @@ var requirejs, require, define;
                             i -= 2;
                         }
                     }
-                });
+                }
                 //end trimDots
 
                 name = name.join("/");
@@ -146,7 +136,12 @@ var requirejs, require, define;
         if (waiting.hasOwnProperty(name)) {
             var args = waiting[name];
             delete waiting[name];
+            defining[name] = true;
             main.apply(undef, args);
+        }
+
+        if (!defined.hasOwnProperty(name)) {
+            throw new Error('No ' + name);
         }
         return defined[name];
     }
@@ -183,29 +178,29 @@ var requirejs, require, define;
         };
     }
 
+    function makeConfig(name) {
+        return function () {
+            return (config && config.config && config.config[name]) || {};
+        };
+    }
+
     main = function (name, deps, callback, relName) {
         var args = [],
             usingExports,
-            cjsModule, depName, ret, map;
+            cjsModule, depName, ret, map, i;
 
         //Use name if no relName
-        if (!relName) {
-            relName = name;
-        }
+        relName = relName || name;
 
         //Call the callback to define the module, if necessary.
         if (typeof callback === 'function') {
 
-            //Default to require, exports, module if no deps if
-            //the factory arg has any arguments specified.
-            if (!deps.length && callback.length) {
-                deps = ['require', 'exports', 'module'];
-            }
-
             //Pull out the defined dependencies and pass the ordered
             //values to the callback.
-            each(deps, function (dep, i) {
-                map = makeMap(dep, relName);
+            //Default to [require, exports, module] if no deps
+            deps = !deps.length && callback.length ? ['require', 'exports', 'module'] : deps;
+            for (i = 0; i < deps.length; i++) {
+                map = makeMap(deps[i], relName);
                 depName = map.f;
 
                 //Fast path CommonJS standard dependencies.
@@ -221,19 +216,17 @@ var requirejs, require, define;
                         id: name,
                         uri: '',
                         exports: defined[name],
-                        config: function () {
-                            return (config && config.config && config.config[name]) || {};
-                        }
+                        config: makeConfig(name)
                     };
                 } else if (defined.hasOwnProperty(depName) || waiting.hasOwnProperty(depName)) {
                     args[i] = callDep(depName);
                 } else if (map.p) {
                     map.p.load(map.n, makeRequire(relName, true), makeLoad(depName), {});
                     args[i] = defined[depName];
-                } else {
+                } else if (!defining[depName]) {
                     throw new Error(name + ' missing ' + depName);
                 }
-            });
+            }
 
             ret = callback.apply(defined[name], args);
 
@@ -273,9 +266,12 @@ var requirejs, require, define;
                 callback = relName;
                 relName = null;
             } else {
-                deps = [];
+                deps = undef;
             }
         }
+
+        //Support require(['a'])
+        callback = callback || function () {};
 
         //Simulate async callback;
         if (forceSync) {
