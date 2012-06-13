@@ -1,5 +1,5 @@
 /*!
- * Lo-Dash v0.3.0 <http://lodash.com>
+ * Lo-Dash v0.3.1 <http://lodash.com>
  * Copyright 2012 John-David Dalton <http://allyoucanleet.com/>
  * Based on Underscore.js 1.3.3, copyright 2009-2012 Jeremy Ashkenas, DocumentCloud Inc.
  * <http://documentcloud.github.com/underscore>
@@ -53,6 +53,12 @@
 
   /** Used to store tokenized template text snippets */
   var tokenized = [];
+
+  /** Detect if sourceURL syntax is usable without erroring */
+  try {
+    // Adobe's and Narwhal's JS engines will error
+    var useSourceURL = (Function('//@')(), true);
+  } catch(e){ }
 
   /**
    * Used to escape characters for inclusion in HTML.
@@ -525,7 +531,7 @@
    */
   function tokenizeEscape(match, value) {
     var index = tokenized.length;
-    tokenized[index] = "'+\n((__t = (" + value + ")) == null ? '' : _.escape(__t)) +\n'";
+    tokenized[index] = "'+\n_.escape(" + value + ") +\n'";
     return token + index;
   }
 
@@ -1171,6 +1177,9 @@
    *
    * _.invoke([[5, 1, 7], [3, 2, 1]], 'sort');
    * // => [[1, 5, 7], [1, 2, 3]]
+   *
+   * _.invoke([123, 456], String.prototype.split, '');
+   * // => [['1', '2', '3'], ['4', '5', '6']]
    */
   function invoke(array, methodName) {
     var result = [];
@@ -1526,12 +1535,17 @@
     } else if (thisArg) {
       callback = iteratorBind(callback, thisArg);
     }
-    return pluck(map(array, function(value, index) {
-      return {
-        'criteria': callback(value, index, array),
-        'value': value
+    var index = -1,
+        length = array.length,
+        result = Array(length);
+
+    while (++index < length) {
+      result[index] = {
+        'criteria': callback(array[index], index, array),
+        'value': array[index]
       };
-    }).sort(function(left, right) {
+    }
+    result.sort(function(left, right) {
       var a = left.criteria,
           b = right.criteria;
 
@@ -1542,7 +1556,12 @@
         return -1;
       }
       return a < b ? -1 : a > b ? 1 : 0;
-    }), 'value');
+    });
+
+    while (length--) {
+      result[length] = result[length].value;
+    }
+    return result;
   }
 
   /**
@@ -1921,7 +1940,7 @@
   /**
    * Creates a new function that is the composition of the passed functions,
    * where each function consumes the return value of the function that follows.
-   * In math terms, composing thefunctions `f()`, `g()`, and `h()` produces `f(g(h()))`.
+   * In math terms, composing the functions `f()`, `g()`, and `h()` produces `f(g(h()))`.
    *
    * @static
    * @memberOf _
@@ -2628,7 +2647,13 @@
       // ensure both objects have the same number of properties
       if (result) {
         for (prop in b) {
-          if (hasOwnProperty.call(b, prop) && !(size--)) break;
+          // Adobe's JS engine, embedded in applications like InDesign, has a
+          // bug that causes `!size--` to throw an error so it must be wrapped
+          // in parentheses.
+          // https://github.com/documentcloud/underscore/issues/355
+          if (hasOwnProperty.call(b, prop) && !(size--)) {
+            break;
+          }
         }
         result = !size;
       }
@@ -2972,7 +2997,7 @@
    * // => "Curly, Larry &amp; Moe"
    */
   function escape(string) {
-    return (string + '').replace(reUnescapedHtml, escapeHtmlChar);
+    return string == null ? '' : (string + '').replace(reUnescapedHtml, escapeHtmlChar);
   }
 
   /**
@@ -3025,7 +3050,7 @@
         if (arguments.length) {
           push.apply(args, arguments);
         }
-        var result = args.length == 1 ? func.call(lodash, args[0]) : func.apply(lodash, args);
+        var result = func.apply(lodash, args);
         if (this._chain) {
           result = new LoDash(result);
           result._chain = true;
@@ -3054,14 +3079,15 @@
 
   /**
    * Resolves the value of `property` on `object`. If `property` is a function
-   * it will be invoked and its result returned, else the property value is returned.
+   * it will be invoked and its result returned, else the property value is
+   * returned. If `object` is falsey, then `null` is returned.
    *
    * @static
    * @memberOf _
    * @category Utilities
    * @param {Object} object The object to inspect.
    * @param {String} property The property to get the result of.
-   * @returns {Mixed} Returns the resolved.
+   * @returns {Mixed} Returns the resolved value.
    * @example
    *
    * var object = {
@@ -3078,6 +3104,8 @@
    * // => 'nonsense'
    */
   function result(object, property) {
+    // based on Backbone's private `getValue` function
+    // https://github.com/documentcloud/backbone/blob/0.9.2/backbone.js#L1419-1424
     if (!object) {
       return null;
     }
@@ -3086,7 +3114,7 @@
   }
 
   /**
-   * A JavaScript micro-templating method, similar to John Resig's implementation.
+   * A micro-templating method, similar to John Resig's implementation.
    * Lo-Dash templating handles arbitrary delimiters, preserves whitespace, and
    * correctly escapes quotes within interpolated code.
    *
@@ -3187,11 +3215,13 @@
       'var __p, __t, __j = Array.prototype.join;\n' +
       'function print() { __p += __j.call(arguments, \'\') }\n' +
       text +
-      'return __p\n}\n' +
-      // add sourceURL for easier debugging
-      // (Narwhal requires a trailing newline to prevent a syntax error)
-      // http://www.html5rocks.com/en/tutorials/developertools/sourcemaps/#toc-sourceurl
-      '//@ sourceURL=/lodash/template/source[' + (templateCounter++) + ']\n';
+      'return __p\n}';
+
+    // add a sourceURL for easier debugging
+    // http://www.html5rocks.com/en/tutorials/developertools/sourcemaps/#toc-sourceurl
+    if (useSourceURL) {
+      text += '\n//@ sourceURL=/lodash/template/source[' + (templateCounter++) + ']';
+    }
 
     result = Function('_', 'return ' + text)(lodash);
 
@@ -3328,7 +3358,7 @@
    * @memberOf _
    * @type String
    */
-  lodash.VERSION = '0.3.0';
+  lodash.VERSION = '0.3.1';
 
   // assign static methods
   lodash.after = after;
@@ -3455,11 +3485,8 @@
 
     LoDash.prototype[methodName] = function() {
       var value = this._wrapped;
-      if (arguments.length) {
-        func.apply(value, arguments);
-      } else {
-        func.call(value);
-      }
+      func.apply(value, arguments);
+
       // IE compatibility mode and IE < 9 have buggy Array `shift()` and `splice()`
       // functions that fail to remove the last element, `value[0]`, of
       // array-like objects even though the `length` property is set to `0`.
@@ -3482,7 +3509,7 @@
 
     LoDash.prototype[methodName] = function() {
       var value = this._wrapped,
-          result = arguments.length ? func.apply(value, arguments) : func.call(value);
+          result = func.apply(value, arguments);
 
       if (this._chain) {
         result = new LoDash(result);

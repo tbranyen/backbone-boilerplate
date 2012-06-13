@@ -1,5 +1,5 @@
 /** vim: et:ts=4:sw=4:sts=4
- * @license RequireJS 2.0.1 Copyright (c) 2010-2012, The Dojo Foundation All Rights Reserved.
+ * @license RequireJS 2.0.2 Copyright (c) 2010-2012, The Dojo Foundation All Rights Reserved.
  * Available via the MIT or new BSD license.
  * see: http://github.com/jrburke/requirejs for details
  */
@@ -10,7 +10,7 @@ var requirejs, require, define;
 (function (global) {
     'use strict';
 
-    var version = '2.0.1',
+    var version = '2.0.2',
         commentRegExp = /(\/\*([\s\S]*?)\*\/|([^:]|^)\/\/(.*)$)/mg,
         cjsRequireRegExp = /require\s*\(\s*["']([^'"\s]+)["']\s*\)/g,
         jsSuffixRegExp = /\.js$/,
@@ -53,7 +53,7 @@ var requirejs, require, define;
         if (ary) {
             var i;
             for (i = 0; i < ary.length; i += 1) {
-                if (func(ary[i], i, ary)) {
+                if (ary[i] && func(ary[i], i, ary)) {
                     break;
                 }
             }
@@ -68,7 +68,7 @@ var requirejs, require, define;
         if (ary) {
             var i;
             for (i = ary.length - 1; i > -1; i -= 1) {
-                if (func(ary[i], i, ary)) {
+                if (ary[i] && func(ary[i], i, ary)) {
                     break;
                 }
             }
@@ -102,14 +102,22 @@ var requirejs, require, define;
      * Object.prototype names, but the uses of mixin here seem unlikely to
      * trigger a problem related to that.
      */
-    function mixin(target, source, force) {
+    function mixin(target, source, force, deepStringMixin) {
         if (source) {
             eachProp(source, function (value, prop) {
                 if (force || !hasProp(target, prop)) {
-                    target[prop] = value;
+                    if (deepStringMixin && typeof value !== 'string') {
+                        if (!target[prop]) {
+                            target[prop] = {};
+                        }
+                        mixin(target[prop], value, force, deepStringMixin);
+                    } else {
+                        target[prop] = value;
+                    }
                 }
             });
         }
+        return target;
     }
 
     //Similar to Function.prototype.bind, but the 'this' object is specified
@@ -159,7 +167,16 @@ var requirejs, require, define;
             ['defined', 'requireDefined'],
             ['specified', 'requireSpecified']
         ], function (item) {
-            req[item[0]] = makeContextModuleFunc(context[item[1] || item[0]], relMap);
+            var prop = item[1] || item[0];
+            req[item[0]] = context ? makeContextModuleFunc(context[prop], relMap) :
+                //If no context, then use default context. Reference from
+                //contexts instead of early binding to default context, so
+                //that during builds, the latest instance of the default
+                //context with its config gets used.
+                function () {
+                    var ctx = contexts[defContextName];
+                    return ctx[prop].apply(ctx, arguments);
+                };
         });
     }
 
@@ -215,7 +232,6 @@ var requirejs, require, define;
             undefEvents = {},
             defQueue = [],
             defined = {},
-            urlMap = {},
             urlFetched = {},
             requireCounter = 1,
             unnormalizedCounter = 1,
@@ -435,22 +451,16 @@ var requirejs, require, define;
                     //A regular module.
                     normalizedName = normalize(name, parentName, applyMap);
 
-                    url = urlMap[normalizedName];
-                    if (!url) {
-                        //Calculate url for the module, if it has a name.
-                        //Use name here since nameToUrl also calls normalize,
-                        //and for relative names that are outside the baseUrl
-                        //this causes havoc. Was thinking of just removing
-                        //parentModuleMap to avoid extra normalization, but
-                        //normalize() still does a dot removal because of
-                        //issue #142, so just pass in name here and redo
-                        //the normalization. Paths outside baseUrl are just
-                        //messy to support.
-                        url = context.nameToUrl(name, null, parentModuleMap);
-
-                        //Store the URL mapping for later.
-                        urlMap[normalizedName] = url;
-                    }
+                    //Calculate url for the module, if it has a name.
+                    //Use name here since nameToUrl also calls normalize,
+                    //and for relative names that are outside the baseUrl
+                    //this causes havoc. Was thinking of just removing
+                    //parentModuleMap to avoid extra normalization, but
+                    //normalize() still does a dot removal because of
+                    //issue #142, so just pass in name here and redo
+                    //the normalization. Paths outside baseUrl are just
+                    //messy to support.
+                    url = context.nameToUrl(name, null, parentModuleMap);
                 }
             }
 
@@ -631,7 +641,14 @@ var requirejs, require, define;
                     return true;
                 }
 
-                return (foundModule = findCycle(depMod, traced));
+                //mixin traced to a new object for each dependency, so that
+                //sibling dependencies in this object to not generate a
+                //false positive match on a cycle. Ideally an Object.create
+                //type of prototype delegation would be used here, but
+                //optimizing for file size vs. execution speed since hopefully
+                //the trees are small for circular dependency scans relative
+                //to the full app perf.
+                return (foundModule = findCycle(depMod, mixin({}, traced)));
             });
 
             return foundModule;
@@ -834,33 +851,15 @@ var requirejs, require, define;
                     });
                 }
 
-                each(depMaps, bind(this, function (depMap, i) {
-                    if (typeof depMap === 'string') {
-                        depMap = makeModuleMap(depMap,
-                                               (this.map.isDefine ? this.map : this.map.parentMap),
-                                               false,
-                                               true);
-                        this.depMaps.push(depMap);
-                    }
+                //Do a copy of the dependency array, so that
+                //source inputs are not modified. For example
+                //"shim" deps are passed in here directly, and
+                //doing a direct modification of the depMaps array
+                //would affect that config.
+                this.depMaps = depMaps && depMaps.slice(0);
+                this.depMaps.rjsSkipMap = depMaps.rjsSkipMap;
 
-                    var handler = handlers[depMap.id];
-
-                    if (handler) {
-                        this.depExports[i] = handler(this);
-                        return;
-                    }
-
-                    this.depCount += 1;
-
-                    on(depMap, 'defined', bind(this, function (depExports) {
-                        this.defineDep(i, depExports);
-                        this.check();
-                    }));
-
-                    if (errback) {
-                        on(depMap, 'error', errback);
-                    }
-                }));
+                this.errback = errback;
 
                 //Indicate this module has be initialized
                 this.inited = true;
@@ -916,15 +915,13 @@ var requirejs, require, define;
 
                 //If the manager is for a plugin managed resource,
                 //ask the plugin to load it now.
-                if (map.prefix) {
-                    this.callPlugin();
-                } else if (this.shim) {
+                if (this.shim) {
                     makeRequire(this, true)(this.shim.deps || [], bind(this, function () {
-                        this.load();
+                        return map.prefix ? this.callPlugin() : this.load();
                     }));
                 } else {
                     //Regular dependency.
-                    this.load();
+                    return map.prefix ? this.callPlugin() : this.load();
                 }
             },
 
@@ -945,7 +942,7 @@ var requirejs, require, define;
              * check of all loaded modules. That is useful for cycle breaking.
              */
             check: function (silent) {
-                if (!this.enabled) {
+                if (!this.enabled || this.enabling) {
                     return;
                 }
 
@@ -1064,7 +1061,10 @@ var requirejs, require, define;
                             }) || '';
                         }
 
-                        normalizedMap = makeModuleMap(map.prefix + '!' + name);
+                        normalizedMap = makeModuleMap(map.prefix + '!' + name,
+                                                      this.map.parentMap,
+                                                      false,
+                                                      true);
                         on(normalizedMap,
                            'defined', bind(this, function (value) {
                             this.init([], function () { return value; }, null, {
@@ -1119,6 +1119,10 @@ var requirejs, require, define;
                             useInteractive = false;
                         }
 
+                        //Prime the system by creating a module instance for
+                        //it.
+                        getModule(makeModuleMap(moduleName));
+
                         req.exec(text);
 
                         if (hasInteractive) {
@@ -1133,6 +1137,7 @@ var requirejs, require, define;
                     //could be some weird string with no path that actually wants to
                     //reference the parentName's path.
                     plugin.load(map.name, makeRequire(map.parentMap, true, function (deps, cb) {
+                        deps.rjsSkipMap = true;
                         return context.require(deps, cb);
                     }), load, config);
                 }));
@@ -1150,15 +1155,52 @@ var requirejs, require, define;
                     this.waitPushed = true;
                 }
 
+                //Set flag mentioning that the module is enabling,
+                //so that immediate calls to the defined callbacks
+                //for dependencies do not trigger inadvertent load
+                //with the depCount still being zero.
+                this.enabling = true;
+
                 //Enable each dependency
-                each(this.depMaps, bind(this, function (map) {
-                    var id = map.id,
-                        mod = registry[id];
+                each(this.depMaps, bind(this, function (depMap, i) {
+                    var id, mod, handler;
+
+                    if (typeof depMap === 'string') {
+                        //Dependency needs to be converted to a depMap
+                        //and wired up to this module.
+                        depMap = makeModuleMap(depMap,
+                                               (this.map.isDefine ? this.map : this.map.parentMap),
+                                               false,
+                                               !this.depMaps.rjsSkipMap);
+                        this.depMaps[i] = depMap;
+
+                        handler = handlers[depMap.id];
+
+                        if (handler) {
+                            this.depExports[i] = handler(this);
+                            return;
+                        }
+
+                        this.depCount += 1;
+
+                        on(depMap, 'defined', bind(this, function (depExports) {
+                            this.defineDep(i, depExports);
+                            this.check();
+                        }));
+
+                        if (this.errback) {
+                            on(depMap, 'error', this.errback);
+                        }
+                    }
+
+                    id = depMap.id;
+                    mod = registry[id];
+
                     //Skip special modules like 'require', 'exports', 'module'
                     //Also, don't call enable if it is already enabled,
                     //important in circular dependency cases.
                     if (!handlers[id] && mod && !mod.enabled) {
-                        context.enable(map, this);
+                        context.enable(depMap, this);
                     }
                 }));
 
@@ -1170,6 +1212,8 @@ var requirejs, require, define;
                         context.enable(pluginMap, this);
                     }
                 }));
+
+                this.enabling = false;
 
                 this.check();
             },
@@ -1241,7 +1285,6 @@ var requirejs, require, define;
             contextName: contextName,
             registry: registry,
             defined: defined,
-            urlMap: urlMap,
             urlFetched: urlFetched,
             waitCount: 0,
             defQueue: defQueue,
@@ -1262,23 +1305,21 @@ var requirejs, require, define;
 
                 //Save off the paths and packages since they require special processing,
                 //they are additive.
-                var paths = config.paths,
-                    pkgs = config.pkgs,
+                var pkgs = config.pkgs,
                     shim = config.shim,
-                    map = config.map || {};
+                    paths = config.paths,
+                    map = config.map;
 
                 //Mix in the config values, favoring the new values over
                 //existing ones in context.config.
                 mixin(config, cfg, true);
 
                 //Merge paths.
-                mixin(paths, cfg.paths, true);
-                config.paths = paths;
+                config.paths = mixin(paths, cfg.paths, true);
 
                 //Merge map
                 if (cfg.map) {
-                    mixin(map, cfg.map, true);
-                    config.map = map;
+                    config.map = mixin(map || {}, cfg.map, true, true);
                 }
 
                 //Merge shim
@@ -1325,6 +1366,13 @@ var requirejs, require, define;
                     //Done with modifications, assing packages back to context config
                     config.pkgs = pkgs;
                 }
+
+                //If there are any "waiting to execute" modules in the registry,
+                //update the maps for them, since their info, like URLs to load,
+                //may have changed.
+                eachProp(registry, function (mod, id) {
+                    mod.map = makeModuleMap(id);
+                });
 
                 //If a deps array or a config callback is specified, then call
                 //require with those args. This is useful when require is defined as a
@@ -1436,7 +1484,6 @@ var requirejs, require, define;
                     mod = registry[id];
 
                 delete defined[id];
-                delete urlMap[id];
                 delete urlFetched[map.url];
                 delete undefEvents[id];
 
@@ -1734,7 +1781,7 @@ var requirejs, require, define;
 
     //Exports some context-sensitive methods on global require, using
     //default context if no context specified.
-    addRequireMethods(req, contexts[defContextName]);
+    addRequireMethods(req);
 
     if (isBrowser) {
         head = s.head = document.getElementsByTagName('head')[0];
@@ -1877,19 +1924,21 @@ var requirejs, require, define;
             //baseUrl, if it is not already set.
             dataMain = script.getAttribute('data-main');
             if (dataMain) {
-                if (!cfg.baseUrl) {
-                    //Pull off the directory of data-main for use as the
-                    //baseUrl.
-                    src = dataMain.split('/');
-                    mainScript = src.pop();
-                    subPath = src.length ? src.join('/')  + '/' : './';
 
-                    //Set final config.
+                //Pull off the directory of data-main for use as the
+                //baseUrl.
+                src = dataMain.split('/');
+                mainScript = src.pop();
+                subPath = src.length ? src.join('/')  + '/' : './';
+
+                //Set final baseUrl if there is not already an explicit one.
+                if (!cfg.baseUrl) {
                     cfg.baseUrl = subPath;
-                    //Strip off any trailing .js since dataMain is now
-                    //like a module name.
-                    dataMain = mainScript.replace(jsSuffixRegExp, '');
                 }
+
+                //Strip off any trailing .js since dataMain is now
+                //like a module name.
+                dataMain = mainScript.replace(jsSuffixRegExp, '');
 
                 //Put the data-main script in the files to load.
                 cfg.deps = cfg.deps ? cfg.deps.concat(dataMain) : [dataMain];
