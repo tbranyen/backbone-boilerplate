@@ -1,11 +1,12 @@
 define([
-  // Libs
+  // Libraries.
   "jquery",
   "lodash",
   "backbone"
 ],
 
 function($, _, Backbone) {
+
   // Localize or create a new JavaScript Template object.
   var JST = window.JST = window.JST || {};
 
@@ -42,11 +43,12 @@ function($, _, Backbone) {
       return JST[path];
     },
 
-    // Create a custom object with a nested Views object
+    // Create a custom object with a nested Views object.
     module: function(additionalProps) {
       return _.extend({ Views: {} }, additionalProps);
     }
 
   // Mix Backbone.Events into the app object.
   }, Backbone.Events);
+
 });
