@@ -12,7 +12,10 @@ function($, _, Backbone) {
 
   // Provide a global location to place configuration settings and module
   // creation.
-  var app = {};
+  var app = {
+    // The root path to run the application through.
+    root: "/"
+  };
 
   // Localize or create a new JavaScript Template object.
   var JST = window.JST = window.JST || {};
@@ -51,6 +54,7 @@ function($, _, Backbone) {
         return this.layout;
       }
 
+      // If a layout already exists, remove it from the DOM.
       if (this.layout) {
         this.layout.remove();
       }
