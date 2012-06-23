@@ -20,7 +20,10 @@ require.config({
     backbone: {
       deps: ["lodash", "jquery"],
       exports: "Backbone"
-    }
+    },
+
+    // Backbone.LayoutManager depends on Backbone.
+    "plugins/backbone.layoutmanager": ["backbone"]
   }
 
 });

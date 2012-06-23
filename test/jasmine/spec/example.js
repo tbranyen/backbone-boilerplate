@@ -28,28 +28,28 @@ describe("simple tests", function() {
 
 describe("setUp/tearDown", function() {
   beforeEach(function() {
-    console.log("Before");
+    // console.log("Before");
   });
 
   afterEach(function() {
-    console.log("After");
+    // console.log("After");
   });
 
   it("example", function() {
-    console.log("During");
+    // console.log("During");
   });
 
   describe("setUp/tearDown", function() {
     beforeEach(function() {
-      console.log("Before2");
+      // console.log("Before2");
     });
 
     afterEach(function() {
-      console.log("After2");
+      // console.log("After2");
     });
 
     it("example", function() {
-      console.log("During Nested");
+      // console.log("During Nested");
     });
   });
 });

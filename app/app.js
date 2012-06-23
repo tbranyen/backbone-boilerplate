@@ -2,53 +2,78 @@ define([
   // Libraries.
   "jquery",
   "lodash",
-  "backbone"
+  "backbone",
+
+  // Plugins.
+  "plugins/backbone.layoutmanager"
 ],
 
 function($, _, Backbone) {
 
+  // Provide a global location to place configuration settings and module
+  // creation.
+  var app = {};
+
   // Localize or create a new JavaScript Template object.
   var JST = window.JST = window.JST || {};
 
-  // Keep active application instances namespaced under an app object.
-  return _.extend({
-
-    // This is useful when developing if you don't want to use a
-    // build process every time you change a template.
-    //
-    // Delete if you are using a different template loading method.
-    fetchTemplate: function(path) {
-      // Append the file extension.
-      path += ".html";
-
-      // Should be an instant synchronous way of getting the template, if it
-      // exists in the JST object.
-      if (!JST[path]) {
-        // Fetch it asynchronously if not available from JST, ensure that
-        // template requests are never cached and prevent global ajax event
-        // handlers from firing.
-        $.ajax({
-          url: "/" + path,
-          dataType: "text",
-          cache: false,
-          async: false,
-
-          success: function(contents) {
-            JST[path] = _.template(contents);
-          }
-        });
-      }
-
-      // Ensure a normalized return value.
-      return JST[path];
+  // Configure LayoutManager with Backbone Boilerplate defaults.
+  Backbone.LayoutManager.configure({
+    paths: {
+      layout: "app/templates/layouts/",
+      template: "app/templates/"
     },
 
+    fetch: function(path) {
+      path = path + ".html";
+
+      if (!JST[path]) {
+        $.ajax({ url: "/" + path, async: false }).then(function(contents) {
+          JST[path] = _.template(contents);
+        });
+      } 
+      
+      return JST[path];
+    }
+  });
+
+  // Mix Backbone.Events, modules, and layout management into the app object.
+  return _.extend(app, {
     // Create a custom object with a nested Views object.
     module: function(additionalProps) {
       return _.extend({ Views: {} }, additionalProps);
-    }
+    },
 
-  // Mix Backbone.Events into the app object.
+    // Helper for specific layouts.
+    useLayout: function(name) {
+      // If already using this Layout, then don't re-inject into the DOM.
+      if (this.layout && this.layout.options.template === name) {
+        return this.layout;
+      }
+
+      if (this.layout) {
+        this.layout.remove();
+      }
+
+      // Create a new Layout.
+      var layout = new Backbone.Layout({
+        template: name,
+        className: "layout " + name,
+        id: "layout"
+      });
+
+      // Insert into the DOM.
+      $("#main").empty().append(layout.el);
+
+      // Render the layout.
+      layout.render();
+
+      // Cache the reference on the Router.
+      this.layout = layout;
+
+      // Return the reference, for later usage.
+      return layout;
+    }
   }, Backbone.Events);
 
 });
