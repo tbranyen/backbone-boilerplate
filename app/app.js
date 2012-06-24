@@ -13,7 +13,7 @@ function($, _, Backbone) {
   // Provide a global location to place configuration settings and module
   // creation.
   var app = {
-    // The root path to run the application through.
+    // The root path to run the application.
     root: "/"
   };
 
@@ -47,7 +47,7 @@ function($, _, Backbone) {
       return _.extend({ Views: {} }, additionalProps);
     },
 
-    // Helper for specific layouts.
+    // Helper for using layouts.
     useLayout: function(name) {
       // If already using this Layout, then don't re-inject into the DOM.
       if (this.layout && this.layout.options.template === name) {
@@ -72,10 +72,10 @@ function($, _, Backbone) {
       // Render the layout.
       layout.render();
 
-      // Cache the reference on the Router.
+      // Cache the refererence.
       this.layout = layout;
 
-      // Return the reference, for later usage.
+      // Return the reference, for chainability.
       return layout;
     }
   }, Backbone.Events);
