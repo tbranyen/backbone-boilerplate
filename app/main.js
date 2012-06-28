@@ -26,7 +26,7 @@ function(app, Router) {
     var root = location.protocol + "//" + location.host + app.root;
 
     // Ensure the protocol is not part of URL, meaning it's relative.
-    if (href && href.indexOf(root)) {
+    if (href && href.indexOf(location.protocol)) {
       // Stop the default event to ensure the link will not cause a page
       // refresh.
       evt.preventDefault();
