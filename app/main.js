@@ -25,8 +25,8 @@ function(app, Router) {
     // Get the absolute root.
     var root = location.protocol + "//" + location.host + app.root;
 
-    // Ensure the protocol is not part of URL, meaning it's relative.
-    if (href && href.indexOf(location.protocol)) {
+    // Ensure the root is part of the anchor href, meaning it's relative.
+    if (href && href.slice(root.length) === root) {
       // Stop the default event to ensure the link will not cause a page
       // refresh.
       evt.preventDefault();
