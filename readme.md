@@ -1,4 +1,5 @@
 ![Boilerplate](https://github.com/tbranyen/backbone-boilerplate/raw/assets/header.png)
+
 Backbone Boilerplate
 ====================
 
@@ -17,6 +18,9 @@ Special Thanks to: [cowboy](http://github.com/cowboy),
 [iros](http://github.com/iros), [nimbupani](http://github.com/nimbupani),
 [wookiehangover](http://github.com/wookiehangover), and
 [jugglinmike](http://github.com/jugglinmike) for helping me create this project.
+
+Extra Special Thanks to: [Paul Guinan](http://bigredhair.com/work/paul.html)
+for giving me usage rights to his fantastic Boilerplate character.
 
 ## Documentation ##
 
