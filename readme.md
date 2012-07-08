@@ -1,5 +1,4 @@
 ![Boilerplate](https://github.com/tbranyen/backbone-boilerplate/raw/assets/header.png)
-
 Backbone Boilerplate
 ====================
 
