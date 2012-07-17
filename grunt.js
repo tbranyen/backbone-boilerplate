@@ -50,7 +50,7 @@ module.exports = function(grunt) {
     // The concat task depends on this file to exist, so if you decide to
     // remove this, ensure concat is updated accordingly.
     handlebars: {
-      "dist/debug/templates.js": ["app/templates/*.html"]
+      "dist/debug/templates.js": ["app/templates/**/*.html"]
     },
 
     // The concatenate task is used here to merge the almond require/define
