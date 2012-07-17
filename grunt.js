@@ -40,23 +40,18 @@ module.exports = function(grunt) {
         "app/templates/**/*.html"
       ]
     },
-    
+
     // The handlebars task compiles all application templates into JavaScript
-    // functions using Handlebars templating engine. You will need to install
-    // grunt-handlebars globally in order to run this task.
+    // functions using Handlebars templating engine.
     //
     // Since this task defaults to writing to the same file as the jst task,
-    // edit the task or avoid using the two at the same time.
+    // edit the debug task replacing jst with handlebars.
     //
     // The concat task depends on this file to exist, so if you decide to
     // remove this, ensure concat is updated accordingly.
     handlebars: {
-      all: {
-        src: "app/templates",
-        dest: "dist/debug/templates.js"
-      }
+      "dist/debug/templates.js": ["app/templates/*.html"]
     },
-
 
     // The concatenate task is used here to merge the almond require/define
     // shim and the templates into the application code.  It's named
