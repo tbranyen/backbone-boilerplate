@@ -58,11 +58,17 @@ module.exports = function(grunt) {
     // dist/debug/require.js, because we want to only load one script file in
     // index.html.
     concat: {
-      "dist/debug/require.js": [
-        "assets/js/libs/almond.js",
-        "dist/debug/templates.js",
-        "dist/debug/require.js"
-      ]
+      dist: {
+        src: [
+          "assets/js/libs/almond.js",
+          "dist/debug/templates.js",
+          "dist/debug/require.js"
+        ],
+
+        dest: "dist/debug/require.js",
+
+        separator: ";"
+      }
     },
 
     // This task uses the MinCSS Node.js project to take all your CSS files in
