@@ -1,8 +1,8 @@
 /* H5BP styles. */
 @import "../vendor/h5bp/css/style.css";
 
-/* Add Stylus stylesheets here, start each with stylus! For example:
- * @import "stylus!main.styl";
+/* Add Stylus stylesheets here, alll files ending in .styl will be compiled!
+ * For example: @import "main.styl";
  *
  * Note: All stylesheets are relative to `assets/css`.
  *
