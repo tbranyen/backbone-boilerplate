@@ -8,6 +8,7 @@ require.config({
     // JavaScript folders.
     libs: "../assets/js/libs",
     plugins: "../assets/js/plugins",
+    vendor: "../assets/js/vendor",
 
     // Libraries.
     jquery: "../assets/js/libs/jquery",
