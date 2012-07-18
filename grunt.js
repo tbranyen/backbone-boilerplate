@@ -80,8 +80,7 @@ module.exports = function(grunt) {
     stylus: {
       // Put all your CSS files here, order matters!
       files: [
-        "assets/vendor/h5bp/css/style.css",
-        "assets/css/main.styl"
+        "assets/vendor/h5bp/css/style.css"
       ],
 
       // Default task which runs in debug mode, this will build out to the
