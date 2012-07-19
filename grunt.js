@@ -77,8 +77,41 @@ module.exports = function(grunt) {
     // only want to load one stylesheet in index.html.
     mincss: {
       "dist/release/index.css": [
-        "assets/css/h5bp.css"
+        "dist/debug/index.css"
       ]
+    },
+
+    // The stylus task is used to compile Stylus stylesheets into a single
+    // CSS file for debug and release deployments.  
+    stylus: {
+      // Put all your CSS files here, order matters!
+      files: [
+        "assets/vendor/h5bp/css/style.css"
+      ],
+
+      // Default task which runs in debug mode, this will build out to the
+      // `dist/debug` directory.
+      compile: {
+        // Used for @imports.
+        options: { paths: ["assets/css"] },
+        
+        files: {
+          "dist/debug/index.css": "<config:stylus.files>"
+        }
+      },
+
+      // This dev task only runs with `watch:stylus` this will *completely*
+      // overwrite the `assets/css/index.css` file referenced in `index.html`.
+      // Use this only when you cannot use the `bbb server` runtime
+      // compilation.
+      dev: {
+        // Used for @imports.
+        options: { paths: ["assets/css"] },
+        
+        files: {
+          "assets/css/index.css": "<config:stylus.files>"
+        }
+      }
     },
 
     // Takes the built require.js file and minifies it for filesize benefits.
@@ -114,7 +147,8 @@ module.exports = function(grunt) {
         // Map `server:debug` to `debug` folders.
         folders: {
           "app": "dist/debug",
-          "assets/js/libs": "dist/debug"
+          "assets/js/libs": "dist/debug",
+          "assets/css": "dist/debug"
         }
       },
 
@@ -160,6 +194,18 @@ module.exports = function(grunt) {
     // point the configuration to your test directory.
     jasmine: {
       all: ["test/jasmine/*.html"]
+    },
+
+    // The watch task can be used to monitor the filesystem and execute
+    // specific tasks when files are modified.  By default, the watch task is
+    // available to compile stylus templates if you are unable to use the
+    // runtime builder (use if you have a custom server, PhoneGap, Adobe Air,
+    // etc.)
+    watch: {
+      stylus: {
+        files: ["grunt.js", "assets/css/**/*.styl"],
+        tasks: "stylus:dev"
+      }
     }
 
   });
@@ -169,7 +215,7 @@ module.exports = function(grunt) {
   // dist/debug/templates.js, compile all the application code into
   // dist/debug/require.js, and then concatenate the require/define shim
   // almond.js and dist/debug/templates.js into the require.js file.
-  grunt.registerTask("debug", "clean lint jst requirejs concat");
+  grunt.registerTask("debug", "clean lint jst requirejs concat stylus:compile");
 
   // The release task will run the debug tasks and then minify the
   // dist/debug/require.js file and CSS files.
