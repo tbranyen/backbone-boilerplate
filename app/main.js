@@ -26,7 +26,7 @@ function(app, Router) {
     var root = location.protocol + "//" + location.host + app.root;
 
     // Ensure the root is part of the anchor href, meaning it's relative.
-    if (href && href.slice(root.length) === root) {
+    if (href && href.slice(0, root.length) === root) {
       // Stop the default event to ensure the link will not cause a page
       // refresh.
       evt.preventDefault();
