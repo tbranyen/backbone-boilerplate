@@ -1,5 +1,5 @@
 /**
- * almond 0.1.1 Copyright (c) 2011, The Dojo Foundation All Rights Reserved.
+ * almond 0.1.2 Copyright (c) 2011, The Dojo Foundation All Rights Reserved.
  * Available via the MIT or new BSD license.
  * see: http://github.com/jrburke/almond for details
  */
@@ -29,7 +29,8 @@ var requirejs, require, define;
         var baseParts = baseName && baseName.split("/"),
             map = config.map,
             starMap = (map && map['*']) || {},
-            nameParts, nameSegment, mapValue, foundMap, i, j, part;
+            nameParts, nameSegment, mapValue, foundMap,
+            foundI, foundStarMap, starI, i, j, part;
 
         //Adjust any relative paths.
         if (name && name.charAt(0) === ".") {
@@ -92,19 +93,34 @@ var requirejs, require, define;
                             if (mapValue) {
                                 //Match, update name to the new value.
                                 foundMap = mapValue;
+                                foundI = i;
                                 break;
                             }
                         }
                     }
                 }
 
-                foundMap = foundMap || starMap[nameSegment];
-
                 if (foundMap) {
-                    nameParts.splice(0, i, foundMap);
-                    name = nameParts.join('/');
                     break;
                 }
+
+                //Check for a star map match, but just hold on to it,
+                //if there is a shorter segment match later in a matching
+                //config, then favor over this star map.
+                if (!foundStarMap && starMap && starMap[nameSegment]) {
+                    foundStarMap = starMap[nameSegment];
+                    starI = i;
+                }
+            }
+
+            if (!foundMap && foundStarMap) {
+                foundMap = foundStarMap;
+                foundI = starI;
+            }
+
+            if (foundMap) {
+                nameParts.splice(0, foundI, foundMap);
+                name = nameParts.join('/');
             }
         }
 

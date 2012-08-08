@@ -22,6 +22,9 @@ function($, _, Backbone) {
 
   // Configure LayoutManager with Backbone Boilerplate defaults.
   Backbone.LayoutManager.configure({
+    // Allow LayoutManager to augment Backbone.View.prototype.
+    manage: true,
+
     paths: {
       layout: "app/templates/layouts/",
       template: "app/templates/"
