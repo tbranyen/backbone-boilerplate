@@ -31,15 +31,21 @@ function($, _, Backbone) {
     },
 
     fetch: function(path) {
+      // Put fetch into `async-mode`.
+      var done = this.async();
+
+      // Concatenate the file extension.
       path = path + ".html";
 
-      if (!JST[path]) {
-        $.ajax({ url: app.root + path, async: false }).then(function(contents) {
-          JST[path] = _.template(contents);
-        });
-      } 
-      
-      return JST[path];
+      // If cached, use the compiled template.
+      if (JST[path]) {
+        return JST[path];
+      }
+
+      // Otherwise seek out the template asynchronously.
+      $.ajax({ url: app.root + path }).then(function(contents) {
+        done(JST[path] = _.template(contents));
+      });
     }
   });
 
