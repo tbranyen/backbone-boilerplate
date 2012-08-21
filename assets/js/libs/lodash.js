@@ -1,5 +1,5 @@
 /*!
- * Lo-Dash v0.5.0-rc.1 <http://lodash.com>
+ * Lo-Dash v0.5.2 <http://lodash.com>
  * Copyright 2012 John-David Dalton <http://allyoucanleet.com/>
  * Based on Underscore.js 1.3.3, copyright 2009-2012 Jeremy Ashkenas, DocumentCloud Inc.
  * <http://documentcloud.github.com/underscore>
@@ -311,7 +311,7 @@
      * @memberOf _.templateSettings
      * @type String
      */
-    'variable': 'obj'
+    'variable': ''
   };
 
   /*--------------------------------------------------------------------------*/
@@ -339,7 +339,7 @@
     // the following branch is for iterating arrays and array-like objects
     '<% if (arrayBranch) { %>' +
     'var length = iteratee.length; index = -1;' +
-    '  <% if (objectBranch) { %>\nif (length === length >>> 0) {<% } %>' +
+    '  <% if (objectBranch) { %>\nif (length > -1 && length === length >>> 0) {<% } %>' +
 
     // add support for accessing string characters by index if needed
     '  <% if (noCharByIndex) { %>\n' +
@@ -379,15 +379,15 @@
     // iterate own properties using `Object.keys` if it's fast
     '  <% if (isKeysFast && useHas) { %>\n' +
     '  var ownIndex = -1,\n' +
-    '      ownProps = nativeKeys(iteratee),\n' +
+    '      ownProps = objectTypes[typeof iteratee] ? nativeKeys(iteratee) : [],\n' +
     '      length = ownProps.length;\n\n' +
     '  <%= objectBranch.beforeLoop %>;\n' +
     '  while (++ownIndex < length) {\n' +
     '    index = ownProps[ownIndex];\n' +
-    '    if (!(skipProto && index == \'prototype\')) {\n' +
-    '      value = iteratee[index];\n' +
-    '      <%= objectBranch.inLoop %>\n' +
-    '    }\n' +
+    '    <% if (!hasDontEnumBug) { %>if (!(skipProto && index == \'prototype\')) {\n  <% } %>' +
+    '    value = iteratee[index];\n' +
+    '    <%= objectBranch.inLoop %>\n' +
+    '    <% if (!hasDontEnumBug) { %>}\n<% } %>' +
     '  }' +
 
     // else using a for-in loop
@@ -399,7 +399,6 @@
     '    value = iteratee[index];\n' +
     '    <%= objectBranch.inLoop %>;\n' +
     '    <%   if (useHas) { %>}<% } %>' +
-    '    <% } else { %>\n' +
 
     // Firefox < 3.6, Opera > 9.50 - Opera < 11.60, and Safari < 5.1
     // (if the prototype or a property on the prototype has been set)
@@ -407,6 +406,7 @@
     // value to `true`. Because of this Lo-Dash standardizes on skipping
     // the the `prototype` property of functions regardless of its
     // [[Enumerable]] value.
+    '    <% } else { %>\n' +
     '    if (!(skipProto && index == \'prototype\')<% if (useHas) { %> &&\n' +
     '        hasOwnProperty.call(iteratee, index)<% } %>) {\n' +
     '      value = iteratee[index];\n' +
@@ -662,31 +662,34 @@
     // create the function factory
     var factory = Function(
         'arrayLikeClasses, ArrayProto, bind, compareAscending, concat, forIn, ' +
-        'funcClass, hasOwnProperty, identity, indexOf, isArguments, isArray, ' +
-        'isPlainObject, iteratorBind, objectTypes, nativeKeys, propertyIsEnumerable, ' +
-        'slice, stringClass, toString',
+        'hasOwnProperty, identity, indexOf, isArguments, isArray, isFunction, ' +
+        'isPlainObject, iteratorBind, objectClass, objectTypes, nativeKeys, ' +
+        'propertyIsEnumerable, slice, stringClass, toString',
       'var callee = function(' + args + ') {\n' + iteratorTemplate(data) + '\n};\n' +
       'return callee'
     );
     // return the compiled function
     return factory(
       arrayLikeClasses, ArrayProto, bind, compareAscending, concat, forIn,
-      funcClass, hasOwnProperty, identity, indexOf, isArguments, isArray,
-      isPlainObject, iteratorBind, objectTypes, nativeKeys, propertyIsEnumerable,
-      slice, stringClass, toString
+      hasOwnProperty, identity, indexOf, isArguments, isArray, isFunction,
+      isPlainObject, iteratorBind, objectClass, objectTypes, nativeKeys,
+      propertyIsEnumerable, slice, stringClass, toString
     );
   }
 
   /**
-   * Used by `sortBy` to compare transformed values of `collection`, sorting
+   * Used by `sortBy` to compare transformed `collection` values, stable sorting
    * them in ascending order.
    *
    * @private
    * @param {Object} a The object to compare to `b`.
    * @param {Object} b The object to compare to `a`.
-   * @returns {Number} Returns `-1` if `a` < `b`, `0` if `a` == `b`, or `1` if `a` > `b`.
+   * @returns {Number} Returns the sort order indicator of `1` or `-1`.
    */
   function compareAscending(a, b) {
+    var ai = a.index,
+        bi = b.index;
+
     a = a.criteria;
     b = b.criteria;
 
@@ -696,7 +699,9 @@
     if (b === undefined) {
       return -1;
     }
-    return a < b ? -1 : a > b ? 1 : 0;
+    // ensure a stable sort in V8 and other engines
+    // http://code.google.com/p/v8/issues/detail?id=90
+    return a < b ? -1 : a > b ? 1 : ai < bi ? -1 : 1;
   }
 
   /**
@@ -735,15 +740,21 @@
   }
 
   /**
-   * Checks if `value` is a plain `Object` object with `Object` as its constructor.
+   * Checks if a given `value` is an object created by the `Object` constructor
+   * assuming objects created by the `Object` constructor have no inherited
+   * enumerable properties and that there are no `Object.prototype` extensions.
    *
    * @private
    * @param {Mixed} value The value to check.
-   * @returns {Boolean} Returns `true` if the `value` is a plain `Object` object, else `false`.
+   * @param {Boolean} [skipArgsCheck=false] Internally used to skip checks for
+   *  `arguments` objects.
+   * @returns {Boolean} Returns `true` if the `value` is a plain `Object` object,
+   *  else `false`.
    */
-  function isPlainObject(value) {
+  function isPlainObject(value, skipArgsCheck) {
+    // avoid non-objects and false positives for `arguments` objects
     var result = false;
-    if (!(value && typeof value == 'object')) {
+    if (!(value && typeof value == 'object') || (!skipArgsCheck && isArguments(value))) {
       return result;
     }
     // IE < 9 presents DOM nodes as `Object` objects except they have `toString`
@@ -751,7 +762,7 @@
     // Also check that the constructor is `Object` (i.e. `Object instanceof Object`)
     var ctor = value.constructor;
     if ((!noNodeClass || !(typeof value.toString != 'function' && typeof (value + '') == 'string')) &&
-        (toString.call(ctor) != funcClass || ctor instanceof ctor)) {
+        (!isFunction(ctor) || ctor instanceof ctor)) {
       // IE < 9 iterates inherited properties before own properties. If the first
       // iterated property is an object's own property then there are no inherited
       // enumerable properties.
@@ -806,7 +817,7 @@
    * @returns {String} Returns a token.
    */
   function tokenizeEscape(match, value) {
-    if (reComplexDelimiter.test(value)) {
+    if (match && reComplexDelimiter.test(value)) {
       return '<e%-' + value + '%>';
     }
     var index = tokenized.length;
@@ -826,15 +837,14 @@
    * @returns {String} Returns a token.
    */
   function tokenizeEvaluate(match, escapeValue, interpolateValue, evaluateValue) {
-    var index = tokenized.length;
-    if (escapeValue) {
-      tokenized[index] = "' +\n__e(" + escapeValue + ") +\n'";
-    } else if (evaluateValue) {
+    if (evaluateValue) {
+      var index = tokenized.length;
       tokenized[index] = "';\n" + evaluateValue + ";\n__p += '";
-    } else if (interpolateValue) {
-      tokenized[index] = "' +\n((__t = (" + interpolateValue + ")) == null ? '' : __t) +\n'";
+      return token + index;
     }
-    return token + index;
+    return escapeValue
+      ? tokenizeEscape(null, escapeValue)
+      : tokenizeInterpolate(null, interpolateValue);
   }
 
   /**
@@ -846,13 +856,98 @@
    * @returns {String} Returns a token.
    */
   function tokenizeInterpolate(match, value) {
-    if (reComplexDelimiter.test(value)) {
+    if (match && reComplexDelimiter.test(value)) {
       return '<e%=' + value + '%>';
     }
     var index = tokenized.length;
     tokenized[index] = "' +\n((__t = (" + value + ")) == null ? '' : __t) +\n'";
     return token + index;
   }
+
+  /*--------------------------------------------------------------------------*/
+
+  /**
+   * Checks if `value` is an `arguments` object.
+   *
+   * @static
+   * @memberOf _
+   * @category Objects
+   * @param {Mixed} value The value to check.
+   * @returns {Boolean} Returns `true` if the `value` is an `arguments` object, else `false`.
+   * @example
+   *
+   * (function() { return _.isArguments(arguments); })(1, 2, 3);
+   * // => true
+   *
+   * _.isArguments([1, 2, 3]);
+   * // => false
+   */
+  function isArguments(value) {
+    return toString.call(value) == argsClass;
+  }
+  // fallback for browsers that can't detect `arguments` objects by [[Class]]
+  if (noArgsClass) {
+    isArguments = function(value) {
+      return !!(value && hasOwnProperty.call(value, 'callee'));
+    };
+  }
+
+  /**
+   * Checks if `value` is an array.
+   *
+   * @static
+   * @memberOf _
+   * @category Objects
+   * @param {Mixed} value The value to check.
+   * @returns {Boolean} Returns `true` if the `value` is an array, else `false`.
+   * @example
+   *
+   * (function() { return _.isArray(arguments); })();
+   * // => false
+   *
+   * _.isArray([1, 2, 3]);
+   * // => true
+   */
+  var isArray = nativeIsArray || function(value) {
+    return toString.call(value) == arrayClass;
+  };
+
+  /**
+   * Checks if `value` is a function.
+   *
+   * @static
+   * @memberOf _
+   * @category Objects
+   * @param {Mixed} value The value to check.
+   * @returns {Boolean} Returns `true` if the `value` is a function, else `false`.
+   * @example
+   *
+   * _.isFunction(''.concat);
+   * // => true
+   */
+  function isFunction(value) {
+    return typeof value == 'function';
+  }
+  // fallback for older versions of Chrome and Safari
+  if (isFunction(/x/)) {
+    isFunction = function(value) {
+      return toString.call(value) == funcClass;
+    };
+  }
+
+  /**
+   * A shim implementation of `Object.keys` that produces an array of the given
+   * object's own enumerable property names.
+   *
+   * @private
+   * @param {Object} object The object to inspect.
+   * @returns {Array} Returns a new array of property names.
+   */
+  var shimKeys = createIterator({
+    'args': 'object',
+    'init': '[]',
+    'inLoop': 'result.push(index)'
+  });
 
   /*--------------------------------------------------------------------------*/
 
@@ -909,7 +1004,7 @@
     }
     // use custom `clone` method if available
     var isObj = objectTypes[typeof value];
-    if ((isObj || thorough.value) && value.clone && toString.call(value.clone) == funcClass) {
+    if ((isObj || thorough.value) && value.clone && isFunction(value.clone)) {
       thorough.value = null;
       return value.clone(deep);
     }
@@ -921,7 +1016,7 @@
         return value;
       }
       var isArr = className == arrayClass;
-      isObj = isArr || (className == objectClass ? isPlainObject(value) : isObj);
+      isObj = isArr || (className == objectClass ? isPlainObject(value, true) : isObj);
     }
     // shallow clone
     if (!isObj || !deep) {
@@ -1114,7 +1209,7 @@
     'useHas': false,
     'args': 'object',
     'init': '[]',
-    'inLoop': 'if (toString.call(value) == funcClass) result.push(index)',
+    'inLoop': 'if (isFunction(value)) result.push(index)',
     'bottom': 'result.sort()'
   });
 
@@ -1134,54 +1229,8 @@
    * // => true
    */
   function has(object, property) {
-    return hasOwnProperty.call(object, property);
+    return object ? hasOwnProperty.call(object, property) : false;
   }
-
-  /**
-   * Checks if `value` is an `arguments` object.
-   *
-   * @static
-   * @memberOf _
-   * @category Objects
-   * @param {Mixed} value The value to check.
-   * @returns {Boolean} Returns `true` if the `value` is an `arguments` object, else `false`.
-   * @example
-   *
-   * (function() { return _.isArguments(arguments); })(1, 2, 3);
-   * // => true
-   *
-   * _.isArguments([1, 2, 3]);
-   * // => false
-   */
-  function isArguments(value) {
-    return toString.call(value) == argsClass;
-  }
-  // fallback for browsers that can't detect `arguments` objects by [[Class]]
-  if (noArgsClass) {
-    isArguments = function(value) {
-      return !!(value && hasOwnProperty.call(value, 'callee'));
-    };
-  }
-
-  /**
-   * Checks if `value` is an array.
-   *
-   * @static
-   * @memberOf _
-   * @category Objects
-   * @param {Mixed} value The value to check.
-   * @returns {Boolean} Returns `true` if the `value` is an array, else `false`.
-   * @example
-   *
-   * (function() { return _.isArray(arguments); })();
-   * // => false
-   *
-   * _.isArray([1, 2, 3]);
-   * // => true
-   */
-  var isArray = nativeIsArray || function(value) {
-    return toString.call(value) == arrayClass;
-  };
 
   /**
    * Checks if `value` is a boolean (`true` or `false`) value.
@@ -1231,7 +1280,7 @@
    * // => true
    */
   function isElement(value) {
-    return !!(value && value.nodeType == 1);
+    return value ? value.nodeType === 1 : false;
   }
 
   /**
@@ -1259,9 +1308,13 @@
     'args': 'value',
     'init': 'true',
     'top':
-      'if (arrayLikeClasses[toString.call(value)]' +
-        (noArgsClass ? ' || isArguments(value)' : '') +
-      ') return !value.length',
+      'var className = toString.call(value),\n' +
+      '    length = value.length;\n' +
+      'if (arrayLikeClasses[className]' +
+      (noArgsClass ? ' || isArguments(value)' : '') + ' ||\n' +
+      '  (className == objectClass && length > -1 && length === length >>> 0 &&\n' +
+      '  isFunction(value.splice))' +
+      ') return !length',
     'inLoop': {
       'object': 'return false'
     }
@@ -1313,11 +1366,11 @@
         b = b._wrapped;
       }
       // use custom `isEqual` method if available
-      if (a.isEqual && toString.call(a.isEqual) == funcClass) {
+      if (a.isEqual && isFunction(a.isEqual)) {
         thorough.value = null;
         return a.isEqual(b);
       }
-      if (b.isEqual && toString.call(b.isEqual) == funcClass) {
+      if (b.isEqual && isFunction(b.isEqual)) {
         thorough.value = null;
         return b.isEqual(a);
       }
@@ -1404,8 +1457,8 @@
 
     // non `Object` object instances with different constructors are not equal
     if (ctorA != ctorB && !(
-          toString.call(ctorA) == funcClass && ctorA instanceof ctorA &&
-          toString.call(ctorB) == funcClass && ctorB instanceof ctorB
+          isFunction(ctorA) && ctorA instanceof ctorA &&
+          isFunction(ctorB) && ctorB instanceof ctorB
         )) {
       return false;
     }
@@ -1471,23 +1524,6 @@
   }
 
   /**
-   * Checks if `value` is a function.
-   *
-   * @static
-   * @memberOf _
-   * @category Objects
-   * @param {Mixed} value The value to check.
-   * @returns {Boolean} Returns `true` if the `value` is a function, else `false`.
-   * @example
-   *
-   * _.isFunction(''.concat);
-   * // => true
-   */
-  function isFunction(value) {
-    return toString.call(value) == funcClass;
-  }
-
-  /**
    * Checks if `value` is the language type of Object.
    * (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
    *
@@ -1507,7 +1543,9 @@
   function isObject(value) {
     // check if the value is the ECMAScript language type of Object
     // http://es5.github.com/#x8
-    return value && objectTypes[typeof value];
+    // and avoid a V8 bug
+    // http://code.google.com/p/v8/issues/detail?id=2291
+    return value ? objectTypes[typeof value] : false;
   }
 
   /**
@@ -1633,21 +1671,6 @@
   }
 
   /**
-   * A shim implementation of `Object.keys` that produces an array of the given
-   * object's own enumerable property names.
-   *
-   * @private
-   * @param {Object} object The object to inspect.
-   * @returns {Array} Returns a new array of property names.
-   */
-  var shimKeys = createIterator({
-    'args': 'object',
-    'exit': 'if (!(object && objectTypes[typeof object])) throw TypeError()',
-    'init': '[]',
-    'inLoop': 'result.push(index)'
-  });
-
-  /**
    * Creates an array composed of the own enumerable property names of `object`.
    *
    * @static
@@ -1661,11 +1684,73 @@
    * // => ['one', 'two', 'three'] (order is not guaranteed)
    */
   var keys = !nativeKeys ? shimKeys : function(object) {
+    var type = typeof object;
+
     // avoid iterating over the `prototype` property
-    return typeof object == 'function' && propertyIsEnumerable.call(object, 'prototype')
-      ? shimKeys(object)
-      : nativeKeys(object);
+    if (type == 'function' && propertyIsEnumerable.call(object, 'prototype')) {
+      return shimKeys(object);
+    }
+    return object && objectTypes[type]
+      ? nativeKeys(object)
+      : [];
   };
+
+  /**
+   * Merges enumerable properties of the source object(s) into the `destination`
+   * object. Subsequent sources will overwrite propery assignments of previous
+   * sources.
+   *
+   * @static
+   * @memberOf _
+   * @category Objects
+   * @param {Object} object The destination object.
+   * @param {Object} [source1, source2, ...] The source objects.
+   * @param {Object} [indicator] Internally used to indicate that the `stack`
+   *  argument is an array of traversed objects instead of another source object.
+   * @param {Array} [stack=[]] Internally used to keep track of traversed objects
+   *  to avoid circular references.
+   * @returns {Object} Returns the destination object.
+   * @example
+   *
+   * var stooges = [
+   *   { 'name': 'moe' },
+   *   { 'name': 'larry' }
+   * ];
+   *
+   * var ages = [
+   *   { 'age': 40 },
+   *   { 'age': 50 }
+   * ];
+   *
+   * _.merge(stooges, ages);
+   * // => [{ 'name': 'moe', 'age': 40 }, { 'name': 'larry', 'age': 50 }]
+   */
+  var merge = createIterator(extendIteratorOptions, {
+    'args': 'object, source, indicator, stack',
+    'top':
+      'var destValue, found, isArr, stackLength, recursive = indicator == isPlainObject;\n' +
+      'if (!recursive) stack = [];\n' +
+      'for (var argsIndex = 1, argsLength = recursive ? 2 : arguments.length; argsIndex < argsLength; argsIndex++) {\n' +
+      '  if (iteratee = arguments[argsIndex]) {',
+    'inLoop':
+      'if (value && ((isArr = isArray(value)) || isPlainObject(value))) {\n' +
+      '  found = false; stackLength = stack.length;\n' +
+      '  while (stackLength--) {\n' +
+      '    if (found = stack[stackLength].source == value) break\n' +
+      '  }\n' +
+      '  if (found) {\n' +
+      '    result[index] = stack[stackLength].value\n' +
+      '  } else {\n' +
+      '    destValue = (destValue = result[index]) && isArr\n' +
+      '      ? (isArray(destValue) ? destValue : [])\n' +
+      '      : (isPlainObject(destValue) ? destValue : {});\n' +
+      '    stack.push({ value: destValue, source: value });\n' +
+      '    result[index] = callee(destValue, value, isPlainObject, stack)\n' +
+      '  }\n' +
+      '} else if (value != null) {\n' +
+      '  result[index] = value\n' +
+      '}'
+  });
 
   /**
    * Creates a shallow clone of `object` composed of the specified properties.
@@ -1684,11 +1769,14 @@
    * // => { 'name': 'moe', 'age': 40 }
    */
   function pick(object) {
+    var result = {};
+    if (!object) {
+      return result;
+    }
     var prop,
         index = 0,
         props = concat.apply(ArrayProto, arguments),
-        length = props.length,
-        result = {};
+        length = props.length;
 
     // start `index` at `1` to skip `object`
     while (++index < length) {
@@ -1726,9 +1814,18 @@
     if (!value) {
       return 0;
     }
-    return arrayLikeClasses[toString.call(value)] || (noArgsClass && isArguments(value))
-      ? value.length
-      : keys(value).length;
+    var className = toString.call(value),
+        length = value.length;
+
+    // return `value.length` for `arguments` objects, arrays, strings, and DOM
+    // query collections of libraries like jQuery and MooTools
+    // http://code.google.com/p/fbug/source/browse/branches/firebug1.9/content/firebug/chrome/reps.js?r=12614#653
+    // http://trac.webkit.org/browser/trunk/Source/WebCore/inspector/InjectedScriptSource.js?rev=125186#L609
+    if (arrayLikeClasses[className] || (noArgsClass && isArguments(value)) ||
+        (className == objectClass && length > -1 && length === length >>> 0 && isFunction(value.splice))) {
+      return length;
+    }
+    return keys(value).length;
   }
 
   /**
@@ -1961,8 +2058,7 @@
       '    isFunc = typeof methodName == \'function\'',
     'inLoop': {
       'array':
-        'result[index] = (isFunc ? methodName : value[methodName])' +
-        '.apply(value, args)',
+        'result[index] = (isFunc ? methodName : value[methodName]).apply(value, args)',
       'object':
         'result' + (isKeysFast ? '[ownIndex] = ' : '.push') +
         '((isFunc ? methodName : value[methodName]).apply(value, args))'
@@ -1991,63 +2087,6 @@
    * // => [3, 6, 9] (order is not guaranteed)
    */
   var map = createIterator(baseIteratorOptions, mapIteratorOptions);
-
-  /**
-   * Merges enumerable properties of the source object(s) into the `destination`
-   * object. Subsequent sources will overwrite propery assignments of previous
-   * sources.
-   *
-   * @static
-   * @memberOf _
-   * @category Objects
-   * @param {Object} object The destination object.
-   * @param {Object} [source1, source2, ...] The source objects.
-   * @param {Object} [indicator] Internally used to indicate that the `stack`
-   *  argument is an array of traversed objects instead of another source object.
-   * @param {Array} [stack=[]] Internally used to keep track of traversed objects
-   *  to avoid circular references.
-   * @returns {Object} Returns the destination object.
-   * @example
-   *
-   * var stooges = [
-   *   { 'name': 'moe' },
-   *   { 'name': 'larry' }
-   * ];
-   *
-   * var ages = [
-   *   { 'age': 40 },
-   *   { 'age': 50 }
-   * ];
-   *
-   * _.merge(stooges, ages);
-   * // => [{ 'name': 'moe', 'age': 40 }, { 'name': 'larry', 'age': 50 }]
-   */
-  var merge = createIterator(extendIteratorOptions, {
-    'args': 'object, source, indicator, stack',
-    'top':
-      'var destValue, found, isArr, stackLength, recursive = indicator == isPlainObject;\n' +
-      'if (!recursive) stack = [];\n' +
-      'for (var argsIndex = 1, argsLength = recursive ? 2 : arguments.length; argsIndex < argsLength; argsIndex++) {\n' +
-      '  if (iteratee = arguments[argsIndex]) {',
-    'inLoop':
-      'if (value && ((isArr = isArray(value)) || isPlainObject(value))) {\n' +
-      '  found = false; stackLength = stack.length;\n' +
-      '  while (stackLength--) {\n' +
-      '    if (found = stack[stackLength].source == value) break\n' +
-      '  }\n' +
-      '  if (found) {\n' +
-      '    result[index] = stack[stackLength].value\n' +
-      '  } else {\n' +
-      '    destValue = (destValue = result[index]) && isArr\n' +
-      '      ? (isArray(destValue) ? destValue : [])\n' +
-      '      : (isPlainObject(destValue) ? destValue : {});\n' +
-      '    stack.push({ value: destValue, source: value });\n' +
-      '    result[index] = callee(destValue, value, isPlainObject, stack)\n' +
-      '  }\n' +
-      '} else if (value != null) {\n' +
-      '  result[index] = value\n' +
-      '}'
-  });
 
   /**
    * Retrieves the value of a specified property from all elements in
@@ -2146,7 +2185,8 @@
     if(thisArg) {
       callback = iteratorBind(callback, thisArg);
     }
-    if (length === length >>> 0) {
+    // Opera 10.53-10.60 JITted `length >>> 0` returns the wrong value for negative numbers
+    if (length > -1 && length === length >>> 0) {
       var iteratee = noCharByIndex && toString.call(collection) == stringClass
         ? collection.split('')
         : collection;
@@ -2219,9 +2259,9 @@
   });
 
   /**
-   * Creates a new sorted array, sorted in ascending order by the results of
-   * running each element of `collection` through a `callback`. The `callback` is
-   * bound to `thisArg` and invoked with 3 arguments; (value, index|key, collection).
+   * Creates a new array, stable sorted in ascending order by the results of
+   * running each element of `collection` through a `callback`. The `callback`
+   * is bound to `thisArg` and invoked with 3 arguments; (value, index|key, collection).
    * The `callback` argument may also be the name of a property to sort by (e.g. 'length').
    *
    * @static
@@ -2248,11 +2288,13 @@
       'array':
         'result[index] = {\n' +
         '  criteria: callback(value, index, collection),\n' +
+        '  index: index,\n' +
         '  value: value\n' +
         '}',
       'object':
         'result' + (isKeysFast ? '[ownIndex] = ' : '.push') + '({\n' +
         '  criteria: callback(value, index, collection),\n' +
+        '  index: index,\n' +
         '  value: value\n' +
         '})'
     },
@@ -2265,7 +2307,7 @@
   });
 
   /**
-   * Converts the `collection`, into an array. Useful for converting the
+   * Converts the `collection`, to an array. Useful for converting the
    * `arguments` object.
    *
    * @static
@@ -2282,11 +2324,11 @@
     if (!collection) {
       return [];
     }
-    if (collection.toArray && toString.call(collection.toArray) == funcClass) {
+    if (collection.toArray && isFunction(collection.toArray)) {
       return collection.toArray();
     }
     var length = collection.length;
-    if (length === length >>> 0) {
+    if (length > -1 && length === length >>> 0) {
       return (noArraySliceOnStrings ? toString.call(collection) == stringClass : typeof collection == 'string')
         ? collection.split('')
         : slice.call(collection);
@@ -2530,7 +2572,8 @@
   }
 
   /**
-   * Computes the intersection of all the passed-in arrays.
+   * Computes the intersection of all the passed-in arrays using strict equality
+   * for comparisons, i.e. `===`.
    *
    * @static
    * @memberOf _
@@ -2900,7 +2943,8 @@
   }
 
   /**
-   * Computes the union of the passed-in arrays.
+   * Computes the union of the passed-in arrays using strict equality for
+   * comparisons, i.e. `===`.
    *
    * @static
    * @memberOf _
@@ -3160,7 +3204,7 @@
    */
   function bind(func, thisArg) {
     var methodName,
-        isFunc = toString.call(func) == funcClass;
+        isFunc = isFunction(func);
 
     // juggle arguments
     if (!isFunc) {
@@ -3186,7 +3230,7 @@
       }
       if (partialArgs.length) {
         args = args.length
-          ? concat.apply(partialArgs, args)
+          ? partialArgs.concat(slice.call(args))
           : partialArgs;
       }
       if (this instanceof bound) {
@@ -3237,13 +3281,15 @@
       'var funcs = arguments,\n' +
       '    length = funcs.length;\n' +
       'if (length > 1) {\n' +
-      '  for (var index = 1; index < length; index++)\n' +
-      '    result[funcs[index]] = bind(result[funcs[index]], result);\n' +
+      '  for (var index = 1; index < length; index++) {\n' +
+      '    result[funcs[index]] = bind(result[funcs[index]], result)\n' +
+      '  }\n' +
       '  return result\n' +
       '}',
     'inLoop':
-      'if (toString.call(result[index]) == funcClass)' +
-      ' result[index] = bind(result[index], result)'
+      'if (isFunction(result[index])) {\n' +
+      '  result[index] = bind(result[index], result)\n' +
+      '}'
   });
 
   /**
@@ -3421,6 +3467,9 @@
       }
       ran = true;
       result = func.apply(this, arguments);
+
+      // clear the `func` variable so the function may be garbage collected
+      func = null;
       return result;
     };
   }
@@ -3672,15 +3721,19 @@
       return null;
     }
     var value = object[property];
-    return toString.call(value) == funcClass ? object[property]() : value;
+    return isFunction(value) ? object[property]() : value;
   }
 
   /**
    * A micro-templating method that handles arbitrary delimiters, preserves
    * whitespace, and correctly escapes quotes within interpolated code.
    *
-   * Note: For Chrome extensions use the `lodash csp` build and see
-   * http://code.google.com/chrome/extensions/trunk/sandboxingEval.html
+   * Note: In the development build `_.template` utilizes sourceURLs for easier
+   * debugging. See http://www.html5rocks.com/en/tutorials/developertools/sourcemaps/#toc-sourceurl
+   *
+   * Note: Lo-Dash may be used in Chrome extensions by either creating a `lodash csp`
+   * build and avoiding `_.template` use, or loading Lo-Dash in a sandboxed page.
+   * See http://developer.chrome.com/trunk/extensions/sandboxingEval.html
    *
    * @static
    * @memberOf _
@@ -3692,7 +3745,7 @@
    *  is given, else it returns the interpolated text.
    * @example
    *
-   * // using compiled template
+   * // using a compiled template
    * var compiled = _.template('hello: <%= name %>');
    * compiled({ 'name': 'moe' });
    * // => 'hello: moe'
@@ -3701,32 +3754,38 @@
    * _.template(list, { 'people': ['moe', 'larry', 'curly'] });
    * // => '<li>moe</li><li>larry</li><li>curly</li>'
    *
-   * var template = _.template('<b><%- value %></b>');
-   * template({ 'value': '<script>' });
+   * // using the "escape" delimiter to escape HTML in data property values
+   * _.template('<b><%- value %></b>', { 'value': '<script>' });
    * // => '<b>&lt;script></b>'
    *
-   * // using `print`
-   * var compiled = _.template('<% print("Hello " + epithet); %>');
-   * compiled({ 'epithet': 'stooge' });
+   * // using the internal `print` function in "evaluate" delimiters
+   * _.template('<% print("Hello " + epithet); %>', { 'epithet': 'stooge' });
    * // => 'Hello stooge.'
    *
-   * // using custom template settings
+   * // using custom template delimiter settings
    * _.templateSettings = {
    *   'interpolate': /\{\{(.+?)\}\}/g
    * };
    *
-   * var template = _.template('Hello {{ name }}!');
-   * template({ 'name': 'Mustache' });
+   * _.template('Hello {{ name }}!', { 'name': 'Mustache' });
    * // => 'Hello Mustache!'
    *
-   * // using the `variable` option
-   * _.template('<%= data.hasWith %>', { 'hasWith': 'no' }, { 'variable': 'data' });
-   * // => 'no'
+   * // using the `variable` option to ensure a with-statement isn't used in the compiled template
+   * var compiled = _.template('hello: <%= data.name %>', null, { 'variable': 'data' });
+   * compiled.source;
+   * // => function(data) {
+   *   var __t, __p = '', __e = _.escape;
+   *   __p += 'hello: ' + ((__t = ( data.name )) == null ? '' : __t);
+   *   return __p;
+   * }
    *
-   * // using the `source` property
-   * <script>
-   *   JST.project = <%= _.template(jstText).source %>;
-   * </script>
+   * // using the `source` property to inline compiled templates for meaningful
+   * // line numbers in error messages and a stack trace
+   * fs.writeFileSync(path.join(cwd, 'jst.js'), '\
+   *   var JST = {\
+   *     "main": ' + _.template(mainText).source + '\
+   *   };\
+   * ');
    */
   function template(text, data, options) {
     // based on John Resig's `tmpl` implementation
@@ -3734,6 +3793,7 @@
     // and Laura Doktorova's doT.js
     // https://github.com/olado/doT
     options || (options = {});
+    text += '';
 
     var isEvaluating,
         result,
@@ -3741,7 +3801,8 @@
         evaluateDelimiter = options.evaluate,
         interpolateDelimiter = options.interpolate,
         settings = lodash.templateSettings,
-        variable = options.variable;
+        variable = options.variable || settings.variable,
+        hasVariable = variable;
 
     // use default settings if no options object is provided
     if (escapeDelimiter == null) {
@@ -3785,11 +3846,11 @@
     // clear stored code snippets
     tokenized.length = 0;
 
-    // if `options.variable` is not specified and the template contains "evaluate"
+    // if `variable` is not specified and the template contains "evaluate"
     // delimiters, wrap a with-statement around the generated code to add the
     // data object to the top of the scope chain
-    if (!variable) {
-      variable = settings.variable || lastVariable || 'obj';
+    if (!hasVariable) {
+      variable = lastVariable || 'obj';
 
       if (isEvaluating) {
         text = 'with (' + variable + ') {\n' + text + '\n}\n';
@@ -3815,12 +3876,12 @@
 
     // frame code as the function body
     text = 'function(' + variable + ') {\n' +
-      variable + ' || (' + variable + ' = {});\n' +
+      (hasVariable ? '' : variable + ' || (' + variable + ' = {});\n') +
       'var __t, __p = \'\', __e = _.escape' +
       (isEvaluating
         ? ', __j = Array.prototype.join;\n' +
           'function print() { __p += __j.call(arguments, \'\') }\n'
-        : ', __d = ' + variable + '.' + variable + ' || ' + variable + ';\n'
+        : (hasVariable ? '' : ', __d = ' + variable + '.' + variable + ' || ' + variable) + ';\n'
       ) +
       text +
       'return __p\n}';
@@ -3845,7 +3906,7 @@
     }
     // provide the compiled function's source via its `toString` method, in
     // supported environments, or the `source` property as a convenience for
-    // build time precompilation
+    // inlining compiled templates during the build process
     result.source = text;
     return result;
   }
@@ -4000,7 +4061,7 @@
    * @memberOf _
    * @type String
    */
-  lodash.VERSION = '0.5.0-rc.1';
+  lodash.VERSION = '0.5.2';
 
   // assign static methods
   lodash.after = after;
