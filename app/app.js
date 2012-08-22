@@ -31,6 +31,9 @@ function($, _, Backbone) {
     },
 
     fetch: function(path) {
+      // Initialize done for use in async-mode
+      var done;
+
       // Concatenate the file extension.
       path = path + ".html";
 
@@ -39,7 +42,7 @@ function($, _, Backbone) {
         return JST[path];
       } else {
         // Put fetch into `async-mode`.
-        var done = this.async();
+        done = this.async();
 
         // Seek out the template asynchronously.
         return $.ajax({ url: app.root + path }).then(function(contents) {
