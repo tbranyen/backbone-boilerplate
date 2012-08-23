@@ -31,8 +31,8 @@ function($, _, Backbone) {
     },
 
     fetch: function(path) {
-      // Put fetch into `async-mode`.
-      var done = this.async();
+      // Initialize done for use in async-mode
+      var done;
 
       // Concatenate the file extension.
       path = path + ".html";
@@ -40,12 +40,15 @@ function($, _, Backbone) {
       // If cached, use the compiled template.
       if (JST[path]) {
         return JST[path];
-      }
+      } else {
+        // Put fetch into `async-mode`.
+        done = this.async();
 
-      // Otherwise seek out the template asynchronously.
-      $.ajax({ url: app.root + path }).then(function(contents) {
-        done(JST[path] = _.template(contents));
-      });
+        // Seek out the template asynchronously.
+        return $.ajax({ url: app.root + path }).then(function(contents) {
+          done(JST[path] = _.template(contents));
+        });
+      }
     }
   });
 
