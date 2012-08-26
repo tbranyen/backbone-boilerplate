@@ -60,23 +60,26 @@ function($, _, Backbone) {
     },
 
     // Helper for using layouts.
-    useLayout: function(name) {
+    useLayout: function(name, options) {
       // If already using this Layout, then don't re-inject into the DOM.
       if (this.layout && this.layout.options.template === name) {
         return this.layout;
       }
+
+      // If options does not exist, make it an empty object.
+      options = !options ? {} : options;
 
       // If a layout already exists, remove it from the DOM.
       if (this.layout) {
         this.layout.remove();
       }
 
-      // Create a new Layout.
-      var layout = new Backbone.Layout({
+      // Create a new Layout with options.
+      var layout = new Backbone.Layout(_.extend({
         template: name,
         className: "layout " + name,
         id: "layout"
-      });
+      }, options));
 
       // Insert into the DOM.
       $("#main").empty().append(layout.el);
