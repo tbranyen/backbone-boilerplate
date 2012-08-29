@@ -66,9 +66,6 @@ function($, _, Backbone) {
         return this.layout;
       }
 
-      // If options does not exist, make it an empty object.
-      options = !options ? {} : options;
-
       // If a layout already exists, remove it from the DOM.
       if (this.layout) {
         this.layout.remove();
