@@ -81,36 +81,22 @@ module.exports = function(grunt) {
       ]
     },
 
-    // The stylus task is used to compile Stylus stylesheets into a single
-    // CSS file for debug and release deployments.  
-    stylus: {
-      // Put all your CSS files here, order matters!
-      files: [
-        "assets/vendor/h5bp/css/style.css"
-      ],
+    // This task simplifies working with CSS inside Backbone Boilerplate
+    // projects.  Instead of manually specifying your stylesheets inside the
+    // configuration, you can use `@imports` and this task will concatenate
+    // only those paths.
+    styles: {
+      // Out the concatenated contents of the following styles into the below
+      // development file path.
+      "dist/debug/index.css": {
+        // Point this to where your `index.css` file is location.
+        src: "assets/css/index.css",
 
-      // Default task which runs in debug mode, this will build out to the
-      // `dist/debug` directory.
-      compile: {
-        // Used for @imports.
-        options: { paths: ["assets/css"] },
-        
-        files: {
-          "dist/debug/index.css": "<config:stylus.files>"
-        }
-      },
+        // The relative path to use for the @imports.
+        paths: ["assets/css"],
 
-      // This dev task only runs with `watch:stylus` this will *completely*
-      // overwrite the `assets/css/index.css` file referenced in `index.html`.
-      // Use this only when you cannot use the `bbb server` runtime
-      // compilation.
-      dev: {
-        // Used for @imports.
-        options: { paths: ["assets/css"] },
-        
-        files: {
-          "assets/css/index.css": "<config:stylus.files>"
-        }
+        // Additional production-only stylesheets here.
+        additional: []
       }
     },
 
