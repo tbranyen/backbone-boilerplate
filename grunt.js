@@ -184,14 +184,11 @@ module.exports = function(grunt) {
 
     // The watch task can be used to monitor the filesystem and execute
     // specific tasks when files are modified.  By default, the watch task is
-    // available to compile stylus templates if you are unable to use the
-    // runtime builder (use if you have a custom server, PhoneGap, Adobe Air,
-    // etc.)
+    // available to compile CSS if you are unable to use the runtime compiler
+    // (use if you have a custom server, PhoneGap, Adobe Air, etc.)
     watch: {
-      stylus: {
-        files: ["grunt.js", "assets/css/**/*.styl"],
-        tasks: "stylus:dev"
-      }
+      files: ["grunt.js", "assets/**/*", "app/**/*"],
+      tasks: "styles"
     }
 
   });
