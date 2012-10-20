@@ -41,18 +41,6 @@ module.exports = function(grunt) {
       ]
     },
 
-    // The handlebars task compiles all application templates into JavaScript
-    // functions using Handlebars templating engine.
-    //
-    // Since this task defaults to writing to the same file as the jst task,
-    // edit the debug task replacing jst with handlebars.
-    //
-    // The concat task depends on this file to exist, so if you decide to
-    // remove this, ensure concat is updated accordingly.
-    handlebars: {
-      "dist/debug/templates.js": ["app/templates/**/*.html"]
-    },
-
     // The concatenate task is used here to merge the almond require/define
     // shim and the templates into the application code.  It's named
     // dist/debug/require.js, because we want to only load one script file in
@@ -128,7 +116,7 @@ module.exports = function(grunt) {
 
       debug: {
         // Ensure the favicon is mapped correctly.
-        files: { "favicon.ico": "favicon.ico" },
+        files: "<config:server.files>",
 
         // Map `server:debug` to `debug` folders.
         folders: {
@@ -143,7 +131,7 @@ module.exports = function(grunt) {
         host: "0.0.0.0",
 
         // Ensure the favicon is mapped correctly.
-        files: { "favicon.ico": "favicon.ico" },
+        files: "<config:server.files>",
 
         // Map `server:release` to `release` folders.
         folders: {
