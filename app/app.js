@@ -25,30 +25,24 @@ function($, _, Backbone) {
     // Allow LayoutManager to augment Backbone.View.prototype.
     manage: true,
 
-    paths: {
-      layout: "app/templates/layouts/",
-      template: "app/templates/"
-    },
+    prefix: "app/templates/",
 
     fetch: function(path) {
-      // Initialize done for use in async-mode
-      var done;
-
       // Concatenate the file extension.
       path = path + ".html";
 
       // If cached, use the compiled template.
       if (JST[path]) {
         return JST[path];
-      } else {
-        // Put fetch into `async-mode`.
-        done = this.async();
-
-        // Seek out the template asynchronously.
-        return $.ajax({ url: app.root + path }).then(function(contents) {
-          done(JST[path] = _.template(contents));
-        });
       }
+
+      // Put fetch into `async-mode`.
+      var done = this.async();
+
+      // Seek out the template asynchronously.
+      $.get(app.root + path, function(contents) {
+        done(JST[path] = _.template(contents));
+      });
     }
   });
 
@@ -60,35 +54,14 @@ function($, _, Backbone) {
     },
 
     // Helper for using layouts.
-    useLayout: function(name, options) {
-      // If already using this Layout, then don't re-inject into the DOM.
-      if (this.layout && this.layout.options.template === name) {
-        return this.layout;
-      }
-
-      // If a layout already exists, remove it from the DOM.
-      if (this.layout) {
-        this.layout.remove();
-      }
-
+    useLayout: function(options) {
       // Create a new Layout with options.
       var layout = new Backbone.Layout(_.extend({
-        template: name,
-        className: "layout " + name,
-        id: "layout"
+        el: "body"
       }, options));
 
-      // Insert into the DOM.
-      $("#main").empty().append(layout.el);
-
-      // Render the layout.
-      layout.render();
-
       // Cache the refererence.
-      this.layout = layout;
-
-      // Return the reference, for chainability.
-      return layout;
+      return this.layout = layout;
     }
   }, Backbone.Events);
 
