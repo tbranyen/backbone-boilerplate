@@ -97,7 +97,7 @@ module.exports = function(grunt) {
     concat: {
       dist: {
         src: [
-          "assets/js/libs/almond.js",
+          "vendor/js/libs/almond.js",
           "dist/debug/templates.js",
           "dist/debug/require.js"
         ],
@@ -151,8 +151,8 @@ module.exports = function(grunt) {
         // Map `server:debug` to `debug` folders.
         folders: {
           "app": "dist/debug",
-          "assets/js/libs": "dist/debug",
-          "assets/css": "dist/debug"
+          "vendor/js/libs": "dist/debug",
+          "app/styles": "dist/debug"
         }
       },
 
@@ -166,8 +166,8 @@ module.exports = function(grunt) {
         // Map `server:release` to `release` folders.
         folders: {
           "app": "dist/release",
-          "assets/js/libs": "dist/release",
-          "assets/css": "dist/release"
+          "vendor/js/libs": "dist/release",
+          "app/styles": "dist/release"
         }
       }
     },
@@ -189,7 +189,7 @@ module.exports = function(grunt) {
     // available to compile CSS if you are unable to use the runtime compiler
     // (use if you have a custom server, PhoneGap, Adobe Air, etc.)
     watch: {
-      files: ["grunt.js", "assets/**/*", "app/**/*"],
+      files: ["grunt.js", "vendor/**/*", "app/**/*"],
       tasks: "styles"
     },
 
@@ -204,10 +204,10 @@ module.exports = function(grunt) {
   // dist/debug/templates.js, compile all the application code into
   // dist/debug/require.js, and then concatenate the require/define shim
   // almond.js and dist/debug/templates.js into the require.js file.
-  grunt.registerTask("debug", "clean lint jst requirejs concat styles targethtml:debug");
+  grunt.registerTask("debug", "clean lint jst requirejs concat styles");
 
   // The release task will run the debug tasks and then minify the
   // dist/debug/require.js file and CSS files.
-  grunt.registerTask("release", "debug min mincss targethtml:release");
+  grunt.registerTask("release", "debug min mincss");
 
 };
