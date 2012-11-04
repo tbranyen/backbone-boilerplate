@@ -8,7 +8,18 @@
   <title>Backbone Boilerplate</title>
 
   <!-- Application styles. -->
-  <link rel="stylesheet" href="/assets/css/index.css">
+
+  <!--(if target release)>
+  <link rel="stylesheet" href="index.css">
+  <!(endif)-->
+
+  <!--(if target debug)>
+  <link rel="stylesheet" href="index.css">
+  <!(endif)-->
+
+  <!--(if target dummy)><!-->
+  <link rel="stylesheet" href="/app/styles/index.css">
+  <!--<!(endif)-->
 </head>
 
 <body>
@@ -16,6 +27,17 @@
   <div role="main" id="main"></div>
 
   <!-- Application source. -->
+
+  <!--(if target release)>
+  <script data-main="/app/config" src="require.js"></script>
+  <!(endif)-->
+
+  <!--(if target debug)>
+  <script data-main="/app/config" src="require.js"></script>
+  <!(endif)-->
+
+  <!--(if target dummy)><!-->
   <script data-main="/app/config" src="/assets/js/libs/require.js"></script>
+  <!--<!(endif)-->
 </body>
 </html>

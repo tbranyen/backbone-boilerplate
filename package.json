@@ -3,7 +3,7 @@
   "version": "0.1.0",
 
   "jam": {
-    "packageDir": "./assets/jam",
+    "packageDir": "./vendor/jam",
     "baseUrl": "./app",
 
     "dependencies": {

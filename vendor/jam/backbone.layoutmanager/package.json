@@ -1,0 +1,47 @@
+{
+  "author": "Tim Branyen (@tbranyen)",
+  "name": "backbone.layoutmanager",
+  "description": "A manager for templates & layouts in Backbone.js",
+
+  "version": "0.7.0",
+
+  "homepage": "http://tbranyen.github.com/backbone.layoutmanager/",
+
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/tbranyen/backbone.layoutmanager.git"
+  },
+
+  "main": "node/index",
+
+  "engines": {
+    "node": ">=0.6"
+  },
+
+  "dependencies": {
+    "backbone": "0.9.2",
+    "underscore.deferred": "0.2.0",
+    "cheerio": "0.9.2"
+  },
+
+  "devDependencies": {
+    "grunt-remove-logging": "0.0.2"
+  },
+
+  "jam": {
+    "dependencies": {
+      "lodash": "*",
+      "backbone": "*",
+      "jquery": "*"
+    },
+
+    "include": ["backbone.layoutmanager.js"],
+
+    "main": "backbone.layoutmanager.js",
+
+    "shim": {
+      "deps": ["jquery", "backbone", "lodash"],
+      "exports": "Backbone.LayoutManager"
+    }
+  }
+}

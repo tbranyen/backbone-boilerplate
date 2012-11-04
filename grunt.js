@@ -5,9 +5,20 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
 
-    // The clean task ensures all files are removed from the dist/ directory so
-    // that no files linger from previous builds.
-    clean: ["dist/"],
+    // If you want to generate targeted `index.html` builds into the `dist/`
+    // folders, uncomment the following configuration block and use the
+    // conditionals inside `index.html`.
+    //targethtml: {
+    //  debug: {
+    //    src: "index.html",
+    //    dest: "dist/debug/index.html"
+    //  },
+    //
+    //  release: {
+    //    src: "index.html",
+    //    dest: "dist/release/index.html"
+    //  }
+    //},
 
     // The lint task will run the build configuration and the application
     // JavaScript through JSHint and report any errors.  You can change the
@@ -41,6 +52,44 @@ module.exports = function(grunt) {
       ]
     },
 
+    // This task simplifies working with CSS inside Backbone Boilerplate
+    // projects.  Instead of manually specifying your stylesheets inside the
+    // configuration, you can use `@imports` and this task will concatenate
+    // only those paths.
+    styles: {
+      // Out the concatenated contents of the following styles into the below
+      // development file path.
+      "dist/debug/index.css": {
+        // Point this to where your `index.css` file is location.
+        src: "app/styles/index.css",
+
+        // The relative path to use for the @imports.
+        paths: ["app/styles"],
+
+        // Point to where styles live.
+        prefix: "app/styles/",
+
+        // Additional production-only stylesheets here.
+        additional: []
+      }
+    },
+
+    // This task uses James Burke's excellent r.js AMD build tool.  In the
+    // future other builders may be contributed as drop-in alternatives.
+    requirejs: {
+      // Include the main configuration file.
+      mainConfigFile: "app/config.js",
+
+      // Output file.
+      out: "dist/debug/require.js",
+
+      // Root application module.
+      name: "config",
+
+      // Do not wrap everything in an IIFE.
+      wrap: false
+    },
+
     // The concatenate task is used here to merge the almond require/define
     // shim and the templates into the application code.  It's named
     // dist/debug/require.js, because we want to only load one script file in
@@ -53,7 +102,7 @@ module.exports = function(grunt) {
           "dist/debug/require.js"
         ],
 
-        dest: "dist/debug/require.js",
+        dest: "dist/debug/source.js",
 
         separator: ";"
       }
@@ -69,29 +118,10 @@ module.exports = function(grunt) {
       ]
     },
 
-    // This task simplifies working with CSS inside Backbone Boilerplate
-    // projects.  Instead of manually specifying your stylesheets inside the
-    // configuration, you can use `@imports` and this task will concatenate
-    // only those paths.
-    styles: {
-      // Out the concatenated contents of the following styles into the below
-      // development file path.
-      "dist/debug/index.css": {
-        // Point this to where your `index.css` file is location.
-        src: "assets/css/index.css",
-
-        // The relative path to use for the @imports.
-        paths: ["assets/css"],
-
-        // Additional production-only stylesheets here.
-        additional: []
-      }
-    },
-
     // Takes the built require.js file and minifies it for filesize benefits.
     min: {
-      "dist/release/require.js": [
-        "dist/debug/require.js"
+      "dist/release/source.min.js": [
+        "dist/debug/source.js"
       ]
     },
 
@@ -142,22 +172,6 @@ module.exports = function(grunt) {
       }
     },
 
-    // This task uses James Burke's excellent r.js AMD build tool.  In the
-    // future other builders may be contributed as drop-in alternatives.
-    requirejs: {
-      // Include the main configuration file.
-      mainConfigFile: "app/config.js",
-
-      // Output file.
-      out: "dist/debug/require.js",
-
-      // Root application module.
-      name: "config",
-
-      // Do not wrap everything in an IIFE.
-      wrap: false
-    },
-
     // The headless QUnit testing environment is provided for "free" by Grunt.
     // Simply point the configuration to your test directory.
     qunit: {
@@ -177,7 +191,11 @@ module.exports = function(grunt) {
     watch: {
       files: ["grunt.js", "assets/**/*", "app/**/*"],
       tasks: "styles"
-    }
+    },
+
+    // The clean task ensures all files are removed from the dist/ directory so
+    // that no files linger from previous builds.
+    clean: ["dist/"]
 
   });
 
@@ -186,10 +204,10 @@ module.exports = function(grunt) {
   // dist/debug/templates.js, compile all the application code into
   // dist/debug/require.js, and then concatenate the require/define shim
   // almond.js and dist/debug/templates.js into the require.js file.
-  grunt.registerTask("debug", "clean lint jst requirejs concat styles");
+  grunt.registerTask("debug", "clean lint jst requirejs concat styles targethtml:debug");
 
   // The release task will run the debug tasks and then minify the
   // dist/debug/require.js file and CSS files.
-  grunt.registerTask("release", "debug min mincss");
+  grunt.registerTask("release", "debug min mincss targethtml:release");
 
 };
