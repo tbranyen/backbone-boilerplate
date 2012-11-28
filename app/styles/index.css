@@ -1,15 +1,8 @@
-/* H5BP styles. */
-@import "/vendor/h5bp/css/normalize.css";
-@import "/vendor/h5bp/css/main.css";
+/*-- HTML5 Boilerplate. -----------------------------------------------------*/
 
-/* Add Stylus stylesheets here, alll files ending in .styl will be compiled!
- * For example: @import "main.styl";
- *
- * Note: All stylesheets are relative to `assets/css`.
- *
- */ 
+@import "../../vendor/h5bp/css/normalize.css";
+@import "../../vendor/h5bp/css/main.css";
 
+/*-- Application stylesheets. -----------------------------------------------*/
 
-
-/* Put development-only CSS below this line. */
-
+@import "style.css";

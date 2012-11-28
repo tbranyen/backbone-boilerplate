@@ -2061,15 +2061,17 @@ var jam = {
             "name": "lodash",
             "location": "../vendor/jam/lodash",
             "main": "./lodash.js"
-        },
-        {
-            "name": "underscore",
-            "location": "../vendor/jam/underscore",
-            "main": "underscore.js"
         }
     ],
     "version": "0.2.11",
     "shim": {
+        "backbone": {
+            "deps": [
+                "jquery",
+                "lodash"
+            ],
+            "exports": "Backbone"
+        },
         "backbone.layoutmanager": {
             "deps": [
                 "jquery",

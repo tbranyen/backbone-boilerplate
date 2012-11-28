@@ -9,35 +9,36 @@
 
   <!-- Application styles. -->
 
-  <!--(if target release)>
-  <link rel="stylesheet" href="index.css">
-  <!(endif)-->
-
-  <!--(if target debug)>
-  <link rel="stylesheet" href="index.css">
-  <!(endif)-->
-
   <!--(if target dummy)><!-->
   <link rel="stylesheet" href="/app/styles/index.css">
   <!--<!(endif)-->
-</head>
-
-<body>
-  <!-- Main container. -->
-  <div role="main" id="main"></div>
-
-  <!-- Application source. -->
 
   <!--(if target release)>
-  <script data-main="/app/config" src="require.js"></script>
+  <link rel="stylesheet" href="index.css">
   <!(endif)-->
 
   <!--(if target debug)>
-  <script data-main="/app/config" src="require.js"></script>
+  <link rel="stylesheet" href="index.css">
   <!(endif)-->
+</head>
+
+<body>
+  <!-- Application container. -->
+
+  <main role="main" id="main"></main>
+
+  <!-- Application source. -->
 
   <!--(if target dummy)><!-->
   <script data-main="/app/config" src="/vendor/js/libs/require.js"></script>
   <!--<!(endif)-->
+
+  <!--(if target release)>
+  <script src="require.js"></script>
+  <!(endif)-->
+
+  <!--(if target debug)>
+  <script src="require.js"></script>
+  <!(endif)-->
 </body>
 </html>

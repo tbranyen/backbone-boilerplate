@@ -5,21 +5,6 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
 
-    // If you want to generate targeted `index.html` builds into the `dist/`
-    // folders, uncomment the following configuration block and use the
-    // conditionals inside `index.html`.
-    //targethtml: {
-    //  debug: {
-    //    src: "index.html",
-    //    dest: "dist/debug/index.html"
-    //  },
-    //
-    //  release: {
-    //    src: "index.html",
-    //    dest: "dist/release/index.html"
-    //  }
-    //},
-
     // The lint task will run the build configuration and the application
     // JavaScript through JSHint and report any errors.  You can change the
     // options for this task, by reading this:
@@ -80,6 +65,9 @@ module.exports = function(grunt) {
       // Include the main configuration file.
       mainConfigFile: "app/config.js",
 
+      // Also include the JamJS configuration file.
+      jamConfig: "/vendor/jam/require.config.js",
+
       // Output file.
       out: "dist/debug/require.js",
 
@@ -102,7 +90,7 @@ module.exports = function(grunt) {
           "dist/debug/require.js"
         ],
 
-        dest: "dist/debug/source.js",
+        dest: "dist/debug/require.js",
 
         separator: ";"
       }
@@ -120,8 +108,8 @@ module.exports = function(grunt) {
 
     // Takes the built require.js file and minifies it for filesize benefits.
     min: {
-      "dist/release/source.min.js": [
-        "dist/debug/source.js"
+      "dist/release/require.js": [
+        "dist/debug/require.js"
       ]
     },
 
@@ -143,6 +131,9 @@ module.exports = function(grunt) {
     server: {
       // Ensure the favicon is mapped correctly.
       files: { "favicon.ico": "favicon.ico" },
+
+      // For styles.
+      prefix: "app/styles/",
 
       debug: {
         // Ensure the favicon is mapped correctly.
@@ -195,7 +186,41 @@ module.exports = function(grunt) {
 
     // The clean task ensures all files are removed from the dist/ directory so
     // that no files linger from previous builds.
-    clean: ["dist/"]
+    clean: ["dist/"],
+
+    // If you want to generate targeted `index.html` builds into the `dist/`
+    // folders, uncomment the following configuration block and use the
+    // conditionals inside `index.html`.
+    //targethtml: {
+    //  debug: {
+    //    src: "index.html",
+    //    dest: "dist/debug/index.html"
+    //  },
+    //
+    //  release: {
+    //    src: "index.html",
+    //    dest: "dist/release/index.html"
+    //  }
+    //},
+    
+    // This task will copy assets into your build directory,
+    // automatically.  This makes an entirely encapsulated build into
+    // each directory.
+    //copy: {
+    //  debug: {
+    //    files: {
+    //      "dist/debug/app/": "app/**",
+    //      "dist/debug/vendor/": "vendor/**"
+    //    }
+    //  },
+
+    //  release: {
+    //    files: {
+    //      "dist/release/app/": "app/**",
+    //      "dist/release/vendor/": "vendor/**"
+    //    }
+    //  }
+    //}
 
   });
 

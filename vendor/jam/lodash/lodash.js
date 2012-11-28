@@ -1,5 +1,5 @@
 /*!
- * Lo-Dash v0.9.1 <http://lodash.com>
+ * Lo-Dash v0.9.2 <http://lodash.com>
  * (c) 2012 John-David Dalton <http://allyoucanleet.com/>
  * Based on Underscore.js 1.4.2 <http://underscorejs.org>
  * (c) 2009-2012 Jeremy Ashkenas, DocumentCloud Inc.
@@ -18,13 +18,14 @@
 
   /** Used for array and object method references */
   var arrayRef = [],
-      objectRef = {};
+      // avoid a Closure Compiler bug by creatively creating an object
+      objectRef = new function(){};
 
   /** Used to generate unique IDs */
   var idCounter = 0;
 
   /** Used internally to indicate various things */
-  var indicatorObject = {};
+  var indicatorObject = objectRef;
 
   /** Used by `cachedContains` as the default size when optimizations are enabled for large arrays */
   var largeArraySize = 30;
@@ -32,7 +33,7 @@
   /** Used to restore the original `_` reference in `noConflict` */
   var oldDash = window._;
 
-  /** Used to detect delimiter values that should be processed by `tokenizeEvaluate` */
+  /** Used to detect template delimiter values that require a with-statement */
   var reComplexDelimiter = /[-?+=!~*%&^<>|{(\/]|\[\D|\b(?:delete|in|instanceof|new|typeof|void)\b/;
 
   /** Used to match HTML entities */
@@ -56,7 +57,16 @@
       .replace(/valueOf|for [^\]]+/g, '.+?') + '$'
   );
 
-  /** Used to ensure capturing order and avoid matches for undefined delimiters */
+  /**
+   * Used to match ES6 template delimiters
+   * http://people.mozilla.org/~jorendorff/es6-draft.html#sec-7.8.6
+   */
+  var reEsTemplate = /\$\{((?:(?=\\?)\\?[\s\S])*?)}/g;
+
+  /** Used to match "interpolate" template delimiters */
+  var reInterpolate = /<%=([\s\S]+?)%>/g;
+
+  /** Used to ensure capturing order of template delimiters */
   var reNoMatch = /($^)/;
 
   /** Used to match HTML characters */
@@ -277,7 +287,7 @@
      * @memberOf _.templateSettings
      * @type RegExp
      */
-    'interpolate': /<%=([\s\S]+?)%>/g,
+    'interpolate': reInterpolate,
 
     /**
      * Used to reference the data object in the template text.
@@ -318,7 +328,7 @@
 
     // add support for accessing string characters by index if needed
     '  <% if (noCharByIndex) { %>\n' +
-    '  if (toString.call(iteratee) == stringClass) {\n' +
+    '  if (isString(iteratee)) {\n' +
     '    iteratee = iteratee.split(\'\')\n' +
     '  }' +
     '  <% } %>\n' +
@@ -436,13 +446,13 @@
   /*--------------------------------------------------------------------------*/
 
   /**
-   * Creates a function optimized for searching large arrays for a given `value`,
+   * Creates a function optimized to search large arrays for a given `value`,
    * starting at `fromIndex`, using strict equality for comparisons, i.e. `===`.
    *
    * @private
    * @param {Array} array The array to search.
    * @param {Mixed} value The value to search for.
-   * @param {Number} [fromIndex=0] The index to start searching from.
+   * @param {Number} [fromIndex=0] The index to search from.
    * @param {Number} [largeSize=30] The length at which an array is considered large.
    * @returns {Boolean} Returns `true` if `value` is found, else `false`.
    */
@@ -450,14 +460,14 @@
     fromIndex || (fromIndex = 0);
 
     var length = array.length,
-        isLarge = (length - fromIndex) >= (largeSize || largeArraySize),
-        cache = isLarge ? {} : array;
+        isLarge = (length - fromIndex) >= (largeSize || largeArraySize);
 
     if (isLarge) {
-      // init value cache
-      var index = fromIndex - 1;
+      var cache = {},
+          index = fromIndex - 1;
+
       while (++index < length) {
-        // manually coerce `value` to string because `hasOwnProperty`, in some
+        // manually coerce `value` to a string because `hasOwnProperty`, in some
         // older versions of Firefox, coerces objects incorrectly
         var key = array[index] + '';
         (hasOwnProperty.call(cache, key) ? cache[key] : (cache[key] = [])).push(array[index]);
@@ -468,8 +478,20 @@
         var key = value + '';
         return hasOwnProperty.call(cache, key) && indexOf(cache[key], value) > -1;
       }
-      return indexOf(cache, value, fromIndex) > -1;
+      return indexOf(array, value, fromIndex) > -1;
     }
+  }
+
+  /**
+   * Used by `_.max` and `_.min` as the default `callback` when a given
+   * `collection` is a string value.
+   *
+   * @private
+   * @param {String} value The character to inspect.
+   * @returns {Number} Returns the code unit of given character.
+   */
+  function charAtCallback(value) {
+    return value.charCodeAt(0);
   }
 
   /**
@@ -544,7 +566,7 @@
         // mimic the constructor's `return` behavior
         // http://es5.github.com/#x13.2.2
         var result = func.apply(thisBinding, args);
-        return result && objectTypes[typeof result]
+        return isObject(result)
           ? result
           : thisBinding
       }
@@ -619,14 +641,14 @@
 
     // create the function factory
     var factory = Function(
-        'createCallback, hasOwnProperty, isArguments, objectTypes, nativeKeys, ' +
-        'propertyIsEnumerable, stringClass, toString',
+        'createCallback, hasOwnProperty, isArguments, isString, objectTypes, ' +
+        'nativeKeys, propertyIsEnumerable',
       'return function(' + args + ') {\n' + iteratorTemplate(data) + '\n}'
     );
     // return the compiled function
     return factory(
-      createCallback, hasOwnProperty, isArguments, objectTypes, nativeKeys,
-      propertyIsEnumerable, stringClass, toString
+      createCallback, hasOwnProperty, isArguments, isString, objectTypes,
+      nativeKeys, propertyIsEnumerable
     );
   }
 
@@ -879,7 +901,7 @@
       deep = false;
     }
     // inspect [[Class]]
-    var isObj = objectTypes[typeof value];
+    var isObj = isObject(value);
     if (isObj) {
       // don't clone `arguments` objects, functions, or non-object Objects
       var className = toString.call(value);
@@ -1564,15 +1586,10 @@
    * // => ['one', 'two', 'three'] (order is not guaranteed)
    */
   var keys = !nativeKeys ? shimKeys : function(object) {
-    var type = typeof object;
-
     // avoid iterating over the `prototype` property
-    if (type == 'function' && propertyIsEnumerable.call(object, 'prototype')) {
-      return shimKeys(object);
-    }
-    return object && objectTypes[type]
-      ? nativeKeys(object)
-      : [];
+    return typeof object == 'function' && propertyIsEnumerable.call(object, 'prototype')
+      ? shimKeys(object)
+      : (isObject(object) ? nativeKeys(object) : []);
   };
 
   /**
@@ -1613,7 +1630,7 @@
         stackA = args[3],
         stackB = args[4];
 
-    if (indicator !== indicatorObject) {
+    if (indicator !== objectRef) {
       stackA = [];
       stackB = [];
       length = args.length;
@@ -1641,7 +1658,7 @@
               : (isPlainObject(value) ? value : {})
             );
             // recursively merge objects and arrays (susceptible to call stack limits)
-            object[key] = merge(value, source, indicatorObject, stackA, stackB);
+            object[key] = merge(value, source, objectRef, stackA, stackB);
           }
         } else if (source != null) {
           object[key] = source;
@@ -1792,7 +1809,8 @@
 
   /**
    * Checks if a given `target` element is present in a `collection` using strict
-   * equality for comparisons, i.e. `===`.
+   * equality for comparisons, i.e. `===`. If `fromIndex` is negative, it is used
+   * as the offset from the end of the collection.
    *
    * @static
    * @memberOf _
@@ -1800,11 +1818,15 @@
    * @category Collections
    * @param {Array|Object|String} collection The collection to iterate over.
    * @param {Mixed} target The value to check for.
+   * @param {Number} [fromIndex=0] The index to search from.
    * @returns {Boolean} Returns `true` if the `target` element is found, else `false`.
    * @example
    *
-   * _.contains([1, 2, 3], 3);
+   * _.contains([1, 2, 3], 1);
    * // => true
+   *
+   * _.contains([1, 2, 3], 1, 2);
+   * // => false
    *
    * _.contains({ 'name': 'moe', 'age': 40 }, 'moe');
    * // => true
@@ -1812,16 +1834,19 @@
    * _.contains('curly', 'ur');
    * // => true
    */
-  function contains(collection, target) {
-    var length = collection ? collection.length : 0;
+  function contains(collection, target, fromIndex) {
+    var index = -1,
+        length = collection ? collection.length : 0;
+
+    fromIndex = (fromIndex < 0 ? nativeMax(0, length + fromIndex) : fromIndex) || 0;
     if (typeof length == 'number') {
-      return (toString.call(collection) == stringClass
-        ? collection.indexOf(target)
-        : indexOf(collection, target)
+      return (isString(collection)
+        ? collection.indexOf(target, fromIndex)
+        : indexOf(collection, target, fromIndex)
       ) > -1;
     }
     return some(collection, function(value) {
-      return value === target;
+      return ++index >= fromIndex && value === target;
     });
   }
 
@@ -1883,9 +1908,21 @@
   function every(collection, callback, thisArg) {
     var result = true;
     callback = createCallback(callback, thisArg);
-    forEach(collection, function(value, index, collection) {
-      return (result = !!callback(value, index, collection));
-    });
+
+    if (isArray(collection)) {
+      var index = -1,
+          length = collection.length;
+
+      while (++index < length) {
+        if (!(result = !!callback(collection[index], index, collection))) {
+          break;
+        }
+      }
+    } else {
+      forEach(collection, function(value, index, collection) {
+        return (result = !!callback(value, index, collection));
+      });
+    }
     return result;
   }
 
@@ -1941,8 +1978,11 @@
   function find(collection, callback, thisArg) {
     var result;
     callback = createCallback(callback, thisArg);
-    some(collection, function(value, index, collection) {
-      return callback(value, index, collection) && (result = value, true);
+    forEach(collection, function(value, index, collection) {
+      if (callback(value, index, collection)) {
+        result = value;
+        return false;
+      }
     });
     return result;
   }
@@ -2109,8 +2149,11 @@
         length = collection ? collection.length : 0,
         result = computed;
 
-    if (callback || typeof length != 'number') {
-      callback = createCallback(callback, thisArg);
+    if (callback || !isArray(collection)) {
+      callback = !callback && isString(collection)
+        ? charAtCallback
+        : createCallback(callback, thisArg);
+
       forEach(collection, function(value, index, collection) {
         var current = callback(value, index, collection);
         if (current > computed) {
@@ -2152,8 +2195,11 @@
         length = collection ? collection.length : 0,
         result = computed;
 
-    if (callback || typeof length != 'number') {
-      callback = createCallback(callback, thisArg);
+    if (callback || !isArray(collection)) {
+      callback = !callback && isString(collection)
+        ? charAtCallback
+        : createCallback(callback, thisArg);
+
       forEach(collection, function(value, index, collection) {
         var current = callback(value, index, collection);
         if (current < computed) {
@@ -2257,7 +2303,7 @@
     if (typeof length != 'number') {
       var props = keys(collection);
       length = props.length;
-    } else if (noCharByIndex && toString.call(collection) == stringClass) {
+    } else if (noCharByIndex && isString(collection)) {
       iteratee = collection.split('');
     }
     forEach(collection, function(value, index, collection) {
@@ -2367,9 +2413,21 @@
   function some(collection, callback, thisArg) {
     var result;
     callback = createCallback(callback, thisArg);
-    forEach(collection, function(value, index, collection) {
-      return !(result = callback(value, index, collection));
-    });
+
+    if (isArray(collection)) {
+      var index = -1,
+          length = collection.length;
+
+      while (++index < length) {
+        if (result = callback(collection[index], index, collection)) {
+          break;
+        }
+      }
+    } else {
+      forEach(collection, function(value, index, collection) {
+        return !(result = callback(value, index, collection));
+      });
+    }
     return !!result;
   }
 
@@ -2432,7 +2490,7 @@
    */
   function toArray(collection) {
     if (collection && typeof collection.length == 'number') {
-      return (noArraySliceOnStrings ? toString.call(collection) == stringClass : typeof collection == 'string')
+      return (noArraySliceOnStrings ? isString(collection) : typeof collection == 'string')
         ? collection.split('')
         : slice.call(collection);
     }
@@ -2610,8 +2668,8 @@
    * @category Arrays
    * @param {Array} array The array to search.
    * @param {Mixed} value The value to search for.
-   * @param {Boolean|Number} [fromIndex=0] The index to start searching from or
-   *  `true` to perform a binary search on a sorted `array`.
+   * @param {Boolean|Number} [fromIndex=0] The index to search from or `true` to
+   *  perform a binary search on a sorted `array`.
    * @returns {Number} Returns the index of the matched value or `-1`.
    * @example
    *
@@ -2650,7 +2708,7 @@
    * @memberOf _
    * @category Arrays
    * @param {Array} array The array to query.
-   * @param {Number} [n] The number of elements to return.
+   * @param {Number} [n=1] The number of elements to exclude.
    * @param- {Object} [guard] Internally used to allow this method to work with
    *  others like `_.map` without using their callback `index` argument for `n`.
    * @returns {Array} Returns all but the last element or `n` elements of `array`.
@@ -2726,15 +2784,16 @@
   }
 
   /**
-   * Gets the index at which the last occurrence of `value` is found using
-   * strict equality for comparisons, i.e. `===`.
+   * Gets the index at which the last occurrence of `value` is found using strict
+   * equality for comparisons, i.e. `===`. If `fromIndex` is negative, it is used
+   * as the offset from the end of the collection.
    *
    * @static
    * @memberOf _
    * @category Arrays
    * @param {Array} array The array to search.
    * @param {Mixed} value The value to search for.
-   * @param {Number} [fromIndex=array.length-1] The index to start searching from.
+   * @param {Number} [fromIndex=array.length-1] The index to search from.
    * @returns {Number} Returns the index of the matched value or `-1`.
    * @example
    *
@@ -2849,7 +2908,7 @@
    * @alias drop, tail
    * @category Arrays
    * @param {Array} array The array to query.
-   * @param {Number} [n] The number of elements to return.
+   * @param {Number} [n=1] The number of elements to exclude.
    * @param- {Object} [guard] Internally used to allow this method to work with
    *  others like `_.map` without using their callback `index` argument for `n`.
    * @returns {Array} Returns all but the first value or `n` values of `array`.
@@ -2981,6 +3040,11 @@
       callback = isSorted;
       isSorted = false;
     }
+    // init value cache for large arrays
+    var isLarge = !isSorted && length > 74;
+    if (isLarge) {
+      var cache = {};
+    }
     if (callback) {
       seen = [];
       callback = createCallback(callback, thisArg);
@@ -2989,11 +3053,16 @@
       var value = array[index],
           computed = callback ? callback(value, index, array) : value;
 
+      if (isLarge) {
+        // manually coerce `computed` to a string because `hasOwnProperty`, in
+        // some older versions of Firefox, coerces objects incorrectly
+        seen = hasOwnProperty.call(cache, computed + '') ? cache[computed] : (cache[computed] = []);
+      }
       if (isSorted
             ? !index || seen[seen.length - 1] !== computed
             : indexOf(seen, computed) < 0
           ) {
-        if (callback) {
+        if (callback || isLarge) {
           seen.push(computed);
         }
         result.push(value);
@@ -3062,8 +3131,9 @@
   /*--------------------------------------------------------------------------*/
 
   /**
-   * Creates a function that is restricted to executing only after it is
-   * called `n` times.
+   * Creates a function that is restricted to executing `func` only after it is
+   * called `n` times. The `func` is executed with the `this` binding of the
+   * created function.
    *
    * @static
    * @memberOf _
@@ -3159,6 +3229,7 @@
    * Creates a function that is the composition of the passed functions,
    * where each function consumes the return value of the function that follows.
    * In math terms, composing the functions `f()`, `g()`, and `h()` produces `f(g(h()))`.
+   * Each function is executed with the `this` binding of the composed function.
    *
    * @static
    * @memberOf _
@@ -3316,7 +3387,8 @@
    * Creates a function that memoizes the result of `func`. If `resolver` is
    * passed, it will be used to determine the cache key for storing the result
    * based on the arguments passed to the memoized function. By default, the first
-   * argument passed to the memoized function is used as the cache key.
+   * argument passed to the memoized function is used as the cache key. The `func`
+   * is executed with the `this` binding of the memoized function.
    *
    * @static
    * @memberOf _
@@ -3341,8 +3413,9 @@
   }
 
   /**
-   * Creates a function that is restricted to one execution. Repeat calls to
-   * the function will return the value of the first call.
+   * Creates a function that is restricted to execute `func` once. Repeat calls to
+   * the function will return the value of the first call. The `func` is executed
+   * with the `this` binding of the created function.
    *
    * @static
    * @memberOf _
@@ -3375,8 +3448,8 @@
 
   /**
    * Creates a function that, when called, invokes `func` with any additional
-   * `partial` arguments prepended to those passed to the new function. This method
-   * is similar to `bind`, except it does **not** alter the `this` binding.
+   * `partial` arguments prepended to those passed to the new function. This
+   * method is similar to `bind`, except it does **not** alter the `this` binding.
    *
    * @static
    * @memberOf _
@@ -3446,8 +3519,9 @@
 
   /**
    * Creates a function that passes `value` to the `wrapper` function as its
-   * first argument. Additional arguments passed to the new function are appended
-   * to those passed to the `wrapper` function.
+   * first argument. Additional arguments passed to the function are appended
+   * to those passed to the `wrapper` function. The `wrapper` is executed with
+   * the `this` binding of the created function.
    *
    * @static
    * @memberOf _
@@ -3671,7 +3745,11 @@
    *
    * // using the "escape" delimiter to escape HTML in data property values
    * _.template('<b><%- value %></b>', { 'value': '<script>' });
-   * // => '<b>&lt;script></b>'
+   * // => '<b>&lt;script&gt;</b>'
+   *
+   * // using the ES6 delimiter as an alternative to the default "interpolate" delimiter
+   * _.template('hello ${ name }', { 'name': 'curly' });
+   * // => 'hello curly'
    *
    * // using the internal `print` function in "evaluate" delimiters
    * _.template('<% print("hello " + epithet); %>!', { 'epithet': 'stooge' });
@@ -3679,7 +3757,7 @@
    *
    * // using custom template delimiters
    * _.templateSettings = {
-   *   'interpolate': /\{\{([\s\S]+?)\}\}/g
+   *   'interpolate': /{{([\s\S]+?)}}/g
    * };
    *
    * _.template('hello {{ name }}!', { 'name': 'mustache' });
@@ -3717,8 +3795,9 @@
 
     var isEvaluating,
         result,
-        index = 0,
         settings = lodash.templateSettings,
+        index = 0,
+        interpolate = options.interpolate || settings.interpolate || reNoMatch,
         source = "__p += '",
         variable = options.variable || settings.variable,
         hasVariable = variable;
@@ -3726,11 +3805,14 @@
     // compile regexp to match each delimiter
     var reDelimiters = RegExp(
       (options.escape || settings.escape || reNoMatch).source + '|' +
-      (options.interpolate || settings.interpolate || reNoMatch).source + '|' +
+      interpolate.source + '|' +
+      (interpolate === reInterpolate ? reEsTemplate : reNoMatch).source + '|' +
       (options.evaluate || settings.evaluate || reNoMatch).source + '|$'
     , 'g');
 
-    text.replace(reDelimiters, function(match, escapeValue, interpolateValue, evaluateValue, offset) {
+    text.replace(reDelimiters, function(match, escapeValue, interpolateValue, esTemplateValue, evaluateValue, offset) {
+      interpolateValue || (interpolateValue = esTemplateValue);
+
       // escape characters that cannot be included in string literals
       source += text.slice(index, offset).replace(reUnescapedString, escapeStringChar);
 
@@ -3975,7 +4057,7 @@
    * @memberOf _
    * @type String
    */
-  lodash.VERSION = '0.9.1';
+  lodash.VERSION = '0.9.2';
 
   // assign static methods
   lodash.after = after;

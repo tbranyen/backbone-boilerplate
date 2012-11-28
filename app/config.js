@@ -6,9 +6,7 @@ require.config({
   deps: ["../vendor/jam/require.config", "main"],
 
   paths: {
-    // JavaScript folders.
-    libs: "../assets/js/libs",
-    vendor: "../assets/vendor"
+    // Put paths here.
   },
 
   shim: {
