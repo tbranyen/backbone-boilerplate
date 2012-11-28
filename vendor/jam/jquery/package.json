@@ -1,0 +1,34 @@
+{
+    "name": "jquery",
+    "version": "1.8.3",
+    "description": "New Wave JavaScript",
+    "categories": [
+        "AJAX & Websockets",
+        "DOM",
+        "CSS",
+        "Frameworks",
+        "Effects",
+        "Events"
+    ],
+    "author": {
+        "name": "John Resig"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/jquery/jquery.git"
+    },
+    "bugs": {
+        "web": "http://bugs.jquery.com"
+    },
+    "licenses": [
+        {
+            "type": "MIT",
+            "url": "http://jquery.com/blob/master/MIT-LICENSE.txt"
+        },
+        {
+            "type": "GPL",
+            "url": "http://jquery.com/blob/master/GPL-LICENSE.txt"
+        }
+    ],
+    "main": "jquery.js"
+}

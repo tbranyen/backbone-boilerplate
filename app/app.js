@@ -1,14 +1,6 @@
 define([
-  // Libraries.
-  "jquery",
-  "lodash",
-  "backbone",
-
-  // Plugins.
-  "plugins/backbone.layoutmanager"
-],
-
-function($, _, Backbone) {
+  "backbone.layoutmanager"
+], function() {
 
   // Provide a global location to place configuration settings and module
   // creation.
@@ -54,10 +46,24 @@ function($, _, Backbone) {
     },
 
     // Helper for using layouts.
-    useLayout: function(options) {
+    useLayout: function(name, options) {
+      // Enable variable arity by allowing the first argument to be the options
+      // object and omitting the name argument.
+      if (_.isObject(name)) {
+        options = name;
+      }
+
+      // Ensure options is an object.
+      options = options || {};
+
+      // If a name property was specified use that as the template.
+      if (_.isString(name)) {
+        options.template = name;
+      }
+
       // Create a new Layout with options.
       var layout = new Backbone.Layout(_.extend({
-        el: "body"
+        el: "#main"
       }, options));
 
       // Cache the refererence.

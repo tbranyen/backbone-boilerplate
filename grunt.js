@@ -5,10 +5,6 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
 
-    // The clean task ensures all files are removed from the dist/ directory so
-    // that no files linger from previous builds.
-    clean: ["dist/"],
-
     // The lint task will run the build configuration and the application
     // JavaScript through JSHint and report any errors.  You can change the
     // options for this task, by reading this:
@@ -41,6 +37,47 @@ module.exports = function(grunt) {
       ]
     },
 
+    // This task simplifies working with CSS inside Backbone Boilerplate
+    // projects.  Instead of manually specifying your stylesheets inside the
+    // configuration, you can use `@imports` and this task will concatenate
+    // only those paths.
+    styles: {
+      // Out the concatenated contents of the following styles into the below
+      // development file path.
+      "dist/debug/index.css": {
+        // Point this to where your `index.css` file is location.
+        src: "app/styles/index.css",
+
+        // The relative path to use for the @imports.
+        paths: ["app/styles"],
+
+        // Point to where styles live.
+        prefix: "app/styles/",
+
+        // Additional production-only stylesheets here.
+        additional: []
+      }
+    },
+
+    // This task uses James Burke's excellent r.js AMD build tool.  In the
+    // future other builders may be contributed as drop-in alternatives.
+    requirejs: {
+      // Include the main configuration file.
+      mainConfigFile: "app/config.js",
+
+      // Also include the JamJS configuration file.
+      jamConfig: "/vendor/jam/require.config.js",
+
+      // Output file.
+      out: "dist/debug/require.js",
+
+      // Root application module.
+      name: "config",
+
+      // Do not wrap everything in an IIFE.
+      wrap: false
+    },
+
     // The concatenate task is used here to merge the almond require/define
     // shim and the templates into the application code.  It's named
     // dist/debug/require.js, because we want to only load one script file in
@@ -48,7 +85,7 @@ module.exports = function(grunt) {
     concat: {
       dist: {
         src: [
-          "assets/js/libs/almond.js",
+          "vendor/js/libs/almond.js",
           "dist/debug/templates.js",
           "dist/debug/require.js"
         ],
@@ -67,25 +104,6 @@ module.exports = function(grunt) {
       "dist/release/index.css": [
         "dist/debug/index.css"
       ]
-    },
-
-    // This task simplifies working with CSS inside Backbone Boilerplate
-    // projects.  Instead of manually specifying your stylesheets inside the
-    // configuration, you can use `@imports` and this task will concatenate
-    // only those paths.
-    styles: {
-      // Out the concatenated contents of the following styles into the below
-      // development file path.
-      "dist/debug/index.css": {
-        // Point this to where your `index.css` file is location.
-        src: "assets/css/index.css",
-
-        // The relative path to use for the @imports.
-        paths: ["assets/css"],
-
-        // Additional production-only stylesheets here.
-        additional: []
-      }
     },
 
     // Takes the built require.js file and minifies it for filesize benefits.
@@ -114,6 +132,9 @@ module.exports = function(grunt) {
       // Ensure the favicon is mapped correctly.
       files: { "favicon.ico": "favicon.ico" },
 
+      // For styles.
+      prefix: "app/styles/",
+
       debug: {
         // Ensure the favicon is mapped correctly.
         files: "<config:server.files>",
@@ -121,8 +142,8 @@ module.exports = function(grunt) {
         // Map `server:debug` to `debug` folders.
         folders: {
           "app": "dist/debug",
-          "assets/js/libs": "dist/debug",
-          "assets/css": "dist/debug"
+          "vendor/js/libs": "dist/debug",
+          "app/styles": "dist/debug"
         }
       },
 
@@ -136,26 +157,10 @@ module.exports = function(grunt) {
         // Map `server:release` to `release` folders.
         folders: {
           "app": "dist/release",
-          "assets/js/libs": "dist/release",
-          "assets/css": "dist/release"
+          "vendor/js/libs": "dist/release",
+          "app/styles": "dist/release"
         }
       }
-    },
-
-    // This task uses James Burke's excellent r.js AMD build tool.  In the
-    // future other builders may be contributed as drop-in alternatives.
-    requirejs: {
-      // Include the main configuration file.
-      mainConfigFile: "app/config.js",
-
-      // Output file.
-      out: "dist/debug/require.js",
-
-      // Root application module.
-      name: "config",
-
-      // Do not wrap everything in an IIFE.
-      wrap: false
     },
 
     // The headless QUnit testing environment is provided for "free" by Grunt.
@@ -175,9 +180,47 @@ module.exports = function(grunt) {
     // available to compile CSS if you are unable to use the runtime compiler
     // (use if you have a custom server, PhoneGap, Adobe Air, etc.)
     watch: {
-      files: ["grunt.js", "assets/**/*", "app/**/*"],
+      files: ["grunt.js", "vendor/**/*", "app/**/*"],
       tasks: "styles"
-    }
+    },
+
+    // The clean task ensures all files are removed from the dist/ directory so
+    // that no files linger from previous builds.
+    clean: ["dist/"],
+
+    // If you want to generate targeted `index.html` builds into the `dist/`
+    // folders, uncomment the following configuration block and use the
+    // conditionals inside `index.html`.
+    //targethtml: {
+    //  debug: {
+    //    src: "index.html",
+    //    dest: "dist/debug/index.html"
+    //  },
+    //
+    //  release: {
+    //    src: "index.html",
+    //    dest: "dist/release/index.html"
+    //  }
+    //},
+    
+    // This task will copy assets into your build directory,
+    // automatically.  This makes an entirely encapsulated build into
+    // each directory.
+    //copy: {
+    //  debug: {
+    //    files: {
+    //      "dist/debug/app/": "app/**",
+    //      "dist/debug/vendor/": "vendor/**"
+    //    }
+    //  },
+
+    //  release: {
+    //    files: {
+    //      "dist/release/app/": "app/**",
+    //      "dist/release/vendor/": "vendor/**"
+    //    }
+    //  }
+    //}
 
   });
 
