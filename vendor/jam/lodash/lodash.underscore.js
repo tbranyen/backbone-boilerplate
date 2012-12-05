@@ -1,5 +1,6 @@
 /*!
- * Lo-Dash 1.0.0-rc.2 <http://lodash.com>
+ * Lo-Dash 1.0.0-rc.2 (Custom Build) <http://lodash.com>
+ * Build: `lodash underscore -d -o ./lodash.underscore.js`
  * (c) 2012 John-David Dalton <http://allyoucanleet.com/>
  * Based on Underscore.js 1.4.3 <http://underscorejs.org>
  * (c) 2009-2012 Jeremy Ashkenas, DocumentCloud Inc.
@@ -26,9 +27,6 @@
 
   /** Used internally to indicate various things */
   var indicatorObject = objectRef;
-
-  /** Used by `cachedContains` as the default size when optimizations are enabled for large arrays */
-  var largeArraySize = 30;
 
   /** Used to restore the original `_` reference in `noConflict` */
   var oldDash = window._;
@@ -116,26 +114,11 @@
       stringClass = '[object String]';
 
   /** Detect various environments */
-  var isFirefox = !/1/.test(Function('1')),
-      isIeOpera = !!window.attachEvent,
+  var isIeOpera = !!window.attachEvent,
       isV8 = nativeBind && !/\n|true/.test(nativeBind + isIeOpera);
 
   /* Detect if `Function#bind` exists and is inferred to be fast (all but V8) */
   var isBindFast = nativeBind && !isV8;
-
-  /* Detect if `Object.keys` exists and is inferred to be fast (IE, Opera, V8) */
-  var isKeysFast = nativeKeys && (isIeOpera || isV8);
-
-  /**
-   * Detect the JScript [[DontEnum]] bug:
-   *
-   * In IE < 9 an objects own properties, shadowing non-enumerable ones, are
-   * made non-enumerable as well.
-   */
-  var hasDontEnumBug;
-
-  /** Detect if own properties are iterated after inherited properties (IE < 9) */
-  var iteratesOwnLast;
 
   /**
    * Detect if `Array#shift` and `Array#splice` augment array-like objects
@@ -150,23 +133,6 @@
   var hasObjectSpliceBug = (hasObjectSpliceBug = { '0': 1, 'length': 1 },
     arrayRef.splice.call(hasObjectSpliceBug, 0, 1), hasObjectSpliceBug[0]);
 
-  /** Detect if an `arguments` object's indexes are non-enumerable (IE < 9) */
-  var noArgsEnum = true;
-
-  (function() {
-    var props = [];
-    function ctor() { this.x = 1; }
-    ctor.prototype = { 'valueOf': 1, 'y': 1 };
-    for (var prop in new ctor) { props.push(prop); }
-    for (prop in arguments) { noArgsEnum = !prop; }
-
-    hasDontEnumBug = !/valueOf/.test(props);
-    iteratesOwnLast = props[0] != 'x';
-  }(1));
-
-  /** Detect if an `arguments` object's [[Class]] is unresolvable (Firefox < 4, IE < 9) */
-  var noArgsClass = !isArguments(arguments);
-
   /**
    * Detect lack of support for accessing string characters by index:
    *
@@ -174,15 +140,6 @@
    * characters by index on string literals.
    */
   var noCharByIndex = ('x'[0] + Object('x')[0]) != 'xx';
-
-  /**
-   * Detect if a node's [[Class]] is unresolvable (IE < 9)
-   * and that the JS engine won't error when attempting to coerce an object to
-   * a string without a `toString` property value of `typeof` "function".
-   */
-  try {
-    var noNodeClass = ({ 'toString': 0 } + '', toString.call(document) == objectClass);
-  } catch(e) { }
 
   /**
    * Detect if sourceURL syntax is usable without erroring:
@@ -200,24 +157,6 @@
   try {
     var useSourceURL = (Function('//@')(), !isIeOpera);
   } catch(e) { }
-
-  /** Used to identify object classifications that `_.clone` supports */
-  var cloneableClasses = {};
-  cloneableClasses[funcClass] = false;
-  cloneableClasses[argsClass] = cloneableClasses[arrayClass] =
-  cloneableClasses[boolClass] = cloneableClasses[dateClass] =
-  cloneableClasses[numberClass] = cloneableClasses[objectClass] =
-  cloneableClasses[regexpClass] = cloneableClasses[stringClass] = true;
-
-  /** Used to lookup a built-in constructor by [[Class]] */
-  var ctorByClass = {};
-  ctorByClass[arrayClass] = Array;
-  ctorByClass[boolClass] = Boolean;
-  ctorByClass[dateClass] = Date;
-  ctorByClass[objectClass] = Object;
-  ctorByClass[numberClass] = Number;
-  ctorByClass[regexpClass] = RegExp;
-  ctorByClass[stringClass] = String;
 
   /** Used to determine if values are of the language type Object */
   var objectTypes = {
@@ -312,138 +251,6 @@
   };
 
   /*--------------------------------------------------------------------------*/
-
-  /**
-   * Creates a function from the given `args` and `body` strings.
-   *
-   * @private
-   * @param {String} args The comma separated function arguments.
-   * @param {String} body The function body.
-   * @returns {Function} The new function.
-   */
-  function createFunction(args, body) {
-    // the newline, in `'\n}'`, is required to avoid errors if `body` ends
-    // with a single line comment
-    return window.eval('(function(' + args + ') {' + body + '\n})');
-  }
-  // use `eval` to avoid Firefox's unoptimized `Function` constructor
-  // http://bugzil.la/804933
-  if (isIeOpera || isV8 || !isFirefox) {
-    createFunction = Function;
-  }
-
-  /**
-   * The template used to create iterator functions.
-   *
-   * @private
-   * @param {Obect} data The data object used to populate the text.
-   * @returns {String} Returns the interpolated text.
-   */
-  var iteratorTemplate = template(
-    // conditional strict mode
-    "<% if (obj.useStrict) { %>'use strict';\n<% } %>" +
-
-    // the `iteratee` may be reassigned by the `top` snippet
-    'var index, iteratee = <%= firstArg %>, ' +
-    // assign the `result` variable an initial value
-    'result = <%= firstArg %>;\n' +
-    // exit early if the first argument is falsey
-    'if (!<%= firstArg %>) return result;\n' +
-    // add code before the iteration branches
-    '<%= top %>;\n' +
-
-    // array-like iteration:
-    '<% if (arrayLoop) { %>' +
-    'var length = iteratee.length; index = -1;\n' +
-    "if (typeof length == 'number') {" +
-
-    // add support for accessing string characters by index if needed
-    '  <% if (noCharByIndex) { %>\n' +
-    '  if (isString(iteratee)) {\n' +
-    "    iteratee = iteratee.split('')\n" +
-    '  }' +
-    '  <% } %>\n' +
-
-    // iterate over the array-like value
-    '  while (++index < length) {\n' +
-    '    <%= arrayLoop %>\n' +
-    '  }\n' +
-    '}\n' +
-    'else {' +
-
-    // object iteration:
-    // add support for iterating over `arguments` objects if needed
-    '  <%  } else if (noArgsEnum) { %>\n' +
-    '  var length = iteratee.length; index = -1;\n' +
-    '  if (length && isArguments(iteratee)) {\n' +
-    '    while (++index < length) {\n' +
-    "      index += '';\n" +
-    '      <%= objectLoop %>\n' +
-    '    }\n' +
-    '  } else {' +
-    '  <% } %>' +
-
-    // Firefox < 3.6, Opera > 9.50 - Opera < 11.60, and Safari < 5.1
-    // (if the prototype or a property on the prototype has been set)
-    // incorrectly sets a function's `prototype` property [[Enumerable]]
-    // value to `true`. Because of this Lo-Dash standardizes on skipping
-    // the the `prototype` property of functions regardless of its
-    // [[Enumerable]] value.
-    '  <% if (!hasDontEnumBug) { %>\n' +
-    "  var skipProto = typeof iteratee == 'function' && \n" +
-    "    propertyIsEnumerable.call(iteratee, 'prototype');\n" +
-    '  <% } %>' +
-
-    // iterate own properties using `Object.keys` if it's fast
-    '  <% if (isKeysFast && useHas) { %>\n' +
-    '  var ownIndex = -1,\n' +
-    '      ownProps = objectTypes[typeof iteratee] ? nativeKeys(iteratee) : [],\n' +
-    '      length = ownProps.length;\n\n' +
-    '  while (++ownIndex < length) {\n' +
-    '    index = ownProps[ownIndex];\n' +
-    "    <% if (!hasDontEnumBug) { %>if (!(skipProto && index == 'prototype')) {\n  <% } %>" +
-    '    <%= objectLoop %>\n' +
-    '    <% if (!hasDontEnumBug) { %>}\n<% } %>' +
-    '  }' +
-
-    // else using a for-in loop
-    '  <% } else { %>\n' +
-    '  for (index in iteratee) {<%' +
-    '    if (!hasDontEnumBug || useHas) { %>\n    if (<%' +
-    "      if (!hasDontEnumBug) { %>!(skipProto && index == 'prototype')<% }" +
-    '      if (!hasDontEnumBug && useHas) { %> && <% }' +
-    '      if (useHas) { %>hasOwnProperty.call(iteratee, index)<% }' +
-    '    %>) {' +
-    '    <% } %>\n' +
-    '    <%= objectLoop %>;' +
-    '    <% if (!hasDontEnumBug || useHas) { %>\n    }<% } %>\n' +
-    '  }' +
-    '  <% } %>' +
-
-    // Because IE < 9 can't set the `[[Enumerable]]` attribute of an
-    // existing property and the `constructor` property of a prototype
-    // defaults to non-enumerable, Lo-Dash skips the `constructor`
-    // property when it infers it's iterating over a `prototype` object.
-    '  <% if (hasDontEnumBug) { %>\n\n' +
-    '  var ctor = iteratee.constructor;\n' +
-    '    <% for (var k = 0; k < 7; k++) { %>\n' +
-    "  index = '<%= shadowed[k] %>';\n" +
-    '  if (<%' +
-    "      if (shadowed[k] == 'constructor') {" +
-    '        %>!(ctor && ctor.prototype === iteratee) && <%' +
-    '      } %>hasOwnProperty.call(iteratee, index)) {\n' +
-    '    <%= objectLoop %>\n' +
-    '  }' +
-    '    <% } %>' +
-    '  <% } %>' +
-    '  <% if (arrayLoop || noArgsEnum) { %>\n}<% } %>\n' +
-
-    // add code to the bottom of the iteration function
-    '<%= bottom %>;\n' +
-    // finally, return the `result`
-    'return result'
-  );
-
   /** Reusable iterator options for `assign` and `defaults` */
   var assignIteratorOptions = {
     'args': 'object, source, guard',
@@ -470,43 +277,6 @@
   };
 
   /*--------------------------------------------------------------------------*/
-
-  /**
-   * Creates a function optimized to search large arrays for a given `value`,
-   * starting at `fromIndex`, using strict equality for comparisons, i.e. `===`.
-   *
-   * @private
-   * @param {Array} array The array to search.
-   * @param {Mixed} value The value to search for.
-   * @param {Number} [fromIndex=0] The index to search from.
-   * @param {Number} [largeSize=30] The length at which an array is considered large.
-   * @returns {Boolean} Returns `true` if `value` is found, else `false`.
-   */
-  function cachedContains(array, fromIndex, largeSize) {
-    fromIndex || (fromIndex = 0);
-
-    var length = array.length,
-        isLarge = (length - fromIndex) >= (largeSize || largeArraySize);
-
-    if (isLarge) {
-      var cache = {},
-          index = fromIndex - 1;
-
-      while (++index < length) {
-        // manually coerce `value` to a string because `hasOwnProperty`, in some
-        // older versions of Firefox, coerces objects incorrectly
-        var key = array[index] + '';
-        (hasOwnProperty.call(cache, key) ? cache[key] : (cache[key] = [])).push(array[index]);
-      }
-    }
-    return function(value) {
-      if (isLarge) {
-        var key = value + '';
-        return hasOwnProperty.call(cache, key) && indexOf(cache[key], value) > -1;
-      }
-      return indexOf(array, value, fromIndex) > -1;
-    }
-  }
 
   /**
    * Used by `_.max` and `_.min` as the default `callback` when a given
@@ -561,27 +331,12 @@
    * @returns {Function} Returns the new bound function.
    */
   function createBound(func, thisArg, partialArgs) {
-    var isFunc = isFunction(func),
-        isPartial = !partialArgs,
-        key = thisArg;
-
-    // juggle arguments
-    if (isPartial) {
-      partialArgs = thisArg;
-    }
-    if (!isFunc) {
-      thisArg = func;
-    }
-
     function bound() {
       // `Function#bind` spec
       // http://es5.github.com/#x15.3.4.5
       var args = arguments,
-          thisBinding = isPartial ? this : thisArg;
+          thisBinding = thisArg;
 
-      if (!isFunc) {
-        func = thisArg[key];
-      }
       if (partialArgs.length) {
         args = args.length
           ? partialArgs.concat(slice(args))
@@ -649,7 +404,6 @@
       'arrayLoop': '',
       'bottom': '',
       'hasDontEnumBug': hasDontEnumBug,
-      'isKeysFast': isKeysFast,
       'objectLoop': '',
       'noArgsEnum': noArgsEnum,
       'noCharByIndex': noCharByIndex,
@@ -668,14 +422,14 @@
     data.firstArg = /^[^,]+/.exec(args)[0];
 
     // create the function factory
-    var factory = createFunction(
-        'createCallback, hasOwnProperty, isArguments, isString, objectTypes, ' +
+    var factory = Function(
+        'createCallback, hasOwnProperty, isString, objectTypes, ' +
         'nativeKeys, propertyIsEnumerable',
-      'return function(' + args + ') {\n' + iteratorTemplate(data) + '\n}'
+      'return function(' + args + ') {\n' + (data) + '\n}'
     );
     // return the compiled function
     return factory(
-      createCallback, hasOwnProperty, isArguments, isString, objectTypes,
+      createCallback, hasOwnProperty, isString, objectTypes,
       nativeKeys, propertyIsEnumerable
     );
   }
@@ -783,8 +537,20 @@
    * _.assign({ 'name': 'moe' }, { 'age': 40 });
    * // => { 'name': 'moe', 'age': 40 }
    */
-  var assign = createIterator(assignIteratorOptions);
-
+  function assign(object) {
+    if (!object) {
+      return object;
+    }
+    for (var argsIndex = 1, argsLength = arguments.length; argsIndex < argsLength; argsIndex++) {
+      var iteratee = arguments[argsIndex];
+      if (iteratee) {
+        for (var key in iteratee) {
+          object[key] = iteratee[key];
+        }
+      }
+    }
+    return object;
+  }
   /**
    * Checks if `value` is an `arguments` object.
    *
@@ -801,12 +567,13 @@
    * _.isArguments([1, 2, 3]);
    * // => false
    */
-  function isArguments(value) {
+  lodash.isArguments = function(value) {
     return toString.call(value) == argsClass;
   }
+
   // fallback for browsers that can't detect `arguments` objects by [[Class]]
-  if (noArgsClass) {
-    isArguments = function(value) {
+  if (!lodash.isArguments(arguments)) {
+    lodash.isArguments = function(value) {
       return value ? hasOwnProperty.call(value, 'callee') : false;
     };
   }
@@ -839,9 +606,16 @@
    * });
    * // => alerts 'name' and 'bark' (order is not guaranteed)
    */
-  var forIn = createIterator(forEachIteratorOptions, forOwnIteratorOptions, {
-    'useHas': false
-  });
+  var forIn = function (collection, callback) {
+    var index, iteratee = collection, result = collection;
+    if (!collection) return result;
+    callback || (callback = identity);
+    
+      for (index in iteratee) {
+        if (callback(iteratee[index], index, collection) === indicatorObject) return result;    
+      }    
+    return result
+  };
 
   /**
    * Iterates over an object's own enumerable properties, executing the `callback`
@@ -863,7 +637,18 @@
    * });
    * // => alerts '0', '1', and 'length' (order is not guaranteed)
    */
-  var forOwn = createIterator(forEachIteratorOptions, forOwnIteratorOptions);
+  var forOwn = function (collection, callback) {
+    var index, iteratee = collection, result = collection;
+    if (!collection) return result;
+    callback || (callback = identity);
+    
+      for (index in iteratee) {
+        if (hasOwnProperty.call(iteratee, index)) {    
+        if (callback(iteratee[index], index, collection) === indicatorObject) return result;    
+        }
+      }    
+    return result
+  };
 
   /**
    * A fallback implementation of `isPlainObject` that checks if a given `value`
@@ -883,17 +668,7 @@
     }
     // check that the constructor is `Object` (i.e. `Object instanceof Object`)
     var ctor = value.constructor;
-    if ((!isFunction(ctor) && (!noNodeClass || !isNode(value))) || ctor instanceof ctor) {
-      // IE < 9 iterates inherited properties before own properties. If the first
-      // iterated property is an object's own property then there are no inherited
-      // enumerable properties.
-      if (iteratesOwnLast) {
-        forIn(value, function(value, key, object) {
-          result = !hasOwnProperty.call(object, key);
-          return false;
-        });
-        return result === false;
-      }
+    if ((!isFunction(ctor)) || ctor instanceof ctor) {
       // In most environments an object's own properties are iterated before
       // its inherited properties. If the last iterated property is an object's
       // own property then there are no inherited enumerable properties.
@@ -982,74 +757,10 @@
    * deep[0] === stooges[0];
    * // => false
    */
-  function clone(value, deep, guard, stackA, stackB) {
-    if (value == null) {
-      return value;
-    }
-    if (guard) {
-      deep = false;
-    }
-    // inspect [[Class]]
-    var isObj = isObject(value);
-    if (isObj) {
-      var className = toString.call(value);
-      if (!cloneableClasses[className] || (noNodeClass && isNode(value))) {
-        return value;
-      }
-      var isArr = isArray(value);
-    }
-    // shallow clone
-    if (!isObj || !deep) {
-      return isObj
-        ? (isArr ? slice(value) : assign({}, value))
-        : value;
-    }
-    var ctor = ctorByClass[className];
-    switch (className) {
-      case boolClass:
-      case dateClass:
-        return new ctor(+value);
-
-      case numberClass:
-      case stringClass:
-        return new ctor(value);
-
-      case regexpClass:
-        return ctor(value.source, reFlags.exec(value));
-    }
-    // check for circular references and return corresponding clone
-    stackA || (stackA = []);
-    stackB || (stackB = []);
-
-    var length = stackA.length;
-    while (length--) {
-      if (stackA[length] == value) {
-        return stackB[length];
-      }
-    }
-    // init cloned object
-    var result = isArr ? ctor(value.length) : {};
-
-    // add the source value to the stack of traversed objects
-    // and associate it with its clone
-    stackA.push(value);
-    stackB.push(result);
-
-    // recursively populate clone (susceptible to call stack limits)
-    (isArr ? forEach : forOwn)(value, function(objValue, key) {
-      result[key] = clone(objValue, deep, null, stackA, stackB);
-    });
-
-    // add array properties assigned by `RegExp#exec`
-    if (isArr) {
-      if (hasOwnProperty.call(value, 'index')) {
-        result.index = value.index;
-      }
-      if (hasOwnProperty.call(value, 'input')) {
-        result.input = value.input;
-      }
-    }
-    return result;
+  function clone(value) {
+    return value && objectTypes[typeof value]
+      ? (isArray(value) ? slice(value) : assign({}, value))
+      : value
   }
 
   /**
@@ -1070,9 +781,22 @@
    * _.defaults(iceCream, { 'flavor': 'vanilla', 'sprinkles': 'rainbow' });
    * // => { 'flavor': 'chocolate', 'sprinkles': 'rainbow' }
    */
-  var defaults = createIterator(assignIteratorOptions, {
-    'objectLoop': 'if (result[index] == null) ' + assignIteratorOptions.objectLoop
-  });
+  function defaults(object) {
+    if (!object) {
+      return object;
+    }
+    for (var argsIndex = 1, argsLength = arguments.length; argsIndex < argsLength; argsIndex++) {
+      var iteratee = arguments[argsIndex];
+      if (iteratee) {
+        for (var key in iteratee) {
+          if (object[key] == null) {
+            object[key] = iteratee[key];
+          }
+        }
+      }
+    }
+    return object;
+  }
 
   /**
    * Creates a sorted array of all enumerable properties, own and inherited,
@@ -1232,22 +956,18 @@
    * // => true
    */
   function isEmpty(value) {
-    var result = true;
     if (!value) {
-      return result;
+      return true;
     }
-    var className = toString.call(value),
-        length = value.length;
-
-    if ((className == arrayClass || className == stringClass ||
-        className == argsClass || (noArgsClass && isArguments(value))) ||
-        (className == objectClass && typeof length == 'number' && isFunction(value.splice))) {
-      return !length;
+    if (isArray(value) || isString(value)) {
+      return !value.length;
     }
-    forOwn(value, function() {
-      return (result = false);
-    });
-    return result;
+    for (var key in value) {
+      if (hasOwnProperty.call(value, key)) {
+        return false;
+      }
+    }
+    return true;
   }
 
   /**
@@ -1287,12 +1007,6 @@
     var className = toString.call(a),
         otherName = toString.call(b);
 
-    if (className == argsClass) {
-      className = objectClass;
-    }
-    if (otherName == argsClass) {
-      otherName = objectClass;
-    }
     if (className != otherName) {
       return false;
     }
@@ -1323,12 +1037,12 @@
         return isEqual(a.__wrapped__ || a, b.__wrapped__ || b);
       }
       // exit for functions and DOM nodes
-      if (className != objectClass || (noNodeClass && (isNode(a) || isNode(b)))) {
+      if (className != objectClass) {
         return false;
       }
       // in older versions of Opera, `arguments` objects have `Array` constructors
-      var ctorA = noArgsClass && isArguments(a) ? Object : a.constructor,
-          ctorB = noArgsClass && isArguments(b) ? Object : b.constructor;
+      var ctorA = a.constructor,
+          ctorB = b.constructor;
 
       // non `Object` object instances with different constructors are not equal
       if (ctorA != ctorB && !(
@@ -1381,7 +1095,7 @@
         // count the number of properties.
         size++;
         // deep compare each property value.
-        return (result = hasOwnProperty.call(b, key) && isEqual(value, b[key], stackA, stackB));
+        return !(result = hasOwnProperty.call(b, key) && isEqual(value, b[key], stackA, stackB)) && indicatorObject;
       }
     });
 
@@ -1390,7 +1104,7 @@
       forIn(b, function(value, key, b) {
         if (hasOwnProperty.call(b, key)) {
           // `size` will be `-1` if `b` has more properties than `a`
-          return (result = --size > -1);
+          return !(result = --size > -1) && indicatorObject;
         }
       });
     }
@@ -1549,42 +1263,6 @@
   }
 
   /**
-   * Checks if a given `value` is an object created by the `Object` constructor.
-   *
-   * @static
-   * @memberOf _
-   * @category Objects
-   * @param {Mixed} value The value to check.
-   * @returns {Boolean} Returns `true` if `value` is a plain object, else `false`.
-   * @example
-   *
-   * function Stooge(name, age) {
-   *   this.name = name;
-   *   this.age = age;
-   * }
-   *
-   * _.isPlainObject(new Stooge('moe', 40));
-   * // => false
-   *
-   * _.isPlainObject([1, 2, 3]);
-   * // => false
-   *
-   * _.isPlainObject({ 'name': 'moe', 'age': 40 });
-   * // => true
-   */
-  var isPlainObject = !getPrototypeOf ? shimIsPlainObject : function(value) {
-    if (!(value && typeof value == 'object')) {
-      return false;
-    }
-    var valueOf = value.valueOf,
-        objProto = typeof valueOf == 'function' && (objProto = getPrototypeOf(valueOf)) && getPrototypeOf(objProto);
-
-    return objProto
-      ? value == objProto || (getPrototypeOf(value) == objProto && !isArguments(value))
-      : shimIsPlainObject(value);
-  };
-
-  /**
    * Checks if `value` is a regular expression.
    *
    * @static
@@ -1649,91 +1327,8 @@
    * // => ['one', 'two', 'three'] (order is not guaranteed)
    */
   var keys = !nativeKeys ? shimKeys : function(object) {
-    // avoid iterating over the `prototype` property
-    return typeof object == 'function' && propertyIsEnumerable.call(object, 'prototype')
-      ? shimKeys(object)
-      : (isObject(object) ? nativeKeys(object) : []);
+    return (isObject(object) ? nativeKeys(object) : []);
   };
-
-  /**
-   * Merges enumerable properties of the source object(s) into the `destination`
-   * object. Subsequent sources will overwrite propery assignments of previous
-   * sources.
-   *
-   * @static
-   * @memberOf _
-   * @category Objects
-   * @param {Object} object The destination object.
-   * @param {Object} [source1, source2, ...] The source objects.
-   * @param- {Object} [indicator] Internally used to indicate that the `stack`
-   *  argument is an array of traversed objects instead of another source object.
-   * @param- {Array} [stackA=[]] Internally used to track traversed source objects.
-   * @param- {Array} [stackB=[]] Internally used to associate values with their
-   *  source counterparts.
-   * @returns {Object} Returns the destination object.
-   * @example
-   *
-   * var stooges = [
-   *   { 'name': 'moe' },
-   *   { 'name': 'larry' }
-   * ];
-   *
-   * var ages = [
-   *   { 'age': 40 },
-   *   { 'age': 50 }
-   * ];
-   *
-   * _.merge(stooges, ages);
-   * // => [{ 'name': 'moe', 'age': 40 }, { 'name': 'larry', 'age': 50 }]
-   */
-  function merge(object, source, indicator) {
-    var args = arguments,
-        index = 0,
-        length = 2,
-        stackA = args[3],
-        stackB = args[4];
-
-    if (indicator !== indicatorObject) {
-      stackA = [];
-      stackB = [];
-
-      // work with `_.reduce` by only using its callback `accumulator` and `value` arguments
-      if (typeof indicator != 'number') {
-        length = args.length;
-      }
-    }
-    while (++index < length) {
-      forOwn(args[index], function(source, key) {
-        var found, isArr, value;
-        if (source && ((isArr = isArray(source)) || isPlainObject(source))) {
-          // avoid merging previously merged cyclic sources
-          var stackLength = stackA.length;
-          while (stackLength--) {
-            found = stackA[stackLength] == source;
-            if (found) {
-              break;
-            }
-          }
-          if (found) {
-            object[key] = stackB[stackLength];
-          }
-          else {
-            // add `source` and associated `value` to the stack of traversed objects
-            stackA.push(source);
-            stackB.push(value = (value = object[key], isArr)
-              ? (isArray(value) ? value : [])
-              : (isPlainObject(value) ? value : {})
-            );
-            // recursively merge objects and arrays (susceptible to call stack limits)
-            object[key] = merge(value, source, indicatorObject, stackA, stackB);
-          }
-        } else if (source != null) {
-          object[key] = source;
-        }
-      });
-    }
-    return object;
-  }
 
   /**
    * Creates a shallow clone of `object` excluding the specified properties.
@@ -1760,20 +1355,12 @@
    * });
    * // => { 'name': 'moe' }
    */
-  function omit(object, callback, thisArg) {
-    var isFunc = typeof callback == 'function',
+  function omit(object) {
+    var props = concat.apply(arrayRef, arguments),
         result = {};
 
-    if (isFunc) {
-      callback = createCallback(callback, thisArg);
-    } else {
-      var props = concat.apply(arrayRef, arguments);
-    }
-    forIn(object, function(value, key, object) {
-      if (isFunc
-            ? !callback(value, key, object)
-            : indexOf(props, key, 1) < 0
-          ) {
+    forIn(object, function(value, key) {
+      if (indexOf(props, key, 1) < 0) {
         result[key] = value;
       }
     });
@@ -1827,26 +1414,17 @@
    * });
    * // => { 'name': 'moe' }
    */
-  function pick(object, callback, thisArg) {
-    var result = {};
-    if (typeof callback != 'function') {
-      var index = 0,
-          props = concat.apply(arrayRef, arguments),
-          length = props.length;
+  function pick(object) {
+    var index = 0,
+        props = concat.apply(arrayRef, arguments),
+        length = props.length,
+        result = {};
 
-      while (++index < length) {
-        var key = props[index];
-        if (key in object) {
-          result[key] = object[key];
-        }
+    while (++index < length) {
+      var prop = props[index];
+      if (prop in object) {
+        result[prop] = object[prop];
       }
-    } else {
-      callback = createCallback(callback, thisArg);
-      forIn(object, function(value, key, object) {
-        if (callback(value, key, object)) {
-          result[key] = value;
-        }
-      });
     }
     return result;
   }
@@ -1901,22 +1479,14 @@
    * _.contains('curly', 'ur');
    * // => true
    */
-  function contains(collection, target, fromIndex) {
-    var index = -1,
-        length = collection ? collection.length : 0,
+  function contains(collection, target) {
+    var length = collection ? collection.length : 0,
         result = false;
-
-    fromIndex = (fromIndex < 0 ? nativeMax(0, length + fromIndex) : fromIndex) || 0;
     if (typeof length == 'number') {
-      result = (isString(collection)
-        ? collection.indexOf(target, fromIndex)
-        : indexOf(collection, target, fromIndex)
-      ) > -1;
+      result = indexOf(collection, target) > -1;
     } else {
       forEach(collection, function(value) {
-        if (++index >= fromIndex) {
-          return !(result = value === target);
-        }
+        return (result = value === target) && indicatorObject;
       });
     }
     return result;
@@ -1992,7 +1562,7 @@
       }
     } else {
       forEach(collection, function(value, index, collection) {
-        return (result = !!callback(value, index, collection));
+        return !(result = !!callback(value, index, collection)) && indicatorObject;
       });
     }
     return result;
@@ -2066,7 +1636,7 @@
     forEach(collection, function(value, index, collection) {
       if (callback(value, index, collection)) {
         result = value;
-        return false;
+        return indicatorObject;
       }
     });
     return result;
@@ -2094,7 +1664,25 @@
    * _.forEach({ 'one': 1, 'two': 2, 'three': 3 }, alert);
    * // => alerts each number value (order is not guaranteed)
    */
-  var forEach = createIterator(forEachIteratorOptions);
+  var forEach = function (collection, callback, thisArg) {
+    var index, iteratee = collection, result = collection;
+    if (!collection) return result;
+    callback = callback && typeof thisArg == 'undefined' ? callback : createCallback(callback, thisArg);
+    var length = iteratee.length; index = -1;
+    if (typeof length == 'number') {  
+      while (++index < length) {
+        if (callback(iteratee[index], index, collection) === indicatorObject) return result
+      }
+    }
+    else {  
+      for (index in iteratee) {
+        if (hasOwnProperty.call(iteratee, index)) {    
+        if (callback(iteratee[index], index, collection) === indicatorObject) return result;    
+        }
+      }    
+    }
+    
+  };
 
   /**
    * Creates an object composed of keys returned from running each element of
@@ -2235,9 +1823,7 @@
         result = computed;
 
     if (callback || !isArray(collection)) {
-      callback = !callback && isString(collection)
-        ? charAtCallback
-        : createCallback(callback, thisArg);
+      callback = createCallback(callback, thisArg);
 
       forEach(collection, function(value, index, collection) {
         var current = callback(value, index, collection);
@@ -2281,9 +1867,7 @@
         result = computed;
 
     if (callback || !isArray(collection)) {
-      callback = !callback && isString(collection)
-        ? charAtCallback
-        : createCallback(callback, thisArg);
+      callback = createCallback(callback, thisArg);
 
       forEach(collection, function(value, index, collection) {
         var current = callback(value, index, collection);
@@ -2384,8 +1968,6 @@
     if (typeof length != 'number') {
       var props = keys(collection);
       length = props.length;
-    } else if (noCharByIndex && isString(collection)) {
-      iteratee = collection.split('');
     }
     callback || (callback = identity);
     forEach(collection, function(value, index, collection) {
@@ -2507,7 +2089,7 @@
       }
     } else {
       forEach(collection, function(value, index, collection) {
-        return !(result = callback(value, index, collection));
+        return (result = callback(value, index, collection)) && indicatorObject;
       });
     }
     return !!result;
@@ -2573,9 +2155,7 @@
   function toArray(collection) {
     var length = collection ? collection.length : 0;
     if (typeof length == 'number') {
-      return noCharByIndex && isString(collection)
-        ? collection.split('')
-        : slice(collection);
+      return  slice(collection);
     }
     return values(collection);
   }
@@ -2663,18 +2243,17 @@
    */
   function difference(array) {
     var index = -1,
-        length = array ? array.length : 0,
+        length = array.length,
         flattened = concat.apply(arrayRef, arguments),
-        contains = cachedContains(flattened, length),
         result = [];
 
     while (++index < length) {
-      var value = array[index];
-      if (!contains(value)) {
+      var value = array[index]
+      if (indexOf(flattened, value, length) < 0) {
         result.push(value);
       }
     }
-    return result;
+    return result
   }
 
   /**
@@ -2827,14 +2406,13 @@
   function intersection(array) {
     var args = arguments,
         argsLength = args.length,
-        cache = {},
         result = [];
 
     forEach(array, function(value) {
       if (indexOf(result, value) < 0) {
         var length = argsLength;
         while (--length) {
-          if (!(cache[length] || (cache[length] = cachedContains(args[length])))(value)) {
+          if (indexOf(args[length], value) < 0) {
             return;
           }
         }
@@ -3118,16 +2696,10 @@
         result = [],
         seen = result;
 
-    // juggle arguments
     if (typeof isSorted == 'function') {
       thisArg = callback;
       callback = isSorted;
       isSorted = false;
-    }
-    // init value cache for large arrays
-    var isLarge = !isSorted && length > 74;
-    if (isLarge) {
-      var cache = {};
     }
     if (callback) {
       seen = [];
@@ -3137,16 +2709,11 @@
       var value = array[index],
           computed = callback ? callback(value, index, array) : value;
 
-      if (isLarge) {
-        // manually coerce `computed` to a string because `hasOwnProperty`, in
-        // some older versions of Firefox, coerces objects incorrectly
-        seen = hasOwnProperty.call(cache, computed + '') ? cache[computed] : (cache[computed] = []);
-      }
       if (isSorted
             ? !index || seen[seen.length - 1] !== computed
             : indexOf(seen, computed) < 0
           ) {
-        if (callback || isLarge) {
+        if (callback) {
           seen.push(computed);
         }
         result.push(value);
@@ -3172,17 +2739,16 @@
    */
   function without(array) {
     var index = -1,
-        length = array ? array.length : 0,
-        contains = cachedContains(arguments, 1, 20),
+        length = array.length,
         result = [];
 
     while (++index < length) {
-      var value = array[index];
-      if (!contains(value)) {
+      var value = array[index]
+      if (indexOf(arguments, value, 1) < 0) {
         result.push(value);
       }
     }
-    return result;
+    return result
   }
 
   /**
@@ -3307,44 +2873,6 @@
       object[key] = bind(object[key], object);
     }
     return object;
-  }
-
-  /**
-   * Creates a function that, when called, invokes the method at `object[key]`
-   * and prepends any additional `bindKey` arguments to those passed to the bound
-   * function. This method differs from `_.bind` by allowing bound functions to
-   * reference methods that will be redefined or don't yet exist.
-   * See http://michaux.ca/articles/lazy-function-definition-pattern.
-   *
-   * @static
-   * @memberOf _
-   * @category Functions
-   * @param {Object} object The object the method belongs to.
-   * @param {String} key The key of the method.
-   * @param {Mixed} [arg1, arg2, ...] Arguments to be partially applied.
-   * @returns {Function} Returns the new bound function.
-   * @example
-   *
-   * var object = {
-   *   'name': 'moe',
-   *   'greet': function(greeting) {
-   *     return greeting + ' ' + this.name;
-   *   }
-   * };
-   *
-   * var func = _.bindKey(object, 'greet', 'hi');
-   * func();
-   * // => 'hi moe'
-   *
-   * object.greet = function(greeting) {
-   *   return greeting + ', ' + this.name + '!';
-   * };
-   *
-   * func();
-   * // => 'hi, moe!'
-   */
-  function bindKey(object, key) {
-    return createBound(object, key, slice(arguments, 2));
   }
 
   /**
@@ -3532,28 +3060,6 @@
   }
 
   /**
-   * Creates a function that, when called, invokes `func` with any additional
-   * `partial` arguments prepended to those passed to the new function. This
-   * method is similar to `bind`, except it does **not** alter the `this` binding.
-   *
-   * @static
-   * @memberOf _
-   * @category Functions
-   * @param {Function} func The function to partially apply arguments to.
-   * @param {Mixed} [arg1, arg2, ...] Arguments to be partially applied.
-   * @returns {Function} Returns the new partially applied function.
-   * @example
-   *
-   * var greet = function(greeting, name) { return greeting + ': ' + name; };
-   * var hi = _.partial(greet, 'hi');
-   * hi('moe');
-   * // => 'hi: moe'
-   */
-  function partial(func) {
-    return createBound(func, slice(arguments, 1));
-  }
-
-  /**
    * Creates a function that, when executed, will only call the `func`
    * function at most once per every `wait` milliseconds. If the throttled
    * function is invoked more than once during the `wait` timeout, `func` will
@@ -3703,7 +3209,11 @@
         push.apply(args, arguments);
 
         var result = func.apply(lodash, args);
-        return new lodash(result);
+        if (this.__chain__) {
+          result = new lodash(result);
+          result.__chain__ = true;
+        }
+        return result;
       };
     });
   }
@@ -3867,109 +3377,49 @@
    * ');
    */
   function template(text, data, options) {
-    // based on John Resig's `tmpl` implementation
-    // http://ejohn.org/blog/javascript-micro-templating/
-    // and Laura Doktorova's doT.js
-    // https://github.com/olado/doT
     text || (text = '');
-    options || (options = {});
+    options = defaults({}, options, lodash.templateSettings);
 
-    var isEvaluating,
-        result,
-        settings = lodash.templateSettings,
-        index = 0,
-        interpolate = options.interpolate || settings.interpolate || reNoMatch,
+    var index = 0,
         source = "__p += '",
-        variable = options.variable || settings.variable,
-        hasVariable = variable;
+        variable = options.variable;
 
-    // compile regexp to match each delimiter
     var reDelimiters = RegExp(
-      (options.escape || settings.escape || reNoMatch).source + '|' +
-      interpolate.source + '|' +
-      (interpolate === reInterpolate ? reEsTemplate : reNoMatch).source + '|' +
-      (options.evaluate || settings.evaluate || reNoMatch).source + '|$'
+      (options.escape || reNoMatch).source + '|' +
+      (options.interpolate || reNoMatch).source + '|' +
+      (options.evaluate || reNoMatch).source + '|$'
     , 'g');
 
-    text.replace(reDelimiters, function(match, escapeValue, interpolateValue, esTemplateValue, evaluateValue, offset) {
-      interpolateValue || (interpolateValue = esTemplateValue);
-
-      // escape characters that cannot be included in string literals
+    text.replace(reDelimiters, function(match, escapeValue, interpolateValue, evaluateValue, offset) {
       source += text.slice(index, offset).replace(reUnescapedString, escapeStringChar);
+      source +=
+        escapeValue ? "' +\n_.escape(" + escapeValue + ") +\n'" :
+        evaluateValue ? "';\n" + evaluateValue + ";\n__p += '" :
+        interpolateValue ? "' +\n((__t = (" + interpolateValue + ")) == null ? '' : __t) +\n'" : '';
 
-      // replace delimiters with snippets
-      if (escapeValue) {
-        source += "' +\n__e(" + escapeValue + ") +\n'";
-      }
-      if (evaluateValue) {
-        source += "';\n" + evaluateValue + ";\n__p += '";
-      }
-      if (interpolateValue) {
-        source += "' +\n((__t = (" + interpolateValue + ")) == null ? '' : __t) +\n'";
-      }
-      isEvaluating || (isEvaluating = evaluateValue || reComplexDelimiter.test(escapeValue || interpolateValue));
       index = offset + match.length;
-
-      // the JS engine embedded in Adobe products requires returning the `match`
-      // string in order to produce the correct `offset` value
-      return match;
     });
 
     source += "';\n";
-
-    // if `variable` is not specified and the template contains "evaluate"
-    // delimiters, wrap a with-statement around the generated code to add the
-    // data object to the top of the scope chain
-    if (!hasVariable) {
+    if (!variable) {
       variable = 'obj';
-      if (isEvaluating) {
-        source = 'with (' + variable + ') {\n' + source + '\n}\n';
-      }
-      else {
-        // avoid a with-statement by prepending data object references to property names
-        var reDoubleVariable = RegExp('(\\(\\s*)' + variable + '\\.' + variable + '\\b', 'g');
-        source = source
-          .replace(reInsertVariable, '$&' + variable + '.')
-          .replace(reDoubleVariable, '$1__d');
-      }
+      source = 'with (' + variable + ' || {}) {\n' + source + '\n}\n';
     }
-
-    // cleanup code by stripping empty strings
-    source = (isEvaluating ? source.replace(reEmptyStringLeading, '') : source)
-      .replace(reEmptyStringMiddle, '$1')
-      .replace(reEmptyStringTrailing, '$1;');
-
-    // frame code as the function body
     source = 'function(' + variable + ') {\n' +
-      (hasVariable ? '' : variable + ' || (' + variable + ' = {});\n') +
-      "var __t, __p = '', __e = _.escape" +
-      (isEvaluating
-        ? ', __j = Array.prototype.join;\n' +
-          "function print() { __p += __j.call(arguments, '') }\n"
-        : (hasVariable ? '' : ', __d = ' + variable + '.' + variable + ' || ' + variable) + ';\n'
-      ) +
+      "var __t, __p = '', __j = Array.prototype.join;\n" +
+      "function print() { __p += __j.call(arguments, '') }\n" +
       source +
       'return __p\n}';
 
-    // use a sourceURL for easier debugging
-    // http://www.html5rocks.com/en/tutorials/developertools/sourcemaps/#toc-sourceurl
-    var sourceURL = useSourceURL
-      ? '\n//@ sourceURL=' + (options.sourceURL || '/lodash/template/source[' + (templateCounter++) + ']')
-      : '';
-
     try {
-      result = createFunction('_', 'return ' + source + sourceURL)(lodash);
+      var result = Function('_', 'return ' + source)(lodash);
     } catch(e) {
       e.source = source;
       throw e;
     }
-
     if (data) {
       return result(data);
     }
-    // provide the compiled function's source via its `toString` method, in
-    // supported environments, or the `source` property as a convenience for
-    // inlining compiled templates during the build process
     result.source = source;
     return result;
   }
@@ -4044,7 +3494,8 @@
    * // => '105'
    */
   function uniqueId(prefix) {
-    return (prefix == null ? '' : prefix + '') + (++idCounter);
+    var id = ++idCounter + '';
+    return prefix ? prefix + id : id;
   }
 
   /*--------------------------------------------------------------------------*/
@@ -4072,7 +3523,9 @@
    * // => 'moe is 40'
    */
   function chain(value) {
-    return new lodash(value);
+    value = new lodash(value);
+    value.__chain__ = true;
+    return value;
   }
 
   /**
@@ -4120,6 +3573,7 @@
    * // => true
    */
   function wrapperChain() {
+    this.__chain__ = true;
     return this;
   }
 
@@ -4158,8 +3612,6 @@
 
   /*--------------------------------------------------------------------------*/
 
-  // add functions that return wrapped values when chaining
-  lodash.assign = assign;
   lodash.bindAll = bindAll;
   lodash.chain = chain;
   lodash.compact = compact;
@@ -4169,8 +3621,6 @@
   lodash.filter = filter;
   lodash.flatten = flatten;
   lodash.forEach = forEach;
-  lodash.forIn = forIn;
-  lodash.forOwn = forOwn;
   lodash.functions = functions;
   lodash.groupBy = groupBy;
   lodash.initial = initial;
@@ -4180,7 +3630,6 @@
   lodash.keys = keys;
   lodash.map = map;
   lodash.max = max;
-  lodash.merge = merge;
   lodash.min = min;
   lodash.object = object;
   lodash.omit = omit;
@@ -4212,15 +3661,11 @@
   lodash.tail = rest;
   lodash.unique = uniq;
 
-  // add functions to `lodash.prototype`
-  mixin(lodash);
-
   /*--------------------------------------------------------------------------*/
 
   // add functions that return unwrapped values when chaining
   lodash.after = after;
   lodash.bind = bind;
-  lodash.bindKey = bindKey;
   lodash.clone = clone;
   lodash.compose = compose;
   lodash.contains = contains;
@@ -4233,7 +3678,6 @@
   lodash.has = has;
   lodash.identity = identity;
   lodash.indexOf = indexOf;
-  lodash.isArguments = isArguments;
   lodash.isArray = isArray;
   lodash.isBoolean = isBoolean;
   lodash.isDate = isDate;
@@ -4246,7 +3690,6 @@
   lodash.isNull = isNull;
   lodash.isNumber = isNumber;
   lodash.isObject = isObject;
-  lodash.isPlainObject = isPlainObject;
   lodash.isRegExp = isRegExp;
   lodash.isString = isString;
   lodash.isUndefined = isUndefined;
@@ -4255,7 +3698,6 @@
   lodash.mixin = mixin;
   lodash.noConflict = noConflict;
   lodash.once = once;
-  lodash.partial = partial;
   lodash.random = random;
   lodash.reduce = reduce;
   lodash.reduceRight = reduceRight;
@@ -4278,16 +3720,6 @@
   lodash.include = contains;
   lodash.inject = reduce;
 
-  forOwn(lodash, function(func, methodName) {
-    if (!lodash.prototype[methodName]) {
-      lodash.prototype[methodName] = function() {
-        var args = [this.__wrapped__];
-        push.apply(args, arguments);
-        return func.apply(lodash, args);
-      };
-    }
-  });
-
   /*--------------------------------------------------------------------------*/
 
   // add functions capable of returning wrapped and unwrapped values when chaining
@@ -4297,15 +3729,6 @@
   // add aliases
   lodash.take = first;
   lodash.head = first;
-
-  forOwn(lodash, function(func, methodName) {
-    if (!lodash.prototype[methodName]) {
-      lodash.prototype[methodName]= function(n, guard) {
-        var result = func(this.__wrapped__, n, guard);
-        return (n == null || guard) ? result : new lodash(result);
-      };
-    }
-  });
 
   /*--------------------------------------------------------------------------*/
 
@@ -4318,11 +3741,12 @@
    */
   lodash.VERSION = '1.0.0-rc.2';
 
+  // add functions to `lodash.prototype`
+  mixin(lodash);
+
   // add "Chaining" functions to the wrapper
   lodash.prototype.chain = wrapperChain;
-  lodash.prototype.toString = wrapperToString;
   lodash.prototype.value = wrapperValueOf;
-  lodash.prototype.valueOf = wrapperValueOf;
 
   // add mutator `Array` functions to the wrapper
   forEach(['pop', 'push', 'reverse', 'shift', 'sort', 'splice', 'unshift'], function(methodName) {
@@ -4347,32 +3771,17 @@
       var value = this.__wrapped__,
           result = func.apply(value, arguments);
 
-      return new lodash(result);
+      if (this.__chain__) {
+        result = new lodash(result);
+        result.__chain__ = true;
+      }
+      return result;
     };
   });
 
-  // add pseudo private property to be used and removed during the build process
-  lodash._iteratorTemplate = iteratorTemplate;
-
   /*--------------------------------------------------------------------------*/
 
-  // expose Lo-Dash
-  // some AMD build optimizers, like r.js, check for specific condition patterns like the following:
-  if (typeof define == 'function' && typeof define.amd == 'object' && define.amd) {
-    // Expose Lo-Dash to the global object even when an AMD loader is present in
-    // case Lo-Dash was injected by a third-party script and not intended to be
-    // loaded as a module. The global assignment can be reverted in the Lo-Dash
-    // module via its `noConflict()` method.
-    window._ = lodash;
-
-    // define as an anonymous module so, through path mapping, it can be
-    // referenced as the "underscore" module
-    define(function() {
-      return lodash;
-    });
-  }
-  // check for `exports` after `define` in case a build optimizer adds an `exports` object
-  else if (freeExports) {
+  if (freeExports) {
     // in Node.js or RingoJS v0.8.0+
     if (typeof module == 'object' && module && module.exports == freeExports) {
       (module.exports = lodash)._ = lodash;

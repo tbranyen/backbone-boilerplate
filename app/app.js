@@ -1,6 +1,11 @@
 define([
   "backbone.layoutmanager"
-], function() {
+
+  // Include additional libraries installed with JamJS or placed in the
+  // `vendor/js` directory, here.
+],
+
+function() {
 
   // Provide a global location to place configuration settings and module
   // creation.
@@ -61,13 +66,18 @@ define([
         options.template = name;
       }
 
-      // Create a new Layout with options.
-      var layout = new Backbone.Layout(_.extend({
-        el: "#main"
-      }, options));
+      // Check if a layout already exists, if so, update the template.
+      if (this.layout) {
+        this.layout.template = options.template;
+      } else {
+        // Create a new Layout with options.
+        this.layout = new Backbone.Layout(_.extend({
+          el: "main"
+        }, options));
+      }
 
       // Cache the refererence.
-      return this.layout = layout;
+      return this.layout;
     }
   }, Backbone.Events);
 
