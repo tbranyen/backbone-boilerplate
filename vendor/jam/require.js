@@ -2067,7 +2067,6 @@ var jam = {
     "shim": {
         "backbone": {
             "deps": [
-                "jquery",
                 "lodash"
             ],
             "exports": "Backbone"
