@@ -1,5 +1,5 @@
 /*!
- * backbone.layoutmanager.js v0.7.2
+ * backbone.layoutmanager.js v0.7.3
  * Copyright 2012, Tim Branyen (@tbranyen)
  * backbone.layoutmanager.js may be freely distributed under the MIT license.
  */
@@ -248,15 +248,15 @@ var LayoutManager = Backbone.View.extend({
         root.trigger("afterRender", root);
       }
 
-      // Special case for when a parent View that has not been rendered is
-      // involved.
-      if (rentManager && !rentManager.hasRendered) {
+      // If the parent is currently rendering, wait until it has completed
+      // until calling the nested View's `afterRender`.
+      if (rentManager && rentManager.queue) {
         // Wait until the parent View has finished rendering, which could be
         // asynchronous, and trigger afterRender on this View once it has
         // compeleted.
-        return parent.on("afterRender", function() {
+        return parent.on("afterRender", function afterRender() {
           // Wish we had `once` for this...
-          parent.off("afterRender", null, this);
+          parent.off("afterRender", afterRender, this);
 
           // Trigger the afterRender and set hasRendered.
           completeRender();
@@ -351,11 +351,8 @@ var LayoutManager = Backbone.View.extend({
 
   // Merge instance and global options.
   _options: function() {
-    // Instance overrides take precedence, fallback to prototype options. In
-    // Lo-Dash, `_.extend` will not copy over inherited properties, so the
-    // `this.constructor.prototype` was added in to cover that case.
-    return _.extend({}, this, this.constructor.prototype,
-      LayoutManager.prototype.options, this.options);
+    // Instance overrides take precedence, fallback to prototype options.
+    return LayoutManager.augment({}, this, LayoutManager.prototype.options, this.options);
   }
 },
 {
@@ -387,7 +384,7 @@ var LayoutManager = Backbone.View.extend({
     function applyTemplate(rendered) {
       // Actually put the rendered contents into the element.
       if (rendered) {
-        options.html(root.el, rendered);
+        options.html(root.$el, rendered);
       }
 
       // Resolve only after fetch and render have succeeded.
@@ -573,14 +570,21 @@ var LayoutManager = Backbone.View.extend({
 
   // This static method allows for global configuration of LayoutManager.
   configure: function(opts) {
-    _.extend(LayoutManager.prototype.options, opts);
+    this.augment(LayoutManager.prototype.options, opts);
 
     // Allow LayoutManager to manage Backbone.View.prototype.
     if (opts.manage) {
       Backbone.View.prototype.manage = true;
     }
   },
-
+  
+  augment: !_.forIn ? _.extend : function(destination) {
+    return _.reduce(Array.prototype.slice.call(arguments, 1), function(destination, source) {
+      _.forIn(source, function(value, key) { destination[key] = value; });
+      return destination;
+    }, destination);
+  },
+  
   // Configure a View to work with the LayoutManager plugin.
   setupView: function(view, options) {
     // If the View has already been setup, no need to do it again.
@@ -619,7 +623,7 @@ var LayoutManager = Backbone.View.extend({
       _.values(options.events)));
 
     // Merge the View options into the View.
-    _.extend(view, viewOptions);
+    LayoutManager.augment(view, viewOptions);
 
     // If the View still has the Backbone.View#render method, remove it.  Don't
     // want it accidentally overriding the LM render.
@@ -630,7 +634,7 @@ var LayoutManager = Backbone.View.extend({
 
     // Pick out the specific properties that can be dynamically added at
     // runtime and ensure they are available on the view object.
-    _.extend(options, viewOverrides);
+    LayoutManager.augment(options, viewOverrides);
 
     // By default the original Remove function is the Backbone.View one.
     view._remove = Backbone.View.prototype.remove;
@@ -703,7 +707,7 @@ var LayoutManager = Backbone.View.extend({
 // Convenience assignment to make creating Layout's slightly shorter.
 Backbone.Layout = Backbone.LayoutView = Backbone.LayoutManager = LayoutManager;
 // Tack on the version.
-LayoutManager.VERSION = "0.7.2";
+LayoutManager.VERSION = "0.7.3";
 
 // Override _configure to provide extra functionality that is necessary in
 // order for the render function reference to be bound during initialize.
@@ -749,13 +753,13 @@ LayoutManager.prototype.options = {
 
   // Override this with a custom HTML method, passed a root element and an
   // element to replace the innerHTML with.
-  html: function(root, el) {
-    $(root).html(el);
+  html: function($root, el) {
+    $root.html(el);
   },
 
   // Very similar to HTML except this one will appendChild.
-  append: function(root, el) {
-    $(root).append(el);
+  append: function($root, el) {
+    $root.append(el);
   },
 
   // Return a deferred for when all promises resolve/reject.
@@ -778,4 +782,3 @@ LayoutManager.prototype.options = {
 keys = _.keys(LayoutManager.prototype.options);
 
 })(this);
-
