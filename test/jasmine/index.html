@@ -16,14 +16,9 @@
   <script src="vendor/jasmine.js"></script>
   <script src="vendor/jasmine-html.js"></script>
 
-  <!-- Application libs -->
-  <script src="../../assets/js/libs/jquery.js"></script>
-  <script src="../../assets/js/libs/lodash.js"></script>
-  <script src="../../assets/js/libs/backbone.js"></script>
-  
   <!-- Load application -->
   <script data-main="../../app/config"
-    src="../../assets/js/libs/require.js"></script>
+    src="../../vendor/jam/require.js"></script>
 
   <!-- Declare your spec files to be run here -->
   <script>
@@ -32,7 +27,7 @@
     require({ paths: { spec: "../test/jasmine/spec" } }, [
 
       // Load the example spec, replace this and add your own spec
-      "spec/example"
+      "spec/example.spec"
 
     ], function() {
       // Set up the jasmine reporters once each spec has been loaded
