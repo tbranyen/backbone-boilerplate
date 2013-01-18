@@ -2,50 +2,48 @@
   "author": "Tim Branyen (@tbranyen)",
   "name": "backbone.layoutmanager",
   "description": "A manager for templates & layouts in Backbone.js",
-
-  "version": "0.7.3",
-
+  "version": "0.8.0",
   "homepage": "http://tbranyen.github.com/backbone.layoutmanager/",
-
   "repository": {
     "type": "git",
     "url": "git://github.com/tbranyen/backbone.layoutmanager.git"
   },
-
   "main": "node/index",
-
   "engines": {
-    "node": ">=0.8"
+    "node": "~0.8"
   },
-
   "dependencies": {
-    "backbone": "0.9.2",
-    "underscore.deferred": "0.2.0",
-    "cheerio": "0.10.3",
+    "backbone": "0.9.9",
+    "underscore.deferred": "0.4.0",
+    "cheerio": "0.10.5",
     "underscore": "1.4.2"
   },
-
   "devDependencies": {
-    "grunt": "~0.3.15"
+    "grunt": "~0.4",
+    "grunt-cli": "~0.1",
+    "grunt-contrib-jshint": "0.1.1rc5",
+    "grunt-contrib-qunit": "0.1.1rc5",
+    "grunt-nodequnit": "~0.1"
   },
-
   "scripts": {
     "test": "grunt"
   },
-
   "jam": {
     "dependencies": {
-      "lodash": "*",
-      "backbone": "*",
-      "jquery": "*"
+      "underscore": "~1.4",
+      "backbone": "~0.9",
+      "jquery": "~1.8"
     },
-
-    "include": ["backbone.layoutmanager.js"],
-
+    "include": [
+      "backbone.layoutmanager.js"
+    ],
     "main": "backbone.layoutmanager.js",
-
     "shim": {
-      "deps": ["jquery", "backbone", "lodash"],
+      "deps": [
+        "jquery",
+        "backbone",
+        "underscore"
+      ],
       "exports": "Backbone.LayoutManager"
     }
   }

@@ -1,7 +1,7 @@
 {
   "name": "lodash",
-  "version": "1.0.0-rc.3",
-  "description": "An alternative to Underscore.js, delivering consistency, customization, performance, and extra features.",
+  "version": "0.9.2",
+  "description": "A drop-in replacement for Underscore.js delivering performance, bug fixes, and additional features.",
   "homepage": "http://lodash.com",
   "main": "./lodash",
   "keywords": [
@@ -46,8 +46,7 @@
     "main": "./lodash.js"
   },
   "scripts": {
-    "build": "node build",
-    "test": "node test/test && node test/test-build",
-    "install": "node build/post-install"
+    "build": "node ./build.js",
+    "test": "node ./test/test.js && node ./test/test-build.js"
   }
 }

@@ -5,7 +5,7 @@ define([
   // `vendor/js` directory, here.
 ],
 
-function() {
+function(LayoutManager) {
 
   // Provide a global location to place configuration settings and module
   // creation.
@@ -18,7 +18,7 @@ function() {
   var JST = window.JST = window.JST || {};
 
   // Configure LayoutManager with Backbone Boilerplate defaults.
-  Backbone.LayoutManager.configure({
+  LayoutManager.configure({
     // Allow LayoutManager to augment Backbone.View.prototype.
     manage: true,
 
@@ -38,8 +38,8 @@ function() {
 
       // Seek out the template asynchronously.
       $.get(app.root + path, function(contents) {
-        done(JST[path] = _.template(contents));
-      });
+        done(_.template(contents));
+      }, "text");
     }
   });
 

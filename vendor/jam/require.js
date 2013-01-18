@@ -2080,7 +2080,7 @@ var jam = {
             "deps": [
                 "jquery",
                 "backbone",
-                "lodash"
+                "underscore"
             ],
             "exports": "Backbone.LayoutManager"
         },
