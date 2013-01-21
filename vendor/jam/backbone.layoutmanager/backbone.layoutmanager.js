@@ -1,5 +1,5 @@
 /*!
- * backbone.layoutmanager.js v0.8.0
+ * backbone.layoutmanager.js v0.8.1
  * Copyright 2012, Tim Branyen (@tbranyen)
  * backbone.layoutmanager.js may be freely distributed under the MIT license.
  */
@@ -339,16 +339,15 @@ var LayoutManager = Backbone.View.extend({
           // If items are being inserted, they will be in a non-zero length
           // Array.
           if (insert && view.length) {
-            // Only need to wait for the first View to complete, the rest
-            // will be synchronous, by virtue of having the template cached.
-            return view[0].render().pipe(function() {
-              // Map over all the View's to be inserted and call render on
-              // them all.  Once they have all resolved, resolve the other
-              // deferred.
-              return options.when(_.map(view.slice(1), function(insertView) {
-                return insertView.render();
-              }));
-            });
+            // Schedule each view to be rendered in order and return a promise
+            // representing the result of the final rendering.
+            return _.reduce(view.slice(1), function(prevRender, view) {
+              return prevRender.then(function() {
+                return view.render();
+              });
+            // The first view should be rendered immediately, and the resulting
+            // promise used to initialize the reduction.
+            }, view[0].render());
           }
 
           // Only return the fetch deferred, resolve the main deferred after
@@ -760,7 +759,7 @@ var LayoutManager = Backbone.View.extend({
 // Convenience assignment to make creating Layout's slightly shorter.
 Backbone.Layout = LayoutManager;
 // Tack on the version.
-LayoutManager.VERSION = "0.8.0";
+LayoutManager.VERSION = "0.8.1";
 
 // Override _configure to provide extra functionality that is necessary in
 // order for the render function reference to be bound during initialize.

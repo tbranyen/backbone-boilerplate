@@ -13,7 +13,7 @@ var jam = {
         {
             "name": "jquery",
             "location": "../vendor/jam/jquery",
-            "main": "jquery.js"
+            "main": "dist/jquery.js"
         },
         {
             "name": "lodash",
@@ -40,7 +40,7 @@ var jam = {
                 "backbone",
                 "underscore"
             ],
-            "exports": "Backbone.LayoutManager"
+            "exports": "Backbone.Layout"
         },
         "underscore": {
             "exports": "_"
