@@ -34,3 +34,8 @@ To use the new and improved build process, please visit the
 [grunt-bbb](https://github.com/backbone-boilerplate/grunt-bbb)
 plugin repo and follow the instructions to install.  Basing your project off
 this repo will allow the `bbb` commands to work out-of-the-box.
+
+
+## License
+Copyright (c) 2013 Tim Branyen (@tbranyen)  
+Licensed under the MIT license.
