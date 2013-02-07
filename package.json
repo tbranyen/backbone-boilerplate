@@ -2,6 +2,11 @@
   "name": "backbone-boilerplate",
   "version": "0.1.0",
 
+  "dependencies": {
+    "grunt": "~0.4",
+    "grunt-bbb-server": "0.1.0-alpha"
+  },
+
   "jam": {
     "packageDir": "./vendor/jam",
     "baseUrl": "./app",
