@@ -76,7 +76,7 @@ function(LayoutManager) {
         }, options));
       }
 
-      // Cache the refererence.
+      // Cache the reference.
       return this.layout;
     }
   }, Backbone.Events);
