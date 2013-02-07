@@ -22,6 +22,19 @@ Special Thanks to: [cowboy](http://github.com/cowboy),
 Extra Special Thanks to: [Paul Guinan](http://bigredhair.com/work/paul.html)
 for giving me usage rights to his fantastic Boilerplate character.
 
+## Getting started ##
+
+The easiest way to get started is to install Git and clone the repository:
+
+``` bash
+# Create a new project directory and enter it.
+mkdir myproject && cd myproject
+
+# Using Git, fetch only the last few commits.  You don't need the full history
+# for your project.
+git clone --q --depth 0 git@github.com:tbranyen/backbone-boilerplate.git .
+```
+
 ## Documentation ##
 
 View the Backbone Boilerplate documentation here:
