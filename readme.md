@@ -33,6 +33,13 @@ mkdir myproject && cd myproject
 # Using Git, fetch only the last few commits.  You don't need the full history
 # for your project.
 git clone --q --depth 0 git@github.com:tbranyen/backbone-boilerplate.git .
+
+# Optionally, you may want to install grunt & grunt-bbb.
+npm install
+
+# Make sure you install grunt-cli globally.  Depending on your user account you
+# may need to gain elevated privileges using something like sudo.
+npm install grunt-cli -g
 ```
 
 ## Documentation ##
