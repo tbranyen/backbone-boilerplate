@@ -22,6 +22,12 @@ Special Thanks to: [cowboy](http://github.com/cowboy),
 Extra Special Thanks to: [Paul Guinan](http://bigredhair.com/work/paul.html)
 for giving me usage rights to his fantastic Boilerplate character.
 
+## Documentation ##
+
+View the Backbone Boilerplate documentation here:
+
+[GitHub Wiki](https://github.com/tbranyen/backbone-boilerplate/wiki)
+
 ## Getting started ##
 
 The easiest way to get started is to install Git and clone the repository:
@@ -33,28 +39,21 @@ mkdir myproject && cd myproject
 # Using Git, fetch only the last few commits.  You don't need the full history
 # for your project.
 git clone --q --depth 0 git@github.com:tbranyen/backbone-boilerplate.git .
-
-# Optionally, you may want to install grunt & grunt-bbb.
-npm install
-
-# Make sure you install grunt-cli globally.  Depending on your user account you
-# may need to gain elevated privileges using something like sudo.
-npm install grunt-cli -g
 ```
-
-## Documentation ##
-
-View the Backbone Boilerplate documentation here:
-
-[GitHub Wiki](https://github.com/tbranyen/backbone-boilerplate/wiki)
 
 ## Build process ##
 
-To use the new and improved build process, please visit the 
-[grunt-bbb](https://github.com/backbone-boilerplate/grunt-bbb)
-plugin repo and follow the instructions to install.  Basing your project off
-this repo will allow the `bbb` commands to work out-of-the-box.
+The build process consists of numerous Grunt plugin tasks that work together
+to optimize your application.
 
+``` bash
+# Install latest Grunt & useful Grunt plugins. 
+npm install
+
+# Make sure you install grunt-cli globally.  Depending on your user account you
+# may need to gain elevated privileges using something like `sudo`.
+npm install grunt-cli -g
+```
 
 ## License
 Copyright (c) 2013 Tim Branyen (@tbranyen)  
