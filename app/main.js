@@ -2,11 +2,15 @@ require([
   // Application.
   "app",
 
+  // External dependencies.
+  "backbone",
+  "jquery",
+
   // Main Router.
   "router"
 ],
 
-function(app, Router) {
+function(app, Backbone, $, Router) {
 
   // Define your master router on the application namespace and trigger all
   // navigation from this instance.

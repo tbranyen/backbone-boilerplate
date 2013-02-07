@@ -1,5 +1,9 @@
 /** vim: et:ts=4:sw=4:sts=4
+<<<<<<< HEAD
  * @license RequireJS 2.1.4 Copyright (c) 2010-2012, The Dojo Foundation All Rights Reserved.
+=======
+ * @license RequireJS 2.1.2 Copyright (c) 2010-2012, The Dojo Foundation All Rights Reserved.
+>>>>>>> updated to latest practices and added in source map support
  * Available via the MIT or new BSD license.
  * see: http://github.com/jrburke/requirejs for details
  */
@@ -12,7 +16,11 @@ var requirejs, require, define;
 (function (global) {
     var req, s, head, baseElement, dataMain, src,
         interactiveScript, currentlyAddingScript, mainScript, subPath,
+<<<<<<< HEAD
         version = '2.1.4',
+=======
+        version = '2.1.2',
+>>>>>>> updated to latest practices and added in source map support
         commentRegExp = /(\/\*([\s\S]*?)\*\/|([^:]|^)\/\/(.*)$)/mg,
         cjsRequireRegExp = /[^.]\s*require\s*\(\s*["']([^'"\s]+)["']\s*\)/g,
         jsSuffixRegExp = /\.js$/,
@@ -917,7 +925,12 @@ var requirejs, require, define;
                         name = this.map.name,
                         parentName = this.map.parentMap ? this.map.parentMap.name : null,
                         localRequire = context.makeRequire(map.parentMap, {
+<<<<<<< HEAD
                             enableBuildCallback: true
+=======
+                            enableBuildCallback: true,
+                            skipMap: true
+>>>>>>> updated to latest practices and added in source map support
                         });
 
                     //If current map is not normalized, wait for that
@@ -1015,11 +1028,16 @@ var requirejs, require, define;
                         try {
                             req.exec(text);
                         } catch (e) {
+<<<<<<< HEAD
                             return onError(makeError('fromtexteval',
                                              'fromText eval for ' + id +
                                             ' failed: ' + e,
                                              e,
                                              [id]));
+=======
+                            throw new Error('fromText eval for ' + moduleName +
+                                            ' failed: ' + e);
+>>>>>>> updated to latest practices and added in source map support
                         }
 
                         if (hasInteractive) {
@@ -1341,6 +1359,7 @@ var requirejs, require, define;
                         if (relMap && hasProp(handlers, deps)) {
                             return handlers[deps](registry[relMap.id]);
                         }
+<<<<<<< HEAD
 
                         //Synchronous access to one module. If require.get is
                         //available (as in the Node adapter), prefer that.
@@ -1352,6 +1371,19 @@ var requirejs, require, define;
                         map = makeModuleMap(deps, relMap, false, true);
                         id = map.id;
 
+=======
+
+                        //Synchronous access to one module. If require.get is
+                        //available (as in the Node adapter), prefer that.
+                        if (req.get) {
+                            return req.get(context, deps, relMap);
+                        }
+
+                        //Normalize module name, if it contains . or ..
+                        map = makeModuleMap(deps, relMap, false, true);
+                        id = map.id;
+
+>>>>>>> updated to latest practices and added in source map support
                         if (!hasProp(defined, id)) {
                             return onError(makeError('notloaded', 'Module name "' +
                                         id +
@@ -1396,6 +1428,7 @@ var requirejs, require, define;
                      * plain URLs like nameToUrl.
                      */
                     toUrl: function (moduleNamePlusExt) {
+<<<<<<< HEAD
                         var ext, url,
                             index = moduleNamePlusExt.lastIndexOf('.'),
                             segment = moduleNamePlusExt.split('/')[0],
@@ -1404,13 +1437,24 @@ var requirejs, require, define;
                         //Have a file extension alias, and it is not the
                         //dots from a relative path.
                         if (index !== -1 && (!isRelative || index > 1)) {
+=======
+                        var index = moduleNamePlusExt.lastIndexOf('.'),
+                            ext = null;
+
+                        if (index !== -1) {
+>>>>>>> updated to latest practices and added in source map support
                             ext = moduleNamePlusExt.substring(index, moduleNamePlusExt.length);
                             moduleNamePlusExt = moduleNamePlusExt.substring(0, index);
                         }
 
+<<<<<<< HEAD
                         url = context.nameToUrl(normalize(moduleNamePlusExt,
                                                 relMap && relMap.id, true), ext || '.fake');
                         return ext ? url : url.substring(0, url.length - 5);
+=======
+                        return context.nameToUrl(normalize(moduleNamePlusExt,
+                                                relMap && relMap.id, true), ext);
+>>>>>>> updated to latest practices and added in source map support
                     },
 
                     defined: function (id) {
@@ -1422,6 +1466,7 @@ var requirejs, require, define;
                         return hasProp(defined, id) || hasProp(registry, id);
                     }
                 });
+<<<<<<< HEAD
 
                 //Only allow undef on top level require calls
                 if (!relMap) {
@@ -1445,6 +1490,31 @@ var requirejs, require, define;
                                 undefEvents[id] = mod.events;
                             }
 
+=======
+
+                //Only allow undef on top level require calls
+                if (!relMap) {
+                    localRequire.undef = function (id) {
+                        //Bind any waiting define() calls to this context,
+                        //fix for #408
+                        takeGlobalQueue();
+
+                        var map = makeModuleMap(id, relMap, true),
+                            mod = getOwn(registry, id);
+
+                        delete defined[id];
+                        delete urlFetched[map.url];
+                        delete undefEvents[id];
+
+                        if (mod) {
+                            //Hold on to listeners in case the
+                            //module will be attempted to be reloaded
+                            //using a different config.
+                            if (mod.events.defined) {
+                                undefEvents[id] = mod.events;
+                            }
+
+>>>>>>> updated to latest practices and added in source map support
                             cleanRegistry(id);
                         }
                     };
@@ -1459,7 +1529,11 @@ var requirejs, require, define;
              * is passed in for context, when this method is overriden by
              * the optimizer. Not shown here to keep code compact.
              */
+<<<<<<< HEAD
             enable: function (depMap) {
+=======
+            enable: function (depMap, parent) {
+>>>>>>> updated to latest practices and added in source map support
                 var mod = getOwn(registry, depMap.id);
                 if (mod) {
                     getModule(depMap).enable();
@@ -2017,17 +2091,16 @@ var jam = {
             "main": "dist/jquery.js"
         },
         {
-            "name": "lodash",
-            "location": "../vendor/jam/lodash",
-            "main": "./lodash.js"
-        },
-        {
             "name": "underscore",
             "location": "../vendor/jam/underscore",
             "main": "underscore.js"
         }
     ],
+<<<<<<< HEAD
     "version": "0.2.15",
+=======
+    "version": "0.2.13",
+>>>>>>> updated to latest practices and added in source map support
     "shim": {
         "backbone": {
             "deps": [
@@ -2069,11 +2142,14 @@ if (typeof require !== "undefined" && require.config) {
             "main": "dist/jquery.js"
         },
         {
+<<<<<<< HEAD
             "name": "lodash",
             "location": "../vendor/jam/lodash",
             "main": "./lodash.js"
         },
         {
+=======
+>>>>>>> updated to latest practices and added in source map support
             "name": "underscore",
             "location": "../vendor/jam/underscore",
             "main": "underscore.js"
@@ -2120,11 +2196,14 @@ else {
             "main": "dist/jquery.js"
         },
         {
+<<<<<<< HEAD
             "name": "lodash",
             "location": "../vendor/jam/lodash",
             "main": "./lodash.js"
         },
         {
+=======
+>>>>>>> updated to latest practices and added in source map support
             "name": "underscore",
             "location": "../vendor/jam/underscore",
             "main": "underscore.js"

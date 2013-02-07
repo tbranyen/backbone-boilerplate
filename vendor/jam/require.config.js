@@ -16,17 +16,16 @@ var jam = {
             "main": "dist/jquery.js"
         },
         {
-            "name": "lodash",
-            "location": "../vendor/jam/lodash",
-            "main": "./lodash.js"
-        },
-        {
             "name": "underscore",
             "location": "../vendor/jam/underscore",
             "main": "underscore.js"
         }
     ],
+<<<<<<< HEAD
     "version": "0.2.15",
+=======
+    "version": "0.2.13",
+>>>>>>> updated to latest practices and added in source map support
     "shim": {
         "backbone": {
             "deps": [
@@ -68,11 +67,14 @@ if (typeof require !== "undefined" && require.config) {
             "main": "dist/jquery.js"
         },
         {
+<<<<<<< HEAD
             "name": "lodash",
             "location": "../vendor/jam/lodash",
             "main": "./lodash.js"
         },
         {
+=======
+>>>>>>> updated to latest practices and added in source map support
             "name": "underscore",
             "location": "../vendor/jam/underscore",
             "main": "underscore.js"
@@ -119,11 +121,14 @@ else {
             "main": "dist/jquery.js"
         },
         {
+<<<<<<< HEAD
             "name": "lodash",
             "location": "../vendor/jam/lodash",
             "main": "./lodash.js"
         },
         {
+=======
+>>>>>>> updated to latest practices and added in source map support
             "name": "underscore",
             "location": "../vendor/jam/underscore",
             "main": "underscore.js"

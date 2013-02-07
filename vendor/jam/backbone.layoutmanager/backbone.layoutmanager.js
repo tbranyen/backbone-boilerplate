@@ -1,6 +1,11 @@
 /*!
+<<<<<<< HEAD
  * backbone.layoutmanager.js v0.8.6
  * Copyright 2013, Tim Branyen (@tbranyen)
+=======
+ * backbone.layoutmanager.js v0.8.3
+ * Copyright 2012, Tim Branyen (@tbranyen)
+>>>>>>> updated to latest practices and added in source map support
  * backbone.layoutmanager.js may be freely distributed under the MIT license.
  */
 (function(window) {
@@ -422,6 +427,7 @@ var LayoutManager = Backbone.View.extend({
     function applyTemplate(rendered) {
       // Actually put the rendered contents into the element.
       if (rendered) {
+<<<<<<< HEAD
         // If no container is specified, we must replace the content.
         if (manager.noel) {
           // Hold a reference to created element as replaceWith doesn't return new el.
@@ -433,6 +439,10 @@ var LayoutManager = Backbone.View.extend({
           root.$el.replaceWith(renderedEl);
           // Don't delegate events here - we'll do that in resolve()
           root.setElement(renderedEl, false);
+=======
+        if (manager.noel) {
+          root.setElement(rendered, false);
+>>>>>>> updated to latest practices and added in source map support
         } else {
           options.html(root.$el, rendered);
         }
@@ -766,7 +776,11 @@ var LayoutManager = Backbone.View.extend({
 // Convenience assignment to make creating Layout's slightly shorter.
 Backbone.Layout = LayoutManager;
 // Tack on the version.
+<<<<<<< HEAD
 LayoutManager.VERSION = "0.8.6";
+=======
+LayoutManager.VERSION = "0.8.3";
+>>>>>>> updated to latest practices and added in source map support
 
 // Override _configure to provide extra functionality that is necessary in
 // order for the render function reference to be bound during initialize.

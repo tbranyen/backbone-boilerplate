@@ -41,52 +41,51 @@ module.exports = function(grunt) {
       }
     },
 
-    // This task uses James Burke's excellent r.js AMD build tool.  In the
-    // future other builders may be contributed as drop-in alternatives.
+    // This task uses James Burke's excellent r.js AMD builder to take all
+    // modules and concatenate them into a single file.
     requirejs: {
-      options: {
-        // Include the main configuration file.
-        mainConfigFile: "app/config.js",
+      debug: {
+        // Merge the Jam configuration options into the output build.
+        options: grunt.util._.extend({
+          // Include the main configuration file.
+          mainConfigFile: "app/config.js",
 
-        deps: ["vendor/jam/require.config"],
+          // Output file.
+          out: "dist/debug/source.js",
 
-        // Output file.
-        out: "dist/debug/source.js",
+          // Root application module.
+          name: "config",
 
-        // Root application module.
-        name: "config",
+          // Leave optimization to our UglifyJS task.
+          optimize: "none",
 
-        // Leave optimization to our UglifyJS task.
-        optimize: "none",
+          // Show warnings
+          logLevel: 2,
 
-        // Show warnings
-        logLevel: 2,
+          // Ensure modules are inserted
+          skipModuleInsertion: false,
 
-        // Ensure modules are inserted
-        skipModuleInsertion: false,
+          // Optionally allow CommonJS modules to be automatically wrapped to
+          // AMD.
+          cjsTranslate: true,
 
-        // Allow optional CommonJS modules to be automatically wrapped to
-        // AMD.
-        cjsTranslate: true,
-
-        // Do not wrap everything in an IIFE.
-        wrap: false
+          // Do not wrap everything in an IIFE.
+          wrap: false
+        }, require("./vendor/jam/require.config.js"))
       }
     },
 
-    // The concatenate task is used here to merge the almond require/define
-    // shim and the templates into the application code.  It's named
-    // dist/debug/require.js, because we want to only load one script file in
-    // index.html.
+    // Combine the Almond AMD loader and precompiled templates with the
+    // application source code.
     concat: {
       dist: {
         src: [
-          "vendor/js/libs/almond.js",
+          "vendor/js/almond.js",
           "dist/debug/templates.js",
-          "dist/debug/require.js"
+          "dist/debug/source.js"
         ],
 
-        dest: "dist/debug/require.js",
+        dest: "dist/debug/source.js",
 
         separator: ";"
       }
@@ -108,8 +107,9 @@ module.exports = function(grunt) {
     // the original debug build.
     uglify: {
       options: {
-        sourceMap: "dist/release/",
-        sourceMapRoot: "/",
+        sourceMap: "dist/release/source.js.map",
+        sourceMapRoot: "",
+        sourceMapPrefix: 1,
         preserveComments: "some"
       },
 
@@ -139,8 +139,12 @@ module.exports = function(grunt) {
 
       release: {
         map: {
+          "debug/source.js": "dist/release/debug/source.js",
           "source.js": "dist/release/source.js",
-          "styles.css": "dist/release/styles.css"
+          "styles.css": "dist/release/styles.css",
+
+          // For debugging.
+          "source.js.map": "dist/release/source.js.map"
         }
       }
     },
@@ -149,15 +153,16 @@ module.exports = function(grunt) {
     copy: {
       debug: {
         files: [
-          { src: ["app/**"], dest: "dist/debug/" },
-          { src: "vendor/**", dest: "dist/debug/" }
+          { src: ["app/"], dest: "dist/debug/" },
+          { src: "vendor/", dest: "dist/debug/" }
         ]
       },
 
       release: {
         files: [
           { src: ["app/**"], dest: "dist/release/" },
-          { src: "vendor/**", dest: "dist/release/" }
+          { src: "vendor/**", dest: "dist/release/" },
+          { src: "dist/debug/source.js", dest: "dist/release/debug/source.js" }
         ]
       }
     }
@@ -181,7 +186,7 @@ module.exports = function(grunt) {
   // This will reset the build, be the precursor to the production
   // optimizations, and serve as a good intermediary for debugging.
   grunt.registerTask("debug", [
-    "clean", "jshint", "jst", "requirejs", //"concat", "copy" //"styles"
+    "clean", "jshint", "jst", "requirejs", "concat", "copy" //"styles"
   ]);
 
   // The release task will first run the debug tasks.  Following that, minify

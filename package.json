@@ -22,7 +22,6 @@
     "dependencies": {
       "backbone": "*",
       "jquery": "*",
-      "lodash": "*",
       "backbone.layoutmanager": "*"
     }
   }
