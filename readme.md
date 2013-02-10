@@ -7,6 +7,10 @@ This boilerplate is the product of much research and frustration.  Existing
 boilerplates freely modify Backbone core, lack a build process, and are very
 prescriptive; Backbone Boilerplate changes that.
 
+The Backbone Boilerplate is a way of organizing a web application with
+opinionated defaults: such as Backbone, Underscore, jQuery, RequireJS, JamJS,
+Grunt, and the HTML5 Boilerplate styles.
+
 Organize your application with a logical file structure, develop your
 Models/Collections/Views/Routers inside modules, and build knowing you have
 efficient code that will not bottleneck your users.

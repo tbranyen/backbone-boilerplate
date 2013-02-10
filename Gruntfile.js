@@ -46,7 +46,7 @@ module.exports = function(grunt) {
     requirejs: {
       debug: {
         // Merge the Jam configuration options into the output build.
-        options: grunt.util._.extend({
+        options: {
           // Include the main configuration file.
           mainConfigFile: "app/config.js",
 
@@ -56,22 +56,9 @@ module.exports = function(grunt) {
           // Root application module.
           name: "config",
 
-          // Leave optimization to our UglifyJS task.
-          optimize: "none",
-
-          // Show warnings
-          logLevel: 2,
-
-          // Ensure modules are inserted
-          skipModuleInsertion: false,
-
-          // Optionally allow CommonJS modules to be automatically wrapped to
-          // AMD.
-          cjsTranslate: true,
-
           // Do not wrap everything in an IIFE.
           wrap: false
-        }, require("./vendor/jam/require.config.js"))
+        }
       }
     },
 
@@ -80,7 +67,7 @@ module.exports = function(grunt) {
     concat: {
       dist: {
         src: [
-          "vendor/js/almond.js",
+          "vendor/js/require.js",
           "dist/debug/templates.js",
           "dist/debug/source.js"
         ],
@@ -177,16 +164,16 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-contrib-mincss");
   grunt.loadNpmTasks("grunt-contrib-clean");
   grunt.loadNpmTasks("grunt-contrib-copy");
-  grunt.loadNpmTasks("grunt-contrib-requirejs");
 
   // Grunt BBB tasks.
   grunt.loadNpmTasks("grunt-bbb-server");
+  grunt.loadNpmTasks("grunt-bbb-requirejs");
   //grunt.loadNpmTasks("grunt-bbb-styles");
 
   // This will reset the build, be the precursor to the production
   // optimizations, and serve as a good intermediary for debugging.
   grunt.registerTask("debug", [
-    "clean", "jshint", "jst", "requirejs", "concat", "copy" //"styles"
+    "clean", "jshint", "jst", "requirejs", "concat", //"copy" "styles"
   ]);
 
   // The release task will first run the debug tasks.  Following that, minify
@@ -195,4 +182,5 @@ module.exports = function(grunt) {
 
   // When running the default Grunt command, just lint the code.
   grunt.registerTask("default", ["jshint"]);
+
 };

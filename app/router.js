@@ -7,6 +7,6 @@ module.exports = Backbone.Router.extend({
   },
 
   index: function() {
-  
+    console.log("here"); 
   }
 });
