@@ -6,8 +6,12 @@
   "version": "0.8.6",
 =======
   "description": "A manager for templates & layouts in Backbone.js",
+<<<<<<< HEAD
   "version": "0.8.3",
 >>>>>>> updated to latest practices and added in source map support
+=======
+  "version": "0.8.4",
+>>>>>>> bunch of great updates!
   "homepage": "http://tbranyen.github.com/backbone.layoutmanager/",
   "repository": {
     "type": "git",

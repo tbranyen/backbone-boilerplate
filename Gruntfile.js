@@ -1,5 +1,5 @@
-// This is the build configuration file.  It is a Grunt file, which you can 
-// read more about here: https://github.com/gruntjs/grunt/wiki/Configuring-tasks
+// Grunt configuration updated to latest Grunt.  That means your minimum
+// version necessary to run these tasks is Grunt 0.4.
 module.exports = function(grunt) {
 
   grunt.initConfig({

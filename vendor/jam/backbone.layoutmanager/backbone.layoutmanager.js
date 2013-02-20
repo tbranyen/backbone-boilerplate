@@ -1,11 +1,16 @@
 /*!
 <<<<<<< HEAD
+<<<<<<< HEAD
  * backbone.layoutmanager.js v0.8.6
  * Copyright 2013, Tim Branyen (@tbranyen)
 =======
  * backbone.layoutmanager.js v0.8.3
  * Copyright 2012, Tim Branyen (@tbranyen)
 >>>>>>> updated to latest practices and added in source map support
+=======
+ * backbone.layoutmanager.js v0.8.4
+ * Copyright 2013, Tim Branyen (@tbranyen)
+>>>>>>> bunch of great updates!
  * backbone.layoutmanager.js may be freely distributed under the MIT license.
  */
 (function(window) {
@@ -428,6 +433,7 @@ var LayoutManager = Backbone.View.extend({
       // Actually put the rendered contents into the element.
       if (rendered) {
 <<<<<<< HEAD
+<<<<<<< HEAD
         // If no container is specified, we must replace the content.
         if (manager.noel) {
           // Hold a reference to created element as replaceWith doesn't return new el.
@@ -443,6 +449,15 @@ var LayoutManager = Backbone.View.extend({
         if (manager.noel) {
           root.setElement(rendered, false);
 >>>>>>> updated to latest practices and added in source map support
+=======
+        // If no container is specified, we must replace the content.
+        if (manager.noel) {
+          // Hold a reference to created element as replaceWith doesn't return new el.
+          renderedEl = root.$el.html(rendered).children();
+          root.$el.replaceWith(renderedEl);
+          // Don't delegate events here - we'll do that in resolve()
+          root.setElement(renderedEl, false);
+>>>>>>> bunch of great updates!
         } else {
           options.html(root.$el, rendered);
         }
@@ -777,10 +792,14 @@ var LayoutManager = Backbone.View.extend({
 Backbone.Layout = LayoutManager;
 // Tack on the version.
 <<<<<<< HEAD
+<<<<<<< HEAD
 LayoutManager.VERSION = "0.8.6";
 =======
 LayoutManager.VERSION = "0.8.3";
 >>>>>>> updated to latest practices and added in source map support
+=======
+LayoutManager.VERSION = "0.8.4";
+>>>>>>> bunch of great updates!
 
 // Override _configure to provide extra functionality that is necessary in
 // order for the render function reference to be bound during initialize.

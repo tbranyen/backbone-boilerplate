@@ -3,10 +3,14 @@
 	"title": "jQuery",
 	"description": "JavaScript library for DOM operations",
 <<<<<<< HEAD
+<<<<<<< HEAD
 	"version": "1.9.1",
 =======
 	"version": "1.9.0",
 >>>>>>> updated to latest practices and added in source map support
+=======
+	"version": "1.9.1",
+>>>>>>> bunch of great updates!
 	"homepage": "http://jquery.com",
 	"author": {
 		"name": "jQuery Foundation and other contributors",
@@ -48,7 +52,12 @@
 	},
 	"keywords": [],
   "jam": {
+<<<<<<< HEAD
     "include": ["dist/jquery.js"],
     "main": "dist/jquery.js"
+=======
+    "main": "jquery-1.9.1.min.js",
+    "include": ["jquery-1.9.1.min.js"]
+>>>>>>> bunch of great updates!
   }
 }
