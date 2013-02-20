@@ -1,7 +1,7 @@
-define(function(require, exports) {
+define(function(require, app) {
 
   // The root path to run the application through.
-  exports.root = "/";
+  app.root = "/";
 
   // Backbone development dependencies.
   var _ = require("underscore");
@@ -31,7 +31,7 @@ define(function(require, exports) {
       var done = this.async();
 
       // Seek out the template asynchronously.
-      $.get(exports.root + path, function(contents) {
+      $.get(app.root + path, function(contents) {
         done(_.template(contents));
       }, "text");
     }

@@ -2088,7 +2088,7 @@ var jam = {
         {
             "name": "jquery",
             "location": "../vendor/jam/jquery",
-            "main": "jquery-1.9.1.min.js"
+            "main": "dist/jquery.js"
         },
         {
             "name": "underscore",
@@ -2139,7 +2139,7 @@ if (typeof require !== "undefined" && require.config) {
         {
             "name": "jquery",
             "location": "../vendor/jam/jquery",
-            "main": "jquery-1.9.1.min.js"
+            "main": "dist/jquery.js"
         },
         {
 <<<<<<< HEAD
@@ -2193,7 +2193,7 @@ else {
         {
             "name": "jquery",
             "location": "../vendor/jam/jquery",
-            "main": "jquery-1.9.1.min.js"
+            "main": "dist/jquery.js"
         },
         {
 <<<<<<< HEAD

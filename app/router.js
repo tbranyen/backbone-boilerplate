@@ -1,26 +1,16 @@
-var Backbone = require("backbone");
+define(function(require) {
 
-// Defining the application router.
-//module.exports = function() {
-//
-//  var router = require('express')();
-//
-//  router.get("/", function(req, res) {
-//    console.log(Backbone.Layout);
-//  });
-//
-//  router.listen(8888);
-//
-//  return router;
-//
-//};
+  var app = require("app");
 
-module.exports = Backbone.Router.extend({
-  routes: {
-    "": "index"
-  },
+  // Defining the application router.
+  return Backbone.Router.extend({
+    routes: {
+      "": "index"
+    },
 
-  index: function() {
-    console.log("here"); 
-  }
+    index: function() {
+      console.log("here"); 
+    }
+  });
+
 });

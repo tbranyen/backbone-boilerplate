@@ -1,8 +1,15 @@
-// Set the require.js configuration for your application.
-require.config({
+// This is the runtime configuration file.  It complements the Gruntfile.js by
+// supplementing shared properties.
+requirejs.config({
+  // Put additional configuration options here.
+  paths: {
+    "vendor": "../vendor"
+  }
+});
 
-  // Initialize the application with the main application file and the JamJS
-  // generated configuration file.
-  deps: ["../vendor/jam/require.config", "main"]
-
+// Ensure the Jam configuration is loaded before configuring and loading the
+// rest of the application.
+require(["vendor/jam/require.config"], function() {
+  // Now include the main application entry point.
+  require(["main"]);
 });

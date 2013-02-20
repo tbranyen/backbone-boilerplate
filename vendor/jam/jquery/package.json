@@ -38,6 +38,7 @@
 		"grunt-git-authors": "~1.1.0",
 		"grunt-update-submodules": "~0.2.0",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		"grunt-contrib-watch": "~0.1.1",
 		"grunt-contrib-jshint": "~0.1.1",
 		"grunt-contrib-uglify": "~0.1.1",
@@ -47,11 +48,17 @@
 		"grunt-contrib-uglify": "~0.1.0",
 		"grunt-cli": "~0.1.0",
 >>>>>>> updated to latest practices and added in source map support
+=======
+		"grunt-contrib-watch": "~0.1.1",
+		"grunt-contrib-jshint": "~0.1.1",
+		"grunt-contrib-uglify": "~0.1.1",
+>>>>>>> various updates
 		"grunt": "~0.4.0",
 		"testswarm": "0.2.2"
 	},
 	"keywords": [],
   "jam": {
+<<<<<<< HEAD
 <<<<<<< HEAD
     "include": ["dist/jquery.js"],
     "main": "dist/jquery.js"
@@ -59,5 +66,9 @@
     "main": "jquery-1.9.1.min.js",
     "include": ["jquery-1.9.1.min.js"]
 >>>>>>> bunch of great updates!
+=======
+    "include": ["dist/jquery.js"],
+    "main": "dist/jquery.js"
+>>>>>>> various updates
   }
 }
