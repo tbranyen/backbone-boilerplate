@@ -1,6 +1,6 @@
 define(function(require) {
 
-  var app = require("app");
+  var Backbone = require("backbone");
 
   // Defining the application router.
   return Backbone.Router.extend({

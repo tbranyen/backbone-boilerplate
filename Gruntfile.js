@@ -26,7 +26,7 @@ module.exports = function(grunt) {
     styles: {
       // Out the concatenated contents of the following styles into the below
       // development file path.
-      "dist/debug/index.css": {
+      "dist/debug/styles.css": {
         // Point this to where your `index.css` file is location.
         src: "app/styles/index.css",
 
@@ -55,6 +55,9 @@ module.exports = function(grunt) {
 
           // Root application module.
           name: "config",
+
+          // Include the application dependency.
+          deps: ["app"],
 
           // Do not wrap everything in an IIFE.
           wrap: false
@@ -141,7 +144,8 @@ module.exports = function(grunt) {
       debug: {
         files: [
           { src: ["app/"], dest: "dist/debug/" },
-          { src: "vendor/", dest: "dist/debug/" }
+          { src: "vendor/", dest: "dist/debug/" },
+          { src: "index.html", dest: "dist/debug/index.html" }
         ]
       },
 
@@ -149,6 +153,7 @@ module.exports = function(grunt) {
         files: [
           { src: ["app/**"], dest: "dist/release/" },
           { src: "vendor/**", dest: "dist/release/" },
+          { src: "index.html", dest: "dist/release/index.html" },
           { src: "dist/debug/source.js", dest: "dist/release/debug/source.js" }
         ]
       }
@@ -168,12 +173,12 @@ module.exports = function(grunt) {
   // Grunt BBB tasks.
   grunt.loadNpmTasks("grunt-bbb-server");
   grunt.loadNpmTasks("grunt-bbb-requirejs");
-  //grunt.loadNpmTasks("grunt-bbb-styles");
+  grunt.loadNpmTasks("grunt-bbb-styles");
 
   // This will reset the build, be the precursor to the production
   // optimizations, and serve as a good intermediary for debugging.
   grunt.registerTask("debug", [
-    "clean", "jshint", "jst", "requirejs", "concat", //"copy" "styles"
+    "clean", "jshint", "jst", "requirejs", "concat", "copy", "styles"
   ]);
 
   // The release task will first run the debug tasks.  Following that, minify
