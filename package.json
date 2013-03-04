@@ -11,8 +11,9 @@
     "grunt-contrib-copy": "0.4.0rc7",
     "grunt-contrib-clean": "0.4.0rc6",
     "grunt-contrib-concat": "0.1.2rc6",
-    "grunt-contrib-requirejs": "0.4.0rc7",
-    "grunt-bbb-server": "0.1.0-alpha"
+    "grunt-bbb-server": "~0.1.0-alpha.5",
+    "grunt-bbb-styles": "~0.1.0-alpha",
+    "grunt-bbb-requirejs": "~0.1.0-alpha.1"
   },
 
   "jam": {
