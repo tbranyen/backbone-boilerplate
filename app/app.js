@@ -1,8 +1,11 @@
+// External dependencies.
 var _ = require("underscore");
 var $ = require("jquery");
 var Backbone = require("backbone");
-var Router = require("router");
 var LayoutManager = require("backbone.layoutmanager");
+
+// The main application router.
+var Router = require("router");
 
 // Configure LayoutManager with Backbone Boilerplate defaults.
 LayoutManager.configure({
@@ -33,8 +36,10 @@ LayoutManager.configure({
   }
 });
 
-var app = new Backbone.View({
-  el: "body",
+// The application object has been converted to a View which provides events,
+// link hijacking, and 
+module.exports = new Backbone.View({
+  el: "main",
 
   events: {
     "click a[href]:not([data-bypass])": "hijackLinks"
@@ -61,15 +66,12 @@ var app = new Backbone.View({
 });
 
 // The root path to run the application through.
-app.root = "/";
+module.exports.root = "/";
 
 // Define your master router on the application namespace and trigger all
 // navigation from this instance.
-app.router = new Router();
+module.exports.router = new Router();
 
 // Trigger the initial route and enable HTML5 History API support, set
 // the root folder to '/' by default.  Change in app.js.
-Backbone.history.start({ pushState: true, root: app.root });
-
-// Expose this object for other modules if they need it.
-module.exports = app;
+Backbone.history.start({ pushState: true, root: module.exports.root });

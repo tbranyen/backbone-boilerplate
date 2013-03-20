@@ -22,10 +22,14 @@ var jam = {
         }
     ],
 <<<<<<< HEAD
+<<<<<<< HEAD
     "version": "0.2.15",
 =======
     "version": "0.2.13",
 >>>>>>> updated to latest practices and added in source map support
+=======
+    "version": "0.2.15",
+>>>>>>> testing
     "shim": {
         "backbone": {
             "deps": [

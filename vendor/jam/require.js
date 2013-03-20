@@ -1,9 +1,13 @@
 /** vim: et:ts=4:sw=4:sts=4
 <<<<<<< HEAD
+<<<<<<< HEAD
  * @license RequireJS 2.1.4 Copyright (c) 2010-2012, The Dojo Foundation All Rights Reserved.
 =======
  * @license RequireJS 2.1.2 Copyright (c) 2010-2012, The Dojo Foundation All Rights Reserved.
 >>>>>>> updated to latest practices and added in source map support
+=======
+ * @license RequireJS 2.1.4 Copyright (c) 2010-2012, The Dojo Foundation All Rights Reserved.
+>>>>>>> testing
  * Available via the MIT or new BSD license.
  * see: http://github.com/jrburke/requirejs for details
  */
@@ -17,10 +21,14 @@ var requirejs, require, define;
     var req, s, head, baseElement, dataMain, src,
         interactiveScript, currentlyAddingScript, mainScript, subPath,
 <<<<<<< HEAD
+<<<<<<< HEAD
         version = '2.1.4',
 =======
         version = '2.1.2',
 >>>>>>> updated to latest practices and added in source map support
+=======
+        version = '2.1.4',
+>>>>>>> testing
         commentRegExp = /(\/\*([\s\S]*?)\*\/|([^:]|^)\/\/(.*)$)/mg,
         cjsRequireRegExp = /[^.]\s*require\s*\(\s*["']([^'"\s]+)["']\s*\)/g,
         jsSuffixRegExp = /\.js$/,
@@ -926,11 +934,15 @@ var requirejs, require, define;
                         parentName = this.map.parentMap ? this.map.parentMap.name : null,
                         localRequire = context.makeRequire(map.parentMap, {
 <<<<<<< HEAD
+<<<<<<< HEAD
                             enableBuildCallback: true
 =======
                             enableBuildCallback: true,
                             skipMap: true
 >>>>>>> updated to latest practices and added in source map support
+=======
+                            enableBuildCallback: true
+>>>>>>> testing
                         });
 
                     //If current map is not normalized, wait for that
@@ -1029,15 +1041,21 @@ var requirejs, require, define;
                             req.exec(text);
                         } catch (e) {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> testing
                             return onError(makeError('fromtexteval',
                                              'fromText eval for ' + id +
                                             ' failed: ' + e,
                                              e,
                                              [id]));
+<<<<<<< HEAD
 =======
                             throw new Error('fromText eval for ' + moduleName +
                                             ' failed: ' + e);
 >>>>>>> updated to latest practices and added in source map support
+=======
+>>>>>>> testing
                         }
 
                         if (hasInteractive) {
@@ -1429,6 +1447,9 @@ var requirejs, require, define;
                      */
                     toUrl: function (moduleNamePlusExt) {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> testing
                         var ext, url,
                             index = moduleNamePlusExt.lastIndexOf('.'),
                             segment = moduleNamePlusExt.split('/')[0],
@@ -1437,16 +1458,20 @@ var requirejs, require, define;
                         //Have a file extension alias, and it is not the
                         //dots from a relative path.
                         if (index !== -1 && (!isRelative || index > 1)) {
+<<<<<<< HEAD
 =======
                         var index = moduleNamePlusExt.lastIndexOf('.'),
                             ext = null;
 
                         if (index !== -1) {
 >>>>>>> updated to latest practices and added in source map support
+=======
+>>>>>>> testing
                             ext = moduleNamePlusExt.substring(index, moduleNamePlusExt.length);
                             moduleNamePlusExt = moduleNamePlusExt.substring(0, index);
                         }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
                         url = context.nameToUrl(normalize(moduleNamePlusExt,
                                                 relMap && relMap.id, true), ext || '.fake');
@@ -1455,6 +1480,11 @@ var requirejs, require, define;
                         return context.nameToUrl(normalize(moduleNamePlusExt,
                                                 relMap && relMap.id, true), ext);
 >>>>>>> updated to latest practices and added in source map support
+=======
+                        url = context.nameToUrl(normalize(moduleNamePlusExt,
+                                                relMap && relMap.id, true), ext || '.fake');
+                        return ext ? url : url.substring(0, url.length - 5);
+>>>>>>> testing
                     },
 
                     defined: function (id) {
@@ -1530,10 +1560,14 @@ var requirejs, require, define;
              * the optimizer. Not shown here to keep code compact.
              */
 <<<<<<< HEAD
+<<<<<<< HEAD
             enable: function (depMap) {
 =======
             enable: function (depMap, parent) {
 >>>>>>> updated to latest practices and added in source map support
+=======
+            enable: function (depMap) {
+>>>>>>> testing
                 var mod = getOwn(registry, depMap.id);
                 if (mod) {
                     getModule(depMap).enable();
@@ -2097,10 +2131,14 @@ var jam = {
         }
     ],
 <<<<<<< HEAD
+<<<<<<< HEAD
     "version": "0.2.15",
 =======
     "version": "0.2.13",
 >>>>>>> updated to latest practices and added in source map support
+=======
+    "version": "0.2.15",
+>>>>>>> testing
     "shim": {
         "backbone": {
             "deps": [

@@ -42,7 +42,7 @@ mkdir myproject && cd myproject
 
 # Using Git, fetch only the last few commits.  You don't need the full history
 # for your project.
-git clone --q --depth 0 git@github.com:tbranyen/backbone-boilerplate.git .
+git clone --depth 0 git@github.com:tbranyen/backbone-boilerplate.git .
 ```
 
 ## Build process ##
