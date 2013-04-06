@@ -6,12 +6,19 @@
   "author"        : "Jeremy Ashkenas <jeremy@documentcloud.org>",
   "repository"    : {"type": "git", "url": "git://github.com/documentcloud/underscore.git"},
   "main"          : "underscore.js",
-  "version"       : "1.4.3",
+  "version"       : "1.4.4",
+  "devDependencies": {
+    "phantomjs": "0.2.2"
+  },
+  "scripts": {
+    "test": "phantomjs test/vendor/runner.js test/index.html?noglobals=true"
+  },
   "jam": {
-    "main": "underscore.js",
-    "include": ["underscore.js"],
-    "shim": {
-      "exports": "_"
-    }
+      "main": "underscore.js",
+      "include": [
+          "underscore.js",
+          "README.md",
+          "LICENSE"
+      ]
   }
 }

@@ -13,17 +13,10 @@
     "coffee-script": "1.6.1"
   },
   "scripts": {
-<<<<<<< HEAD
     "test": "phantomjs test/vendor/runner.js test/index.html?noglobals=true && coffee test/model.coffee"
   },
   "main"          : "backbone.js",
   "version"       : "1.0.0",
-=======
-    "test": "phantomjs test/vendor/runner.js test/index.html?noglobals=true"
-  },
-  "main"          : "backbone.js",
-  "version"       : "0.9.10",
->>>>>>> updated to latest practices and added in source map support
   "jam": {
     "main": "backbone.js",
     "include": ["backbone.js"],

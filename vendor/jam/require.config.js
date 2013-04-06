@@ -21,15 +21,7 @@ var jam = {
             "main": "underscore.js"
         }
     ],
-<<<<<<< HEAD
-<<<<<<< HEAD
     "version": "0.2.15",
-=======
-    "version": "0.2.13",
->>>>>>> updated to latest practices and added in source map support
-=======
-    "version": "0.2.15",
->>>>>>> testing
     "shim": {
         "backbone": {
             "deps": [
@@ -45,9 +37,6 @@ var jam = {
                 "underscore"
             ],
             "exports": "Backbone.Layout"
-        },
-        "underscore": {
-            "exports": "_"
         }
     }
 };
@@ -71,14 +60,6 @@ if (typeof require !== "undefined" && require.config) {
             "main": "dist/jquery.js"
         },
         {
-<<<<<<< HEAD
-            "name": "lodash",
-            "location": "../vendor/jam/lodash",
-            "main": "./lodash.js"
-        },
-        {
-=======
->>>>>>> updated to latest practices and added in source map support
             "name": "underscore",
             "location": "../vendor/jam/underscore",
             "main": "underscore.js"
@@ -99,9 +80,6 @@ if (typeof require !== "undefined" && require.config) {
                 "underscore"
             ],
             "exports": "Backbone.Layout"
-        },
-        "underscore": {
-            "exports": "_"
         }
     }
 });
@@ -125,14 +103,6 @@ else {
             "main": "dist/jquery.js"
         },
         {
-<<<<<<< HEAD
-            "name": "lodash",
-            "location": "../vendor/jam/lodash",
-            "main": "./lodash.js"
-        },
-        {
-=======
->>>>>>> updated to latest practices and added in source map support
             "name": "underscore",
             "location": "../vendor/jam/underscore",
             "main": "underscore.js"
@@ -153,9 +123,6 @@ else {
                 "underscore"
             ],
             "exports": "Backbone.Layout"
-        },
-        "underscore": {
-            "exports": "_"
         }
     }
 };

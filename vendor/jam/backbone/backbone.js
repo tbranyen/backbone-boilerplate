@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 //     Backbone.js 1.0.0
-=======
-//     Backbone.js 0.9.10
->>>>>>> updated to latest practices and added in source map support
 
 //     (c) 2010-2013 Jeremy Ashkenas, DocumentCloud Inc.
 //     Backbone may be freely distributed under the MIT license.
@@ -38,11 +34,7 @@
   }
 
   // Current version of the library. Keep in sync with `package.json`.
-<<<<<<< HEAD
   Backbone.VERSION = '1.0.0';
-=======
-  Backbone.VERSION = '0.9.10';
->>>>>>> updated to latest practices and added in source map support
 
   // Require Underscore, if we're on the server, and it's not already present.
   var _ = root._;
@@ -73,48 +65,6 @@
   // Backbone.Events
   // ---------------
 
-<<<<<<< HEAD
-=======
-  // Regular expression used to split event strings.
-  var eventSplitter = /\s+/;
-
-  // Implement fancy features of the Events API such as multiple event
-  // names `"change blur"` and jQuery-style event maps `{change: action}`
-  // in terms of the existing API.
-  var eventsApi = function(obj, action, name, rest) {
-    if (!name) return true;
-    if (typeof name === 'object') {
-      for (var key in name) {
-        obj[action].apply(obj, [key, name[key]].concat(rest));
-      }
-    } else if (eventSplitter.test(name)) {
-      var names = name.split(eventSplitter);
-      for (var i = 0, l = names.length; i < l; i++) {
-        obj[action].apply(obj, [names[i]].concat(rest));
-      }
-    } else {
-      return true;
-    }
-  };
-
-  // Optimized internal dispatch function for triggering events. Tries to
-  // keep the usual cases speedy (most Backbone events have 3 arguments).
-  var triggerEvents = function(events, args) {
-    var ev, i = -1, l = events.length;
-    switch (args.length) {
-    case 0: while (++i < l) (ev = events[i]).callback.call(ev.ctx);
-    return;
-    case 1: while (++i < l) (ev = events[i]).callback.call(ev.ctx, args[0]);
-    return;
-    case 2: while (++i < l) (ev = events[i]).callback.call(ev.ctx, args[0], args[1]);
-    return;
-    case 3: while (++i < l) (ev = events[i]).callback.call(ev.ctx, args[0], args[1], args[2]);
-    return;
-    default: while (++i < l) (ev = events[i]).callback.apply(ev.ctx, args);
-    }
-  };
-
->>>>>>> updated to latest practices and added in source map support
   // A module that can be mixed in to *any object* in order to provide it with
   // custom events. You may bind with `on` or remove with `off` callback
   // functions to an event; `trigger`-ing an event fires all callbacks in
@@ -168,16 +118,9 @@
         if (events = this._events[name]) {
           this._events[name] = retain = [];
           if (callback || context) {
-<<<<<<< HEAD
             for (j = 0, k = events.length; j < k; j++) {
               ev = events[j];
               if ((callback && callback !== ev.callback && callback !== ev.callback._callback) ||
-=======
-            for (j = 0, k = list.length; j < k; j++) {
-              ev = list[j];
-              if ((callback && callback !== ev.callback &&
-                               callback !== ev.callback._callback) ||
->>>>>>> updated to latest practices and added in source map support
                   (context && context !== ev.context)) {
                 retain.push(ev);
               }
@@ -202,19 +145,6 @@
       var allEvents = this._events.all;
       if (events) triggerEvents(events, args);
       if (allEvents) triggerEvents(allEvents, arguments);
-<<<<<<< HEAD
-=======
-      return this;
-    },
-
-    // An inversion-of-control version of `on`. Tell *this* object to listen to
-    // an event in another object ... keeping track of what it's listening to.
-    listenTo: function(obj, name, callback) {
-      var listeners = this._listeners || (this._listeners = {});
-      var id = obj._listenerId || (obj._listenerId = _.uniqueId('l'));
-      listeners[id] = obj;
-      obj.on(name, typeof name === 'object' ? this : callback, this);
->>>>>>> updated to latest practices and added in source map support
       return this;
     },
 
@@ -222,7 +152,6 @@
     // to every object it's currently listening to.
     stopListening: function(obj, name, callback) {
       var listeners = this._listeners;
-<<<<<<< HEAD
       if (!listeners) return this;
       var deleteListener = !name && !callback;
       if (typeof name === 'object') callback = this;
@@ -230,18 +159,6 @@
       for (var id in listeners) {
         listeners[id].off(name, callback, this);
         if (deleteListener) delete this._listeners[id];
-=======
-      if (!listeners) return;
-      if (obj) {
-        obj.off(name, typeof name === 'object' ? this : callback, this);
-        if (!name && !callback) delete listeners[obj._listenerId];
-      } else {
-        if (typeof name === 'object') callback = this;
-        for (var id in listeners) {
-          listeners[id].off(name, callback, this);
-        }
-        this._listeners = {};
->>>>>>> updated to latest practices and added in source map support
       }
       return this;
     }
@@ -331,13 +248,8 @@
     options || (options = {});
     this.cid = _.uniqueId('c');
     this.attributes = {};
-<<<<<<< HEAD
     _.extend(this, _.pick(options, modelOptions));
     if (options.parse) attrs = this.parse(attrs, options) || {};
-=======
-    if (options && options.collection) this.collection = options.collection;
-    if (options && options.parse) attrs = this.parse(attrs, options) || {};
->>>>>>> updated to latest practices and added in source map support
     if (defaults = _.result(this, 'defaults')) {
       attrs = _.defaults({}, attrs, defaults);
     }
@@ -393,16 +305,9 @@
       return this.get(attr) != null;
     },
 
-<<<<<<< HEAD
     // Set a hash of model attributes on the object, firing `"change"`. This is
     // the core primitive operation of a model, updating the data and notifying
     // anyone who needs to know about the change in state. The heart of the beast.
-=======
-    // ----------------------------------------------------------------------
-
-    // Set a hash of model attributes on the object, firing `"change"` unless
-    // you choose to silence it.
->>>>>>> updated to latest practices and added in source map support
     set: function(key, val, options) {
       var attr, attrs, unset, changes, silent, changing, prev, current;
       if (key == null) return this;
@@ -456,11 +361,8 @@
         }
       }
 
-<<<<<<< HEAD
       // You might be wondering why there's a `while` loop here. Changes can
       // be recursively nested within `"change"` events.
-=======
->>>>>>> updated to latest practices and added in source map support
       if (changing) return this;
       if (!silent) {
         while (this._pending) {
@@ -523,23 +425,15 @@
       return _.clone(this._previousAttributes);
     },
 
-<<<<<<< HEAD
-=======
-    // ---------------------------------------------------------------------
-
->>>>>>> updated to latest practices and added in source map support
     // Fetch the model from the server. If the server's representation of the
     // model differs from its current attributes, they will be overridden,
     // triggering a `"change"` event.
     fetch: function(options) {
       options = options ? _.clone(options) : {};
       if (options.parse === void 0) options.parse = true;
+      var model = this;
       var success = options.success;
-<<<<<<< HEAD
       options.success = function(resp) {
-=======
-      options.success = function(model, resp, options) {
->>>>>>> updated to latest practices and added in source map support
         if (!model.set(model.parse(resp, options), options)) return false;
         if (success) success(model, resp, options);
         model.trigger('sync', model, resp, options);
@@ -552,11 +446,7 @@
     // If the server returns an attributes hash that differs, the model's
     // state will be `set` again.
     save: function(key, val, options) {
-<<<<<<< HEAD
       var attrs, method, xhr, attributes = this.attributes;
-=======
-      var attrs, success, method, xhr, attributes = this.attributes;
->>>>>>> updated to latest practices and added in source map support
 
       // Handle both `"key", value` and `{key: value}` -style arguments.
       if (key == null || typeof key === 'object') {
@@ -582,14 +472,9 @@
       // After a successful server-side save, the client is (optionally)
       // updated with the server-side state.
       if (options.parse === void 0) options.parse = true;
-<<<<<<< HEAD
       var model = this;
       var success = options.success;
       options.success = function(resp) {
-=======
-      success = options.success;
-      options.success = function(model, resp, options) {
->>>>>>> updated to latest practices and added in source map support
         // Ensure attributes are restored during synchronous saves.
         model.attributes = attributes;
         var serverAttrs = model.parse(resp, options);
@@ -602,10 +487,6 @@
       };
       wrapError(this, options);
 
-<<<<<<< HEAD
-=======
-      // Finish configuring and sending the Ajax request.
->>>>>>> updated to latest practices and added in source map support
       method = this.isNew() ? 'create' : (options.patch ? 'patch' : 'update');
       if (method === 'patch') options.attrs = attrs;
       xhr = this.sync(method, this, options);
@@ -628,14 +509,14 @@
         model.trigger('destroy', model, model.collection, options);
       };
 
-      options.success = function(model, resp, options) {
+      options.success = function(resp) {
         if (options.wait || model.isNew()) destroy();
         if (success) success(model, resp, options);
         if (!model.isNew()) model.trigger('sync', model, resp, options);
       };
 
       if (this.isNew()) {
-        options.success(this, null, options);
+        options.success();
         return false;
       }
       wrapError(this, options);
@@ -672,30 +553,17 @@
 
     // Check if the model is currently in a valid state.
     isValid: function(options) {
-<<<<<<< HEAD
       return this._validate({}, _.extend(options || {}, { validate: true }));
     },
 
     // Run validation against the next complete set of model attributes,
     // returning `true` if all is well. Otherwise, fire an `"invalid"` event.
-=======
-      return !this.validate || !this.validate(this.attributes, options);
-    },
-
-    // Run validation against the next complete set of model attributes,
-    // returning `true` if all is well. Otherwise, fire a general
-    // `"error"` event and call the error callback, if specified.
->>>>>>> updated to latest practices and added in source map support
     _validate: function(attrs, options) {
       if (!options.validate || !this.validate) return true;
       attrs = _.extend({}, this.attributes, attrs);
       var error = this.validationError = this.validate(attrs, options) || null;
       if (!error) return true;
-<<<<<<< HEAD
       this.trigger('invalid', this, error, _.extend(options || {}, {validationError: error}));
-=======
-      this.trigger('invalid', this, error, options || {});
->>>>>>> updated to latest practices and added in source map support
       return false;
     }
 
@@ -731,7 +599,6 @@
     if (options.url) this.url = options.url;
     if (options.model) this.model = options.model;
     if (options.comparator !== void 0) this.comparator = options.comparator;
-    this.models = [];
     this._reset();
     this.initialize.apply(this, arguments);
     if (models) this.reset(models, _.extend({silent: true}, options));
@@ -765,7 +632,6 @@
 
     // Add a model, or list of models to the set.
     add: function(models, options) {
-<<<<<<< HEAD
       return this.set(models, _.defaults(options || {}, addOptions));
     },
 
@@ -804,32 +670,15 @@
       var sortable = this.comparator && (at == null) && options.sort !== false;
       var sortAttr = _.isString(this.comparator) ? this.comparator : null;
       var toAdd = [], toRemove = [], modelMap = {};
-=======
-      models = _.isArray(models) ? models.slice() : [models];
-      options || (options = {});
-      var i, l, model, attrs, existing, doSort, add, at, sort, sortAttr;
-      add = [];
-      at = options.at;
-      sort = this.comparator && (at == null) && options.sort != false;
-      sortAttr = _.isString(this.comparator) ? this.comparator : null;
->>>>>>> updated to latest practices and added in source map support
 
       // Turn bare objects into model references, and prevent invalid models
       // from being added.
       for (i = 0, l = models.length; i < l; i++) {
-<<<<<<< HEAD
         if (!(model = this._prepareModel(models[i], options))) continue;
-=======
-        if (!(model = this._prepareModel(attrs = models[i], options))) {
-          this.trigger('invalid', this, attrs, options);
-          continue;
-        }
->>>>>>> updated to latest practices and added in source map support
 
         // If a duplicate is found, prevent it from being added and
         // optionally merge it into the existing model.
         if (existing = this.get(model)) {
-<<<<<<< HEAD
           if (options.remove) modelMap[existing.cid] = true;
           if (options.merge) {
             existing.set(model.attributes, options);
@@ -845,17 +694,9 @@
           model.on('all', this._onModelEvent, this);
           this._byId[model.cid] = model;
           if (model.id != null) this._byId[model.id] = model;
-=======
-          if (options.merge) {
-            existing.set(attrs === model ? model.attributes : attrs, options);
-            if (sort && !doSort && existing.hasChanged(sortAttr)) doSort = true;
-          }
-          continue;
->>>>>>> updated to latest practices and added in source map support
         }
       }
 
-<<<<<<< HEAD
       // Remove nonexistent models if appropriate.
       if (options.remove) {
         for (i = 0, l = this.length; i < l; ++i) {
@@ -872,40 +713,15 @@
           splice.apply(this.models, [at, 0].concat(toAdd));
         } else {
           push.apply(this.models, toAdd);
-=======
-        // This is a new model, push it to the `add` list.
-        add.push(model);
-
-        // Listen to added models' events, and index models for lookup by
-        // `id` and by `cid`.
-        model.on('all', this._onModelEvent, this);
-        this._byId[model.cid] = model;
-        if (model.id != null) this._byId[model.id] = model;
-      }
-
-      // See if sorting is needed, update `length` and splice in new models.
-      if (add.length) {
-        if (sort) doSort = true;
-        this.length += add.length;
-        if (at != null) {
-          splice.apply(this.models, [at, 0].concat(add));
-        } else {
-          push.apply(this.models, add);
->>>>>>> updated to latest practices and added in source map support
         }
       }
 
       // Silently sort the collection if appropriate.
-<<<<<<< HEAD
       if (sort) this.sort({silent: true});
-=======
-      if (doSort) this.sort({silent: true});
->>>>>>> updated to latest practices and added in source map support
 
       if (options.silent) return this;
 
       // Trigger `add` events.
-<<<<<<< HEAD
       for (i = 0, l = toAdd.length; i < l; i++) {
         (model = toAdd[i]).trigger('add', model, this, options);
       }
@@ -923,36 +739,6 @@
       options || (options = {});
       for (var i = 0, l = this.models.length; i < l; i++) {
         this._removeReference(this.models[i]);
-=======
-      for (i = 0, l = add.length; i < l; i++) {
-        (model = add[i]).trigger('add', model, this, options);
-      }
-
-      // Trigger `sort` if the collection was sorted.
-      if (doSort) this.trigger('sort', this, options);
-
-      return this;
-    },
-
-    // Remove a model, or a list of models from the set.
-    remove: function(models, options) {
-      models = _.isArray(models) ? models.slice() : [models];
-      options || (options = {});
-      var i, l, index, model;
-      for (i = 0, l = models.length; i < l; i++) {
-        model = this.get(models[i]);
-        if (!model) continue;
-        delete this._byId[model.id];
-        delete this._byId[model.cid];
-        index = this.indexOf(model);
-        this.models.splice(index, 1);
-        this.length--;
-        if (!options.silent) {
-          options.index = index;
-          model.trigger('remove', model, this, options);
-        }
-        this._removeReference(model);
->>>>>>> updated to latest practices and added in source map support
       }
       options.previousModels = this.models;
       this._reset();
@@ -997,12 +783,7 @@
     // Get a model from the set by id.
     get: function(obj) {
       if (obj == null) return void 0;
-<<<<<<< HEAD
       return this._byId[obj.id != null ? obj.id : obj.cid || obj];
-=======
-      this._idAttr || (this._idAttr = this.model.prototype.idAttribute);
-      return this._byId[obj.id || obj.cid || obj[this._idAttr] || obj];
->>>>>>> updated to latest practices and added in source map support
     },
 
     // Get the model at the given index.
@@ -1032,13 +813,7 @@
     // normal circumstances, as the set will maintain sort order as each item
     // is added.
     sort: function(options) {
-<<<<<<< HEAD
       if (!this.comparator) throw new Error('Cannot sort a set without a comparator');
-=======
-      if (!this.comparator) {
-        throw new Error('Cannot sort a set without a comparator');
-      }
->>>>>>> updated to latest practices and added in source map support
       options || (options = {});
 
       // Run sort based on type of `comparator`.
@@ -1067,79 +842,16 @@
       return _.invoke(this.models, 'get', attr);
     },
 
-<<<<<<< HEAD
     // Fetch the default set of models for this collection, resetting the
     // collection when they arrive. If `reset: true` is passed, the response
     // data will be passed through the `reset` method instead of `set`.
-=======
-    // Smartly update a collection with a change set of models, adding,
-    // removing, and merging as necessary.
-    update: function(models, options) {
-      options = _.extend({add: true, merge: true, remove: true}, options);
-      if (options.parse) models = this.parse(models, options);
-      var model, i, l, existing;
-      var add = [], remove = [], modelMap = {};
-
-      // Allow a single model (or no argument) to be passed.
-      if (!_.isArray(models)) models = models ? [models] : [];
-
-      // Proxy to `add` for this case, no need to iterate...
-      if (options.add && !options.remove) return this.add(models, options);
-
-      // Determine which models to add and merge, and which to remove.
-      for (i = 0, l = models.length; i < l; i++) {
-        model = models[i];
-        existing = this.get(model);
-        if (options.remove && existing) modelMap[existing.cid] = true;
-        if ((options.add && !existing) || (options.merge && existing)) {
-          add.push(model);
-        }
-      }
-      if (options.remove) {
-        for (i = 0, l = this.models.length; i < l; i++) {
-          model = this.models[i];
-          if (!modelMap[model.cid]) remove.push(model);
-        }
-      }
-
-      // Remove models (if applicable) before we add and merge the rest.
-      if (remove.length) this.remove(remove, options);
-      if (add.length) this.add(add, options);
-      return this;
-    },
-
-    // When you have more items than you want to add or remove individually,
-    // you can reset the entire set with a new list of models, without firing
-    // any `add` or `remove` events. Fires `reset` when finished.
-    reset: function(models, options) {
-      options || (options = {});
-      if (options.parse) models = this.parse(models, options);
-      for (var i = 0, l = this.models.length; i < l; i++) {
-        this._removeReference(this.models[i]);
-      }
-      options.previousModels = this.models.slice();
-      this._reset();
-      if (models) this.add(models, _.extend({silent: true}, options));
-      if (!options.silent) this.trigger('reset', this, options);
-      return this;
-    },
-
-    // Fetch the default set of models for this collection, resetting the
-    // collection when they arrive. If `update: true` is passed, the response
-    // data will be passed through the `update` method instead of `reset`.
->>>>>>> updated to latest practices and added in source map support
     fetch: function(options) {
       options = options ? _.clone(options) : {};
       if (options.parse === void 0) options.parse = true;
       var success = options.success;
-<<<<<<< HEAD
       var collection = this;
       options.success = function(resp) {
         var method = options.reset ? 'reset' : 'set';
-=======
-      options.success = function(collection, resp, options) {
-        var method = options.update ? 'update' : 'reset';
->>>>>>> updated to latest practices and added in source map support
         collection[method](resp, options);
         if (success) success(collection, resp, options);
         collection.trigger('sync', collection, resp, options);
@@ -1176,15 +888,11 @@
       return new this.constructor(this.models);
     },
 
-<<<<<<< HEAD
     // Private method to reset all internal state. Called when the collection
     // is first initialized or reset.
-=======
-    // Reset all internal state. Called when the collection is reset.
->>>>>>> updated to latest practices and added in source map support
     _reset: function() {
       this.length = 0;
-      this.models.length = 0;
+      this.models = [];
       this._byId  = {};
     },
 
@@ -1223,14 +931,6 @@
         if (model.id != null) this._byId[model.id] = model;
       }
       this.trigger.apply(this, arguments);
-    },
-
-    sortedIndex: function (model, value, context) {
-      value || (value = this.comparator);
-      var iterator = _.isFunction(value) ? value : function(model) {
-        return model.get(value);
-      };
-      return _.sortedIndex(this.models, model, iterator, context);
     }
 
   });
@@ -1541,7 +1241,6 @@
         name = '';
       }
       if (!callback) callback = this[name];
-<<<<<<< HEAD
       var router = this;
       Backbone.history.route(route, function(fragment) {
         var args = router._extractParameters(route, fragment);
@@ -1550,15 +1249,6 @@
         router.trigger('route', name, args);
         Backbone.history.trigger('route', router, name, args);
       });
-=======
-      Backbone.history.route(route, _.bind(function(fragment) {
-        var args = this._extractParameters(route, fragment);
-        callback && callback.apply(this, args);
-        this.trigger.apply(this, ['route:' + name].concat(args));
-        this.trigger('route', name, args);
-        Backbone.history.trigger('route', this, name, args);
-      }, this));
->>>>>>> updated to latest practices and added in source map support
       return this;
     },
 
@@ -1822,233 +1512,6 @@
   // Create the default Backbone.history.
   Backbone.history = new History;
 
-<<<<<<< HEAD
-=======
-  // Backbone.View
-  // -------------
-
-  // Creating a Backbone.View creates its initial element outside of the DOM,
-  // if an existing element is not provided...
-  var View = Backbone.View = function(options) {
-    this.cid = _.uniqueId('view');
-    this._configure(options || {});
-    this._ensureElement();
-    this.initialize.apply(this, arguments);
-    this.delegateEvents();
-  };
-
-  // Cached regex to split keys for `delegate`.
-  var delegateEventSplitter = /^(\S+)\s*(.*)$/;
-
-  // List of view options to be merged as properties.
-  var viewOptions = ['model', 'collection', 'el', 'id', 'attributes', 'className', 'tagName', 'events'];
-
-  // Set up all inheritable **Backbone.View** properties and methods.
-  _.extend(View.prototype, Events, {
-
-    // The default `tagName` of a View's element is `"div"`.
-    tagName: 'div',
-
-    // jQuery delegate for element lookup, scoped to DOM elements within the
-    // current view. This should be prefered to global lookups where possible.
-    $: function(selector) {
-      return this.$el.find(selector);
-    },
-
-    // Initialize is an empty function by default. Override it with your own
-    // initialization logic.
-    initialize: function(){},
-
-    // **render** is the core function that your view should override, in order
-    // to populate its element (`this.el`), with the appropriate HTML. The
-    // convention is for **render** to always return `this`.
-    render: function() {
-      return this;
-    },
-
-    // Remove this view by taking the element out of the DOM, and removing any
-    // applicable Backbone.Events listeners.
-    remove: function() {
-      this.$el.remove();
-      this.stopListening();
-      return this;
-    },
-
-    // Change the view's element (`this.el` property), including event
-    // re-delegation.
-    setElement: function(element, delegate) {
-      if (this.$el) this.undelegateEvents();
-      this.$el = element instanceof Backbone.$ ? element : Backbone.$(element);
-      this.el = this.$el[0];
-      if (delegate !== false) this.delegateEvents();
-      return this;
-    },
-
-    // Set callbacks, where `this.events` is a hash of
-    //
-    // *{"event selector": "callback"}*
-    //
-    //     {
-    //       'mousedown .title':  'edit',
-    //       'click .button':     'save'
-    //       'click .open':       function(e) { ... }
-    //     }
-    //
-    // pairs. Callbacks will be bound to the view, with `this` set properly.
-    // Uses event delegation for efficiency.
-    // Omitting the selector binds the event to `this.el`.
-    // This only works for delegate-able events: not `focus`, `blur`, and
-    // not `change`, `submit`, and `reset` in Internet Explorer.
-    delegateEvents: function(events) {
-      if (!(events || (events = _.result(this, 'events')))) return;
-      this.undelegateEvents();
-      for (var key in events) {
-        var method = events[key];
-        if (!_.isFunction(method)) method = this[events[key]];
-        if (!method) throw new Error('Method "' + events[key] + '" does not exist');
-        var match = key.match(delegateEventSplitter);
-        var eventName = match[1], selector = match[2];
-        method = _.bind(method, this);
-        eventName += '.delegateEvents' + this.cid;
-        if (selector === '') {
-          this.$el.on(eventName, method);
-        } else {
-          this.$el.on(eventName, selector, method);
-        }
-      }
-    },
-
-    // Clears all callbacks previously bound to the view with `delegateEvents`.
-    // You usually don't need to use this, but may wish to if you have multiple
-    // Backbone views attached to the same DOM element.
-    undelegateEvents: function() {
-      this.$el.off('.delegateEvents' + this.cid);
-    },
-
-    // Performs the initial configuration of a View with a set of options.
-    // Keys with special meaning *(model, collection, id, className)*, are
-    // attached directly to the view.
-    _configure: function(options) {
-      if (this.options) options = _.extend({}, _.result(this, 'options'), options);
-      _.extend(this, _.pick(options, viewOptions));
-      this.options = options;
-    },
-
-    // Ensure that the View has a DOM element to render into.
-    // If `this.el` is a string, pass it through `$()`, take the first
-    // matching element, and re-assign it to `el`. Otherwise, create
-    // an element from the `id`, `className` and `tagName` properties.
-    _ensureElement: function() {
-      if (!this.el) {
-        var attrs = _.extend({}, _.result(this, 'attributes'));
-        if (this.id) attrs.id = _.result(this, 'id');
-        if (this.className) attrs['class'] = _.result(this, 'className');
-        var $el = Backbone.$('<' + _.result(this, 'tagName') + '>').attr(attrs);
-        this.setElement($el, false);
-      } else {
-        this.setElement(_.result(this, 'el'), false);
-      }
-    }
-
-  });
-
-  // Backbone.sync
-  // -------------
-
-  // Map from CRUD to HTTP for our default `Backbone.sync` implementation.
-  var methodMap = {
-    'create': 'POST',
-    'update': 'PUT',
-    'patch':  'PATCH',
-    'delete': 'DELETE',
-    'read':   'GET'
-  };
-
-  // Override this function to change the manner in which Backbone persists
-  // models to the server. You will be passed the type of request, and the
-  // model in question. By default, makes a RESTful Ajax request
-  // to the model's `url()`. Some possible customizations could be:
-  //
-  // * Use `setTimeout` to batch rapid-fire updates into a single request.
-  // * Send up the models as XML instead of JSON.
-  // * Persist models via WebSockets instead of Ajax.
-  //
-  // Turn on `Backbone.emulateHTTP` in order to send `PUT` and `DELETE` requests
-  // as `POST`, with a `_method` parameter containing the true HTTP method,
-  // as well as all requests with the body as `application/x-www-form-urlencoded`
-  // instead of `application/json` with the model in a param named `model`.
-  // Useful when interfacing with server-side languages like **PHP** that make
-  // it difficult to read the body of `PUT` requests.
-  Backbone.sync = function(method, model, options) {
-    var type = methodMap[method];
-
-    // Default options, unless specified.
-    _.defaults(options || (options = {}), {
-      emulateHTTP: Backbone.emulateHTTP,
-      emulateJSON: Backbone.emulateJSON
-    });
-
-    // Default JSON-request options.
-    var params = {type: type, dataType: 'json'};
-
-    // Ensure that we have a URL.
-    if (!options.url) {
-      params.url = _.result(model, 'url') || urlError();
-    }
-
-    // Ensure that we have the appropriate request data.
-    if (options.data == null && model && (method === 'create' || method === 'update' || method === 'patch')) {
-      params.contentType = 'application/json';
-      params.data = JSON.stringify(options.attrs || model.toJSON(options));
-    }
-
-    // For older servers, emulate JSON by encoding the request into an HTML-form.
-    if (options.emulateJSON) {
-      params.contentType = 'application/x-www-form-urlencoded';
-      params.data = params.data ? {model: params.data} : {};
-    }
-
-    // For older servers, emulate HTTP by mimicking the HTTP method with `_method`
-    // And an `X-HTTP-Method-Override` header.
-    if (options.emulateHTTP && (type === 'PUT' || type === 'DELETE' || type === 'PATCH')) {
-      params.type = 'POST';
-      if (options.emulateJSON) params.data._method = type;
-      var beforeSend = options.beforeSend;
-      options.beforeSend = function(xhr) {
-        xhr.setRequestHeader('X-HTTP-Method-Override', type);
-        if (beforeSend) return beforeSend.apply(this, arguments);
-      };
-    }
-
-    // Don't process data on a non-GET request.
-    if (params.type !== 'GET' && !options.emulateJSON) {
-      params.processData = false;
-    }
-
-    var success = options.success;
-    options.success = function(resp) {
-      if (success) success(model, resp, options);
-      model.trigger('sync', model, resp, options);
-    };
-
-    var error = options.error;
-    options.error = function(xhr) {
-      if (error) error(model, xhr, options);
-      model.trigger('error', model, xhr, options);
-    };
-
-    // Make the request, allowing the user to override any Ajax options.
-    var xhr = options.xhr = Backbone.ajax(_.extend(params, options));
-    model.trigger('request', model, xhr, options);
-    return xhr;
-  };
-
-  // Set the default implementation of `Backbone.ajax` to proxy through to `$`.
-  Backbone.ajax = function() {
-    return Backbone.$.ajax.apply(Backbone.$, arguments);
-  };
-
->>>>>>> updated to latest practices and added in source map support
   // Helpers
   // -------
 
