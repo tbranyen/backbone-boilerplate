@@ -115,14 +115,13 @@ module.exports = function(grunt) {
 
     server: {
       map: {
-        "source.js": "vendor/bower/requirejs/require.js",
-        "styles.css": "app/styles/index.css"
+        "source.js": "vendor/bower/requirejs/require.js"
       },
 
       debug: {
         map: {
           "source.js": "dist/debug/source.js",
-          "styles.css": "dist/debug/styles.css"
+          "index.css": "dist/debug/styles.css"
         }
       },
 
@@ -130,7 +129,7 @@ module.exports = function(grunt) {
         map: {
           "debug/source.js": "dist/release/debug/source.js",
           "source.js": "dist/release/source.js",
-          "styles.css": "dist/release/styles.css",
+          "app/styles/index.css": "dist/release/styles.css",
 
           // For debugging.
           "source.js.map": "dist/release/source.js.map"
