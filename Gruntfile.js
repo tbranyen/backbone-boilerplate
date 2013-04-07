@@ -58,7 +58,10 @@ module.exports = function(grunt) {
           // Include the main application.
           insertRequire: ["main"],
 
-          // Do not wrap everything in an IIFE.
+          // This will ensure the application runs after being built.
+          include: ["main", "app"],
+
+          // Wrap everything in an IIFE.
           wrap: true
         }
       }
