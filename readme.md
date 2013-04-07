@@ -60,7 +60,7 @@ npm install
 npm install jam bower -g
 
 # Updating the JamJS packages.
-jam update
+jam upgrade
 
 # Updating the Bower packages.
 bower update
