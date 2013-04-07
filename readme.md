@@ -45,15 +45,33 @@ mkdir myproject && cd myproject
 git clone --depth 0 git@github.com:tbranyen/backbone-boilerplate.git .
 ```
 
+## Updating and configuring ##
+
+Thid party packages may update independently from this main repo, so it's a
+good idea to update after fetching.  There are two different package managers
+that you need to install and call update on.
+
+``` bash
+# Install latest Grunt & useful Grunt plugins.
+npm install
+
+# Install Jam and Bower.  Depending on your user account you may need to gain
+# elevated privileges using something like `sudo`.
+npm install jam bower -g
+
+# Updating the JamJS packages.
+jam update
+
+# Updating the Bower packages.
+bower update
+```
+
 ## Build process ##
 
 The build process consists of numerous Grunt plugin tasks that work together
 to optimize your application.
 
 ``` bash
-# Install latest Grunt & useful Grunt plugins. 
-npm install
-
 # Make sure you install grunt-cli globally.  Depending on your user account you
 # may need to gain elevated privileges using something like `sudo`.
 npm install grunt-cli -g
