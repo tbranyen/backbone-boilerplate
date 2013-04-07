@@ -4,9 +4,6 @@ var $ = require("jquery");
 var Backbone = require("backbone");
 var LayoutManager = require("backbone.layoutmanager");
 
-// The main application router.
-var Router = require("router");
-
 // Configure LayoutManager with Backbone Boilerplate defaults.
 LayoutManager.configure({
   // Allow LayoutManager to augment Backbone.View.prototype.
@@ -67,11 +64,3 @@ module.exports = new Backbone.View({
 
 // The root path to run the application through.
 module.exports.root = "/";
-
-// Define your master router on the application namespace and trigger all
-// navigation from this instance.
-module.exports.router = new Router();
-
-// Trigger the initial route and enable HTML5 History API support, set
-// the root folder to '/' by default.  Change in app.js.
-Backbone.history.start({ pushState: true, root: module.exports.root });

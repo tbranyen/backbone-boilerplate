@@ -1,0 +1,10 @@
+{
+  "name": "backbone-boilerplate",
+  "version": "0.1.0",
+
+  "dependencies": {
+    "html5-boilerplate": "~4.1.0",
+    "almond": "0.2.5",
+    "requirejs": "2.1.5"
+  }
+}

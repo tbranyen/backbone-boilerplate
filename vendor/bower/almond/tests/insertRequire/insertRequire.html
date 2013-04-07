@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>almond: insertRequire Test</title>
+    <script type="text/javascript" src="../doh/runner.js"></script>
+    <script type="text/javascript" src="../doh/_browserRunner.js"></script>
+    <script type="text/javascript" src="../../almond.js"></script>
+    <script type="text/javascript">
+        define('a', ['b'], function (b) {
+            doh.register(
+                'insertRequire',
+                [
+                    function insertRequire(t){
+                        t.is('b', b.name);
+                    }
+                ]
+            );
+            doh.run();
+        });
+
+        define('b', {
+            name: 'b'
+        });
+
+        require(['a']);
+    </script>
+</head>
+<body>
+    <h1>almond: insertRequire Test</h1>
+
+    <p>Make sure almond can handle juse a plain require(['a']) used by
+    r.js's insertRequire build option. More info:
+    <a href="https://github.com/jrburke/almond/issues/27">27</a>.</p>
+
+    <p>Check console for messages</p>
+</body>
+</html>

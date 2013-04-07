@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>almond: Empty Factory Test</title>
+    <script type="text/javascript" src="../doh/runner.js"></script>
+    <script type="text/javascript" src="../doh/_browserRunner.js"></script>
+    <script type="text/javascript" src="../../almond.js"></script>
+    <script type="text/javascript" src="emptyFactory.js"></script>
+    <script type="text/javascript">
+        doh.register(
+            'emptyFactory',
+            [
+                function emptyFactory(t){
+                    t.is('bread', bread.name);
+                    t.is('yeast', bread.ingredient.name);
+                    t.is('bin', bread.ingredient.bin.name);
+                    t.is(undefined, bread.ingredient.water);
+                }
+            ]
+        );
+        doh.run();
+    </script>
+</head>
+<body>
+    <h1>almond: Empty Factory Test</h1>
+    <p>Module that has an empty factory function.</p>
+    <p>Check console for messages</p>
+</body>
+</html>

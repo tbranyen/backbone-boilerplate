@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>almond: circular Test</title>
+    <script type="text/javascript" src="../doh/runner.js"></script>
+    <script type="text/javascript" src="../doh/_browserRunner.js"></script>
+    <script type="text/javascript" src="../../almond.js"></script>
+    <script type="text/javascript">
+        define('a', ['b', 'require'], function (b, require) {
+            return {
+                name: 'a',
+                getB: function () {
+                    return require('b');
+                }
+            }
+        });
+
+        define('b', ['a', 'require'], function (a, require) {
+            return {
+                name: 'b',
+                getA: function () {
+                    return require('a');
+                }
+            }
+        });
+
+        define('c', ['require', 'exports'], function (require, exports) {
+            exports.name = 'c',
+            exports.d = require('d');
+        });
+
+        define('d', ['require', 'exports'], function (require, exports) {
+            exports.name = 'd',
+            exports.c = require('c');
+        });
+
+        require(['a', 'c', 'd'], function (a, c, d) {
+            doh.register(
+                'circular',
+                [
+                    function circular(t){
+                        b = a.getB();
+                        t.is('a', a.name);
+                        t.is('b', b.name);
+                        t.is('a', b.getA().name);
+                        t.is('c', c.name);
+                        t.is('d', c.d.name);
+                        t.is('d', d.name);
+                        t.is('c', d.c.name);
+                    }
+                ]
+            );
+            doh.run();
+        });
+    </script>
+</head>
+<body>
+    <h1>almond: circular Test</h1>
+
+    <p>Test circular dependencies with almond. More info:
+    <a href="https://github.com/jrburke/almond/issues/17">17</a>.</p>
+
+    <p>Check console for messages</p>
+</body>
+</html>

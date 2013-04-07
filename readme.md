@@ -7,8 +7,8 @@ This boilerplate is the product of much research and frustration.  Existing
 boilerplates freely modify Backbone core, lack a build process, and are very
 prescriptive; Backbone Boilerplate changes that.
 
-The Backbone Boilerplate is a way of organizing a web application with
-opinionated defaults: such as Backbone, Underscore, jQuery, RequireJS, JamJS,
+The Backbone Boilerplate is a way of organizing a web application with some
+opinionated defaults: such as Backbone, Lo-Dash, jQuery, RequireJS, JamJS,
 Grunt, and the HTML5 Boilerplate styles.
 
 Organize your application with a logical file structure, develop your
@@ -40,7 +40,7 @@ The easiest way to get started is to install Git and clone the repository:
 # Create a new project directory and enter it.
 mkdir myproject && cd myproject
 
-# Using Git, fetch only the last few commits.  You don't need the full history
+# Using Git, fetch only the latest commits.  You won't need the full history
 # for your project.
 git clone --depth 0 git@github.com:tbranyen/backbone-boilerplate.git .
 ```
@@ -57,8 +57,11 @@ npm install
 # Make sure you install grunt-cli globally.  Depending on your user account you
 # may need to gain elevated privileges using something like `sudo`.
 npm install grunt-cli -g
+
+# To test the build process works, try running the following command.
+grunt release
 ```
 
-## License
+## License ##
 Copyright (c) 2013 Tim Branyen (@tbranyen)  
 Licensed under the MIT license.

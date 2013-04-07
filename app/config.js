@@ -3,8 +3,8 @@
 require.config({
   // Ensure the Jam configuration is loaded before configuring and loading
   // the rest of the application.
-  shim: { "app": ["../vendor/jam/require.config"] },
+  shim: { "main": ["../vendor/jam/require.config"] },
 
   // Include the main application entry point.
-  deps: ["app"]
+  deps: ["main"]
 });

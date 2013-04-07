@@ -3,7 +3,6 @@
 module.exports = function(grunt) {
 
   grunt.initConfig({
-
     // Runs the application JavaScript through JSHint with the defaults.
     jshint: {
       files: ["app/**/*.js"]
@@ -70,7 +69,7 @@ module.exports = function(grunt) {
     concat: {
       dist: {
         src: [
-          "vendor/js/require.js",
+          "vendor/bower/almond/almond.js",
           "dist/debug/templates.js",
           "dist/debug/source.js"
         ],
@@ -116,7 +115,7 @@ module.exports = function(grunt) {
 
     server: {
       map: {
-        "source.js": "vendor/js/require.js",
+        "source.js": "vendor/bower/requirejs/require.js",
         "styles.css": "app/styles/index.css"
       },
 
@@ -158,7 +157,6 @@ module.exports = function(grunt) {
         ]
       }
     }
-
   });
 
   // Grunt contribution tasks.
