@@ -7,12 +7,12 @@
 
   <title>Backbone Boilerplate QUnit Test Suite</title>
 
-  <!-- QUnit styles -->
+  <!-- QUnit styles. -->
   <link rel="stylesheet" href="vendor/qunit.css">
 </head>
 
 <body>
-  <!-- QUnit stucture -->
+  <!-- QUnit stucture. -->
   <div class="dataset-test">
     <h1 id="qunit-header">Backbone Boilerplate QUnit Test Suite</h1>
     <h2 id="qunit-banner"></h2>
@@ -20,23 +20,35 @@
     <ol id="qunit-tests"></ol>
   </div>
 
-  <!-- Testing libs -->
+  <!-- Testing libraries. -->
   <script src="vendor/qunit.js"></script>
+  <script src="../../vendor/jam/require.js"></script>
 
-  <!-- Load application -->
-  <script data-main="../../app/config"
-    src="../../vendor/jam/require.js"></script>
-
-  <!-- Declare your test files to be run here -->
+  <!-- Declare your test files to be run here. -->
   <script>
-    // Ensure you point to where your tests are, base directory is app/, which
-    // is why ../test is necessary
-    require({ paths: { tests: "../test/qunit/tests" } }, [
+    // Disable auto start.  We'll call start once the async moduels have
+    // loaded.
+    QUnit.config.autostart = false;
 
-      // Load the example tests, replace this and add your own tests
-      "tests/example"
+    // Set the application endpoint and load the configuration.
+    require({ baseUrl: "../../app" }, ["config"], function() {
+      // Ensure you point to where your tests are, base directory is app/,
+      //which is why ../test is necessary.
+      require({ paths: { tests: "../test/qunit/tests" } }, [
 
-    ]);
+        // Load the example tests, replace this and add your own tests
+        "tests/example",
+
+        // Ensure the boilerplate functions correctly.
+        "tests/boilerplate/router"
+
+      ], function() {
+
+        // Only once the dependencies have finished loading, call QUnit.start.
+        QUnit.start();
+      
+      });
+    });
   </script>
 </body>
 </html>
