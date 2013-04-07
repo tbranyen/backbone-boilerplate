@@ -45,6 +45,9 @@ mkdir myproject && cd myproject
 git clone --depth 0 git@github.com:tbranyen/backbone-boilerplate.git .
 ```
 
+You will need to download and install [Node.js](http://nodejs.org/) if you want
+to use the commands in the following sections.
+
 ## Updating and configuring ##
 
 Thid party packages may update independently from this main repo, so it's a
