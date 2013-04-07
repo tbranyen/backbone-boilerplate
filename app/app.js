@@ -33,15 +33,12 @@ LayoutManager.configure({
   }
 });
 
-// The app object to be exported.
-var app = exports;
-
 // The root path to run the application through.
-app.root = "/";
+exports.root = "/";
 
 // The application layout handles link hijacking and can be modified to handle
 // other application global actions as well.
-app.layout= new Backbone.View({
+exports.layout = new Backbone.View({
   el: "main",
 
   events: {
