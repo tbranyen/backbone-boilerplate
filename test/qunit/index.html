@@ -22,7 +22,8 @@
 
   <!-- Testing libraries. -->
   <script src="vendor/qunit.js"></script>
-  <script src="../../vendor/jam/require.js"></script>
+  <script src="/source.js"></script>
+  <script src="/vendor/bower/requirejs/require.js"></script>
 
   <!-- Declare your test files to be run here. -->
   <script>
@@ -43,7 +44,7 @@
     // Set the application endpoint and load the configuration.
     require({
       paths: { tests: "../test/qunit/tests" },
-      baseUrl: "../../app" 
+      baseUrl: "../../app"
     }, ["config"], function() {
       // Load all tests.
       require(tests, function() {

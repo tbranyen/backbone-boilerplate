@@ -55,11 +55,11 @@ module.exports = function(grunt) {
           // Root application module.
           name: "config",
 
-          // Include the application dependency.
-          deps: ["app"],
+          // Include the main application.
+          insertRequire: ["main"],
 
           // Do not wrap everything in an IIFE.
-          wrap: false
+          wrap: true
         }
       }
     },
@@ -115,7 +115,9 @@ module.exports = function(grunt) {
 
     server: {
       map: {
-        "source.js": "vendor/bower/requirejs/require.js"
+        // Point to the Jam `require.js` file because it includes all package
+        // paths automatically.
+        "source.js": "vendor/jam/require.js"
       },
 
       debug: {
@@ -141,8 +143,8 @@ module.exports = function(grunt) {
     copy: {
       debug: {
         files: [
-          { src: ["app/"], dest: "dist/debug/" },
-          { src: "vendor/", dest: "dist/debug/" },
+          { src: ["app/**"], dest: "dist/debug/" },
+          { src: "vendor/**", dest: "dist/debug/" },
           { src: "index.html", dest: "dist/debug/index.html" }
         ]
       },
