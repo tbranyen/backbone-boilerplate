@@ -7,32 +7,36 @@
 
   <title>Backbone Boilerplate Jasmine Test Suite</title>
 
-  <!-- Jasmine styles -->
+  <!-- Jasmine styles. -->
   <link rel="stylesheet" href="vendor/jasmine.css">
 </head>
 
 <body>
-  <!-- Testing libs -->
+  <!-- Testing libraries. -->
   <script src="vendor/jasmine.js"></script>
   <script src="vendor/jasmine-html.js"></script>
-  
-  <!-- Load application -->
-  <script data-main="../../app/config"
-    src="../../vendor/jam/require.js"></script>
+  <script src="../../vendor/jam/require.js"></script>
 
-  <!-- Declare your spec files to be run here -->
+  <!-- Declare your spec files to be run here. -->
   <script>
-    // Ensure you point to where your spec folder is, base directory is app/,
-    // which is why ../test is necessary
-    require({ paths: { spec: "../test/jasmine/spec" } }, [
+    // Set the application endpoint and load the configuration.
+    require({ baseUrl: "../../app" }, ["config"], function() {
+      // Point to where the tests are located from app/.
+      require({ paths: { spec: "../test/jasmine/spec" } }, [
 
-      // Load the example spec, replace this and add your own spec
-      "spec/example.spec"
+        // Load the example spec, replace this and add your own spec.
+        "spec/example.spec",
 
-    ], function() {
-      // Set up the jasmine reporters once each spec has been loaded
-      jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
-      jasmine.getEnv().execute();
+        // Ensure the boilerplate functions correctly.
+        "spec/boilerplate/router.spec"
+
+      ], function() {
+
+        // Set up the jasmine reporters once each spec has been loaded.
+        jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
+        jasmine.getEnv().execute();
+
+      });
     });
   </script>
 </body>

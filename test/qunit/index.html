@@ -32,8 +32,7 @@
 
     // Set the application endpoint and load the configuration.
     require({ baseUrl: "../../app" }, ["config"], function() {
-      // Ensure you point to where your tests are, base directory is app/,
-      //which is why ../test is necessary.
+      // Point to where the tests are located from app/.
       require({ paths: { tests: "../test/qunit/tests" } }, [
 
         // Load the example tests, replace this and add your own tests
