@@ -21,9 +21,9 @@
     "baseUrl": "./app",
 
     "dependencies": {
-      "backbone": "*",
-      "jquery": "*",
-      "backbone.layoutmanager": "*"
+      "backbone": "~1.0.0",
+      "jquery": "~1.9.1",
+      "backbone.layoutmanager": "~0.8.7"
     }
   }
 }
