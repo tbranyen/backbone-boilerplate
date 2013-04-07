@@ -26,22 +26,27 @@
 
   <!-- Declare your test files to be run here. -->
   <script>
+    var tests = [
+
+      // Load the example tests, replace this and add your own tests
+      "tests/example",
+
+      // Ensure the boilerplate functions correctly.
+      "tests/boilerplate/router"
+
+    ];
+
     // Disable auto start.  We'll call start once the async moduels have
     // loaded.
     QUnit.config.autostart = false;
 
     // Set the application endpoint and load the configuration.
-    require({ baseUrl: "../../app" }, ["config"], function() {
-      // Point to where the tests are located from app/.
-      require({ paths: { tests: "../test/qunit/tests" } }, [
-
-        // Load the example tests, replace this and add your own tests
-        "tests/example",
-
-        // Ensure the boilerplate functions correctly.
-        "tests/boilerplate/router"
-
-      ], function() {
+    require({
+      paths: { tests: "../test/qunit/tests" },
+      baseUrl: "../../app" 
+    }, ["config"], function() {
+      // Load all tests.
+      require(tests, function() {
 
         // Only once the dependencies have finished loading, call QUnit.start.
         QUnit.start();
