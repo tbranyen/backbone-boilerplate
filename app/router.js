@@ -6,5 +6,7 @@ module.exports = Backbone.Router.extend({
     "": "index"
   },
 
-  index: function() {}
+  index: function() {
+    console.log("Welcome to your / route.");
+  }
 });
