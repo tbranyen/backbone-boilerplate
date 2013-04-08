@@ -127,6 +127,12 @@ module.exports = function(grunt) {
         "styles.css": "app/styles/index.css"
       },
 
+      karma: {
+        map: "<%= server.map %>",
+        forever: false,
+        port: 8001
+      },
+
       debug: {
         map: {
           "source.js": "dist/debug/source.js",
@@ -174,13 +180,13 @@ module.exports = function(grunt) {
         singleRun: true,
         colors: true,
         captureTimeout: 5000,
-        reportSlowerThan: 500,
 
         reporters: ["progress", "junit"],
         browsers: ["PhantomJS"],
 
         plugins: [
           "karma-jasmine",
+          "karma-qunit",
           "karma-requirejs",
           "karma-chrome-launcher",
           "karma-firefox-launcher",
@@ -189,7 +195,7 @@ module.exports = function(grunt) {
         ],
 
         proxies: {
-          "/base": "http://localhost:8000"
+          "/base": "http://localhost:<%=server.karma.port%>"
         }
       },
 
@@ -198,12 +204,23 @@ module.exports = function(grunt) {
           frameworks: ["jasmine", "requirejs"],
 
           files: [
-            "test/jasmine/vendor/jasmine.js",
-            "test/jasmine/vendor/jasmine-html.js",
-
             "vendor/jam/require.js",
 
+            "test/jasmine/vendor/jasmine-html.js",
+
             "test/jasmine/test-runner.js"
+          ]
+        }
+      },
+
+      qunit: {
+        options: {
+          frameworks: ["qunit", "requirejs"],
+
+          files: [
+            "vendor/jam/require.js",
+
+            "test/qunit/test-runner.js"
           ]
         }
       }
@@ -231,6 +248,10 @@ module.exports = function(grunt) {
   // optimizations, and serve as a good intermediary for debugging.
   grunt.registerTask("debug", [
     "clean", "jshint", "jst", "requirejs", "concat", "copy", "styles"
+  ]);
+
+  grunt.registerTask("karma:run", [
+    "server:karma", "karma:jasmine"
   ]);
 
   // The release task will first run the debug tasks.  Following that, minify

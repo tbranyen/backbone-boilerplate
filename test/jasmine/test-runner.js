@@ -18,13 +18,13 @@ require({
   // Load all specs.
   require(specs, function() {
 
-    // Set up the jasmine reporters once each spec has been loaded.
-    jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
-    jasmine.getEnv().execute();
-
-    // This will start Karma if it exists.
     if (window.__karma__) {
+      // This will start Karma if it exists.
       window.__karma__.start();
+    } else {
+      // Set up the jasmine reporters once each spec has been loaded.
+      jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
+      jasmine.getEnv().execute();
     }
 
   });

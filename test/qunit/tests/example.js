@@ -21,10 +21,12 @@ test("increments (improved)", function() {
 
 module("setUp/tearDown", {
   setup: function() {
+    expect(0);
     //console.log("Before");
   },
 
   teardown: function() {
+    expect(0);
     //console.log("After");
   }
 });

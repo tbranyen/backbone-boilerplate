@@ -24,35 +24,7 @@
   <script src="vendor/qunit.js"></script>
   <script src="../../vendor/jam/require.js"></script>
 
-  <!-- Declare your test files to be run here. -->
-  <script>
-    var tests = [
-
-      // Load the example tests, replace this and add your own tests.
-      "tests/example",
-
-      // Ensure the boilerplate functions correctly.
-      "tests/boilerplate/router"
-
-    ];
-
-    // Disable auto start.  We'll call start once the async moduels have
-    // loaded.
-    QUnit.config.autostart = false;
-
-    // Set the application endpoint and load the configuration.
-    require({
-      paths: { tests: "../test/qunit/tests" },
-      baseUrl: "../../app"
-    }, ["config"], function() {
-      // Load all tests.
-      require(tests, function() {
-
-        // Only once the dependencies have finished loading, call QUnit.start.
-        QUnit.start();
-      
-      });
-    });
-  </script>
+  <!-- Declare your spec files to be run inside this file. -->
+  <script src="test-runner.js"></script>
 </body>
 </html>
