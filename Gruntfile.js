@@ -205,9 +205,7 @@ module.exports = function(grunt) {
 
           files: [
             "vendor/jam/require.js",
-
             "test/jasmine/vendor/jasmine-html.js",
-
             "test/jasmine/test-runner.js"
           ]
         }
@@ -219,7 +217,6 @@ module.exports = function(grunt) {
 
           files: [
             "vendor/jam/require.js",
-
             "test/qunit/test-runner.js"
           ]
         }
@@ -248,10 +245,6 @@ module.exports = function(grunt) {
   // optimizations, and serve as a good intermediary for debugging.
   grunt.registerTask("debug", [
     "clean", "jshint", "jst", "requirejs", "concat", "copy", "styles"
-  ]);
-
-  grunt.registerTask("karma:run", [
-    "server:karma", "karma:jasmine"
   ]);
 
   // The release task will first run the debug tasks.  Following that, minify
