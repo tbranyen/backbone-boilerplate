@@ -120,13 +120,17 @@ module.exports = function(grunt) {
       map: {
         // Point to the Jam `require.js` file because it includes all package
         // paths automatically.
-        "source.js": "vendor/jam/require.js"
+        "source.js": "vendor/jam/require.js",
+
+        // Keep the styles file generic to make running from the `dist/`
+        // directory easier.
+        "styles.css": "app/styles/index.css"
       },
 
       debug: {
         map: {
           "source.js": "dist/debug/source.js",
-          "index.css": "dist/debug/styles.css"
+          "styles.css": "dist/debug/styles.css"
         }
       },
 
@@ -134,9 +138,9 @@ module.exports = function(grunt) {
         map: {
           "debug/source.js": "dist/release/debug/source.js",
           "source.js": "dist/release/source.js",
-          "app/styles/index.css": "dist/release/styles.css",
+          "styles.css": "dist/release/styles.css",
 
-          // For debugging.
+          // Necessary for SourceMap debugging.
           "source.js.map": "dist/release/source.js.map"
         }
       }
@@ -160,6 +164,49 @@ module.exports = function(grunt) {
           { src: "dist/debug/source.js", dest: "dist/release/debug/source.js" }
         ]
       }
+    },
+
+    karma: {
+      options: {
+        basePath: process.cwd(),
+        runnerPort: 9999,
+        port: 9876,
+        singleRun: true,
+        colors: true,
+        captureTimeout: 5000,
+        reportSlowerThan: 500,
+
+        reporters: ["progress", "junit"],
+        browsers: ["PhantomJS"],
+
+        plugins: [
+          "karma-jasmine",
+          "karma-requirejs",
+          "karma-chrome-launcher",
+          "karma-firefox-launcher",
+          "karma-phantomjs-launcher",
+          "karma-junit-reporter"
+        ],
+
+        proxies: {
+          "/base": "http://localhost:8000"
+        }
+      },
+
+      jasmine: {
+        options: {
+          frameworks: ["jasmine", "requirejs"],
+
+          files: [
+            "test/jasmine/vendor/jasmine.js",
+            "test/jasmine/vendor/jasmine-html.js",
+
+            "vendor/jam/require.js",
+
+            "test/jasmine/test-runner.js"
+          ]
+        }
+      }
     }
   });
 
@@ -171,6 +218,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-contrib-mincss");
   grunt.loadNpmTasks("grunt-contrib-clean");
   grunt.loadNpmTasks("grunt-contrib-copy");
+
+  // Third-party tasks.
+  grunt.loadNpmTasks("grunt-karma");
 
   // Grunt BBB tasks.
   grunt.loadNpmTasks("grunt-bbb-server");
