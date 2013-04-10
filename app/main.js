@@ -1,6 +1,5 @@
-// TODO Have @jrburke fix the CommonJS detection to not blacklist `require([])`
-// syntax...
-define(function(require) {
+define(function(require, exports, module) {
+
   // Break out the application running from the configuration definition to
   // assist with testing.
   require("config");
@@ -11,4 +10,5 @@ define(function(require) {
     // root folder to '/' by default.  Change in app.js.
     Backbone.history.start({ pushState: true, root: app.root });
   });
+
 });

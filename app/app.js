@@ -1,3 +1,5 @@
+define(function(require, exports, module) {
+
 // External dependencies.
 var _ = require("underscore");
 var $ = require("jquery");
@@ -70,4 +72,6 @@ exports.layout = new Backbone.View({
       Backbone.history.navigate(href.attr, true);
     }
   }
+});
+
 });
