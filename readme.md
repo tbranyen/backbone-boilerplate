@@ -50,7 +50,7 @@ to use the commands in the following sections.
 
 ## Updating dependencies ##
 
-Thid party packages may update independently from this main repo, so it's a
+Third party packages may update independently from this main repo, so it's a
 good idea to update after fetching.  There are two different package managers
 that you need to install and call update on.
 
@@ -60,7 +60,7 @@ npm install
 
 # Install Jam and Bower.  Depending on your user account you may need to gain
 # elevated privileges using something like `sudo`.
-npm install jam bower -g
+npm install jamjs bower -g
 
 # Updating the JamJS packages.
 jam upgrade
