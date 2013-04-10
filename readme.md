@@ -60,7 +60,7 @@ npm install
 
 # Install Jam and Bower.  Depending on your user account you may need to gain
 # elevated privileges using something like `sudo`.
-npm install jam bower -g
+npm install jamjs bower -g
 
 # Updating the JamJS packages.
 jam upgrade
