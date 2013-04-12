@@ -14,7 +14,7 @@ require({
 
   // Determine the baseUrl if we are in Karma or not.
   baseUrl: window.__karma__ ? "base/app" : "../../app"
-}, ["config"], function() {
+}, ["config", "../vendor/jam/require.config"], function() {
   // Load all specs.
   require(specs, function() {
 

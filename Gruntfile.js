@@ -179,13 +179,14 @@ module.exports = function(grunt) {
         port: 9876,
         singleRun: true,
         colors: true,
-        captureTimeout: 5000,
+        captureTimeout: 7000,
 
         reporters: ["progress"],
         browsers: ["PhantomJS"],
 
         plugins: [
           "karma-jasmine",
+          "karma-mocha",
           "karma-qunit",
           "karma-requirejs",
           "karma-chrome-launcher",
@@ -206,6 +207,18 @@ module.exports = function(grunt) {
             "vendor/jam/require.js",
             "test/jasmine/vendor/jasmine-html.js",
             "test/jasmine/test-runner.js"
+          ]
+        }
+      },
+
+      mocha: {
+        options: {
+          frameworks: ["mocha", "requirejs"],
+
+          files: [
+            "test/mocha/vendor/chai.js",
+            "vendor/jam/require.js",
+            "test/mocha/test-runner.js"
           ]
         }
       },
@@ -249,6 +262,9 @@ module.exports = function(grunt) {
   // The release task will first run the debug tasks.  Following that, minify
   // the built JavaScript and then minify the built CSS.
   grunt.registerTask("release", ["debug", "uglify", "mincss"]);
+
+  // The test task take care of starting test server and running tests
+  grunt.registerTask("test", ["jshint", "server:karma", "karma"]);
 
   // When running the default Grunt command, just lint the code.
   grunt.registerTask("default", ["jshint"]);
