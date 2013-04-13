@@ -59,7 +59,7 @@ module.exports = function(grunt) {
           insertRequire: ["main"],
 
           // This will ensure the application runs after being built.
-          include: ["main", "app"],
+          include: ["app", "main", "router"],
 
           // Wrap everything in an IIFE.
           wrap: true
@@ -181,7 +181,7 @@ module.exports = function(grunt) {
         colors: true,
         captureTimeout: 5000,
 
-        reporters: ["progress", "junit"],
+        reporters: ["progress"],
         browsers: ["PhantomJS"],
 
         plugins: [
@@ -190,8 +190,7 @@ module.exports = function(grunt) {
           "karma-requirejs",
           "karma-chrome-launcher",
           "karma-firefox-launcher",
-          "karma-phantomjs-launcher",
-          "karma-junit-reporter"
+          "karma-phantomjs-launcher"
         ],
 
         proxies: {
