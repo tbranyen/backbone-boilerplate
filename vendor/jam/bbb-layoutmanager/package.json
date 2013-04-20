@@ -1,0 +1,18 @@
+{
+  "author": "Tim Branyen (@tbranyen)",
+  "name": "bbb-layoutmanager",
+  "description": "Backbone Boilerplate and LayoutManager integration.",
+  "version": "0.1.0",
+
+  "jam": {
+    "dependencies": {
+      "backbone.layoutmanager": "~0.8.7"
+    },
+
+    "include": [
+      "adapter.js"
+    ],
+
+    "main": "adapter.js"
+  }
+}

@@ -2017,6 +2017,11 @@ var jam = {
             "main": "backbone.layoutmanager.js"
         },
         {
+            "name": "bbb-layoutmanager",
+            "location": "../vendor/jam/bbb-layoutmanager",
+            "main": "adapter.js"
+        },
+        {
             "name": "backbone",
             "location": "../vendor/jam/backbone",
             "main": "backbone.js"
@@ -2024,6 +2029,9 @@ var jam = {
     ],
     "version": "0.2.17",
     "shim": {
+        "underscore": {
+            "exports": "_"
+        },
         "backbone.layoutmanager": {
             "deps": [
                 "jquery",
@@ -2061,12 +2069,20 @@ if (typeof require !== "undefined" && require.config) {
             "main": "backbone.layoutmanager.js"
         },
         {
+            "name": "bbb-layoutmanager",
+            "location": "../vendor/jam/bbb-layoutmanager",
+            "main": "adapter.js"
+        },
+        {
             "name": "backbone",
             "location": "../vendor/jam/backbone",
             "main": "backbone.js"
         }
     ],
     "shim": {
+        "underscore": {
+            "exports": "_"
+        },
         "backbone.layoutmanager": {
             "deps": [
                 "jquery",
@@ -2104,12 +2120,20 @@ else {
             "main": "backbone.layoutmanager.js"
         },
         {
+            "name": "bbb-layoutmanager",
+            "location": "../vendor/jam/bbb-layoutmanager",
+            "main": "adapter.js"
+        },
+        {
             "name": "backbone",
             "location": "../vendor/jam/backbone",
             "main": "backbone.js"
         }
     ],
     "shim": {
+        "underscore": {
+            "exports": "_"
+        },
         "backbone.layoutmanager": {
             "deps": [
                 "jquery",
