@@ -8,6 +8,11 @@ var specs = [
 
 ];
 
+// Make async.
+if (window.__karma__) {
+  window.__karma__.loaded = function() {};
+}
+
 // Set the application endpoint and load the configuration.
 require({
   paths: { spec: "../test/jasmine/spec" },

@@ -1,3 +1,5 @@
+define(function(require, exports, module) {
+
 var Backbone = require("backbone");
 var Router = require("router");
 
@@ -10,4 +12,6 @@ describe("Application Router", function() {
   it("is a Backbone.Router", function() {
     expect(Router.prototype instanceof Backbone.Router).toBe(true);
   });
+});
+
 });

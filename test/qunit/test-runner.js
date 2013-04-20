@@ -8,6 +8,11 @@ var tests = [
 
 ];
 
+// Make async.
+if (window.__karma__) {
+  window.__karma__.loaded = function() {};
+}
+
 // Disable auto start.  We'll call start once the async moduels have
 // loaded.
 QUnit.config.autostart = false;

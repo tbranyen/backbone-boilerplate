@@ -1,3 +1,5 @@
+define(function(require, exports, module) {
+
 var Backbone = require("backbone");
 var Router = require("router");
 
@@ -9,5 +11,7 @@ describe("Router", function() {
     expect(Router).to.exist;
     expect(new Router()).to.be.an.instanceof(Backbone.Router);
   });
+
+});
 
 });

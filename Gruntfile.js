@@ -127,7 +127,8 @@ module.exports = function(grunt) {
         "styles.css": "app/styles/index.css"
       },
 
-      karma: {
+      // Specifically used for testing the application.
+      test: {
         map: "<%= server.map %>",
         forever: false,
         port: 8001
@@ -195,17 +196,17 @@ module.exports = function(grunt) {
         ],
 
         proxies: {
-          "/base": "http://localhost:<%=server.karma.port%>"
+          "/base": "http://localhost:<%=server.test.port%>"
         }
       },
 
       jasmine: {
         options: {
-          frameworks: ["jasmine", "requirejs"],
+          frameworks: ["jasmine"],
 
           files: [
-            "vendor/jam/require.js",
             "test/jasmine/vendor/jasmine-html.js",
+            "vendor/jam/require.js",
             "test/jasmine/test-runner.js"
           ]
         }
@@ -213,7 +214,7 @@ module.exports = function(grunt) {
 
       mocha: {
         options: {
-          frameworks: ["mocha", "requirejs"],
+          frameworks: ["mocha"],
 
           files: [
             "test/mocha/vendor/chai.js",
@@ -225,7 +226,7 @@ module.exports = function(grunt) {
 
       qunit: {
         options: {
-          frameworks: ["qunit", "requirejs"],
+          frameworks: ["qunit"],
 
           files: [
             "vendor/jam/require.js",
@@ -264,7 +265,7 @@ module.exports = function(grunt) {
   grunt.registerTask("release", ["debug", "uglify", "mincss"]);
 
   // The test task take care of starting test server and running tests.
-  grunt.registerTask("test", ["jshint", "server:karma", "karma"]);
+  grunt.registerTask("test", ["jshint", "server:test", "karma:mocha"]);
 
   // When running the default Grunt command, just lint the code.
   grunt.registerTask("default", ["jshint"]);
