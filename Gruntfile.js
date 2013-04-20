@@ -25,7 +25,7 @@ module.exports = function(grunt) {
     styles: {
       // Out the concatenated contents of the following styles into the below
       // development file path.
-      "dist/debug/styles.css": {
+      "dist/debug/app/styles/index.css": {
         // Point this to where your `index.css` file is location.
         src: "app/styles/index.css",
 
@@ -90,7 +90,9 @@ module.exports = function(grunt) {
     mincss: {
       release: {
         files: {
-          "dist/release/styles.css": ["dist/debug/styles.css"]
+          "dist/release/app/styles/index.css": [
+            "dist/debug/app/styles/index.css"
+          ]
         }
       }
     },
@@ -137,7 +139,7 @@ module.exports = function(grunt) {
       debug: {
         map: {
           "source.js": "dist/debug/source.js",
-          "styles.css": "dist/debug/styles.css"
+          "app/styles/index.css": "dist/debug/app/styles/index.css"
         }
       },
 
@@ -145,7 +147,7 @@ module.exports = function(grunt) {
         map: {
           "debug/source.js": "dist/release/debug/source.js",
           "source.js": "dist/release/source.js",
-          "styles.css": "dist/release/styles.css",
+          "app/styles/index.css": "dist/release/app/styles/index.css",
 
           // Necessary for SourceMap debugging.
           "source.js.map": "dist/release/source.js.map"
