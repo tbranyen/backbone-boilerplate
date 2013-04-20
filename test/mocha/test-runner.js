@@ -35,12 +35,12 @@ function() {
   // Load all tests.
   require(tests, function() {
 
-    // Only once the dependencies have finished loading, call mocha.run.
-    mocha.run();
-
     // This will start Karma if it exists.
     if (window.__karma__) {
       window.__karma__.start();
+    } else {
+      // Only once the dependencies have finished loading, call mocha.run.
+      mocha.run();
     }
   
   });
