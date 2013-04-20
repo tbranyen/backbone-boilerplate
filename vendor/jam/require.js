@@ -2017,6 +2017,11 @@ var jam = {
             "main": "backbone.layoutmanager.js"
         },
         {
+            "name": "lodash",
+            "location": "../vendor/jam/lodash",
+            "main": "./lodash.js"
+        },
+        {
             "name": "bbb-layoutmanager",
             "location": "../vendor/jam/bbb-layoutmanager",
             "main": "adapter.js"
@@ -2069,6 +2074,11 @@ if (typeof require !== "undefined" && require.config) {
             "main": "backbone.layoutmanager.js"
         },
         {
+            "name": "lodash",
+            "location": "../vendor/jam/lodash",
+            "main": "./lodash.js"
+        },
+        {
             "name": "bbb-layoutmanager",
             "location": "../vendor/jam/bbb-layoutmanager",
             "main": "adapter.js"
@@ -2118,6 +2128,11 @@ else {
             "name": "backbone.layoutmanager",
             "location": "../vendor/jam/backbone.layoutmanager",
             "main": "backbone.layoutmanager.js"
+        },
+        {
+            "name": "lodash",
+            "location": "../vendor/jam/lodash",
+            "main": "./lodash.js"
         },
         {
             "name": "bbb-layoutmanager",
