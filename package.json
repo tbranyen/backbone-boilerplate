@@ -3,19 +3,18 @@
   "version": "0.1.0",
 
   "dependencies": {
-    "grunt": "~0.4",
-    "karma": "0.9.1",
-    "grunt-contrib-jshint": "0.1.1rc6",
-    "grunt-contrib-jst": "0.4.1rc7",
-    "grunt-contrib-mincss": "0.4.0rc7",
-    "grunt-contrib-uglify": "0.1.1rc6",
+    "grunt": "~0.4.1",
+    "grunt-contrib-jshint": "~0.4.3",
+    "grunt-contrib-jst": "~0.5.0",
+    "grunt-contrib-mincss": "~0.4.0rc7",
+    "grunt-contrib-uglify": "~0.2.0",
     "grunt-contrib-copy": "~0.4.1",
-    "grunt-contrib-clean": "0.4.0rc6",
-    "grunt-contrib-concat": "0.1.2rc6",
+    "grunt-contrib-clean": "~0.4.1",
+    "grunt-contrib-concat": "~0.2.0",
     "grunt-bbb-server": "~0.1.0",
     "grunt-bbb-styles": "~0.1.0",
     "grunt-bbb-requirejs": "~0.1.0",
-    "grunt-karma": "0.4.3"
+    "grunt-karma-0.9.1": "0.4.3"
   },
 
   "jam": {
@@ -24,7 +23,7 @@
 
     "dependencies": {
       "backbone": "~1.0.0",
-      "jquery": "~1.9.1",
+      "jquery": "~2.0.0",
       "backbone.layoutmanager": "~0.8.7"
     }
   }

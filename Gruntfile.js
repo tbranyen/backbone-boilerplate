@@ -234,7 +234,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-contrib-copy");
 
   // Third-party tasks.
-  grunt.loadNpmTasks("grunt-karma");
+  grunt.loadNpmTasks("grunt-karma-0.9.1");
 
   // Grunt BBB tasks.
   grunt.loadNpmTasks("grunt-bbb-server");
