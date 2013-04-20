@@ -8,10 +8,13 @@ var tests = [
 
 ];
 
-// Set up the assertion library and the set up Mocha with the BDD interface
-// Fell free to use any assertion library: http://visionmedia.github.io/mocha/#assertions
-// and your favorite interface: http://visionmedia.github.io/mocha/#interfaces
+// Set up the assertion library and the set up Mocha with the BDD interface.
+// Feel free to use any assertion library:
+//
+// http://visionmedia.github.io/mocha/#assertions and your favorite interface:
+// http://visionmedia.github.io/mocha/#interfaces
 window.expect = chai.expect;
+
 mocha.setup({
   ui: "bdd"
 });

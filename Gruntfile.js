@@ -263,7 +263,7 @@ module.exports = function(grunt) {
   // the built JavaScript and then minify the built CSS.
   grunt.registerTask("release", ["debug", "uglify", "mincss"]);
 
-  // The test task take care of starting test server and running tests
+  // The test task take care of starting test server and running tests.
   grunt.registerTask("test", ["jshint", "server:karma", "karma"]);
 
   // When running the default Grunt command, just lint the code.
