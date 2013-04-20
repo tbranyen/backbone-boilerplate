@@ -59,7 +59,7 @@ module.exports = function(grunt) {
           insertRequire: ["main"],
 
           // This will ensure the application runs after being built.
-          include: ["main", "app"],
+          include: ["app", "main", "router"],
 
           // Wrap everything in an IIFE.
           wrap: true
@@ -127,7 +127,8 @@ module.exports = function(grunt) {
         "styles.css": "app/styles/index.css"
       },
 
-      karma: {
+      // Specifically used for testing the application.
+      test: {
         map: "<%= server.map %>",
         forever: false,
         port: 8001
@@ -179,41 +180,53 @@ module.exports = function(grunt) {
         port: 9876,
         singleRun: true,
         colors: true,
-        captureTimeout: 5000,
+        captureTimeout: 7000,
 
-        reporters: ["progress", "junit"],
+        reporters: ["progress"],
         browsers: ["PhantomJS"],
 
         plugins: [
           "karma-jasmine",
+          "karma-mocha",
           "karma-qunit",
           "karma-requirejs",
           "karma-chrome-launcher",
           "karma-firefox-launcher",
-          "karma-phantomjs-launcher",
-          "karma-junit-reporter"
+          "karma-phantomjs-launcher"
         ],
 
         proxies: {
-          "/base": "http://localhost:<%=server.karma.port%>"
+          "/base": "http://localhost:<%=server.test.port%>"
         }
       },
 
       jasmine: {
         options: {
-          frameworks: ["jasmine", "requirejs"],
+          frameworks: ["jasmine"],
 
           files: [
-            "vendor/jam/require.js",
             "test/jasmine/vendor/jasmine-html.js",
+            "vendor/jam/require.js",
             "test/jasmine/test-runner.js"
+          ]
+        }
+      },
+
+      mocha: {
+        options: {
+          frameworks: ["mocha"],
+
+          files: [
+            "test/mocha/vendor/chai.js",
+            "vendor/jam/require.js",
+            "test/mocha/test-runner.js"
           ]
         }
       },
 
       qunit: {
         options: {
-          frameworks: ["qunit", "requirejs"],
+          frameworks: ["qunit"],
 
           files: [
             "vendor/jam/require.js",
@@ -250,6 +263,9 @@ module.exports = function(grunt) {
   // The release task will first run the debug tasks.  Following that, minify
   // the built JavaScript and then minify the built CSS.
   grunt.registerTask("release", ["debug", "uglify", "mincss"]);
+
+  // The test task take care of starting test server and running tests.
+  grunt.registerTask("test", ["jshint", "server:test", "karma:mocha"]);
 
   // When running the default Grunt command, just lint the code.
   grunt.registerTask("default", ["jshint"]);

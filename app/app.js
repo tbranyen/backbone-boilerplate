@@ -6,9 +6,6 @@ var $ = require("jquery");
 var Backbone = require("backbone");
 var LayoutManager = require("backbone.layoutmanager");
 
-// Router.
-var Router = require("router");
-
 // Configure LayoutManager with Backbone Boilerplate defaults.
 LayoutManager.configure({
   // Allow LayoutManager to augment Backbone.View.prototype.
@@ -40,10 +37,6 @@ LayoutManager.configure({
 
 // The root path to run the application through.
 exports.root = "/";
-
-// Define your master router on the application namespace and trigger all
-// navigation from this instance.
-exports.router = new Router();
 
 // The application layout handles link hijacking and can be modified to handle
 // other application global actions as well.

@@ -1,3 +1,5 @@
+define(function(require, exports, module) {
+
 var Backbone = require("backbone");
 var Router = require("router");
 
@@ -8,4 +10,6 @@ QUnit.module("Router");
 test("Application Router", 2, function() {
   ok(Router, "Router constructor exists.");
   ok(Router.prototype instanceof Backbone.Router, "Router is a Backbone.Router");
+});
+
 });

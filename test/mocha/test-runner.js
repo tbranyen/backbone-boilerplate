@@ -8,27 +8,35 @@ var tests = [
 
 ];
 
+// Prefer the BDD testing style.
+mocha.setup("bdd");
+
 // Make async.
 if (window.__karma__) {
   window.__karma__.loaded = function() {};
 }
 
-// Disable auto start.  We'll call start once the async moduels have
-// loaded.
-QUnit.config.autostart = false;
+// Set up the assertion library.
+// Compatible libraries: http://visionmedia.github.io/mocha/#assertions
+window.expect = chai.expect;
 
-// Set the application endpoint and load the configuration.
 require({
-  paths: { tests: "../test/qunit/tests" },
+  // Set the application endpoint.
+  paths: { tests: "../test/mocha/tests" },
 
   // Determine the baseUrl if we are in Karma or not.
   baseUrl: window.__karma__ ? "base/app" : "../../app"
-}, ["config", "../vendor/jam/require.config"], function() {
+},
+
+// Load the configuration.
+["config"],
+
+function() {
   // Load all tests.
   require(tests, function() {
 
-    // Only once the dependencies have finished loading, call QUnit.start.
-    QUnit.start();
+    // Only once the dependencies have finished loading, call mocha.run.
+    mocha.run();
 
     // This will start Karma if it exists.
     if (window.__karma__) {

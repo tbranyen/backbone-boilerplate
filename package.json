@@ -14,7 +14,10 @@
     "grunt-bbb-server": "~0.1.0",
     "grunt-bbb-styles": "~0.1.0",
     "grunt-bbb-requirejs": "~0.1.0",
-    "grunt-karma-0.9.1": "0.4.3"
+    "grunt-karma-0.9.1": "0.4.3",
+    "karma-jasmine": "~0.0.1",
+    "karma-mocha": "~0.0.1",
+    "karma-qunit": "~0.0.1"
   },
 
   "jam": {
