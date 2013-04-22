@@ -191,7 +191,6 @@ module.exports = function(grunt) {
           "karma-jasmine",
           "karma-mocha",
           "karma-qunit",
-          "karma-requirejs",
           "karma-chrome-launcher",
           "karma-firefox-launcher",
           "karma-phantomjs-launcher"
@@ -267,7 +266,7 @@ module.exports = function(grunt) {
   grunt.registerTask("release", ["debug", "uglify", "mincss"]);
 
   // The test task take care of starting test server and running tests.
-  grunt.registerTask("test", ["jshint", "server:test", "karma:mocha"]);
+  grunt.registerTask("test", ["jshint", "server:test", "karma"]);
 
   // When running the default Grunt command, just lint the code.
   grunt.registerTask("default", ["jshint"]);
