@@ -1,8 +1,14 @@
-// Grunt configuration updated to latest Grunt.  That means your minimum
+// Grunt ration updated to latest Grunt.  That means your minimum
 // version necessary to run these tasks is Grunt 0.4.
 module.exports = function(grunt) {
 
   grunt.initConfig({
+    // Easier location to change the default debug and release folders.
+    dist: {
+      debug: "dist/debug/",
+      release: "dist/release/"
+    },
+
     // Runs the application JavaScript through JSHint with the defaults.
     jshint: {
       files: ["app/**/*.js"]
@@ -13,19 +19,19 @@ module.exports = function(grunt) {
     jst: {
       debug: {
         files: {
-          "dist/debug/templates.js": ["app/templates/**/*.*"]
+          "<%= dist.debug %>templates.js": ["app/templates/**/*.*"]
         }
       }
     },
 
     // This task simplifies working with CSS inside Backbone Boilerplate
     // projects.  Instead of manually specifying your stylesheets inside the
-    // configuration, you can use `@imports` and this task will concatenate
+    // ration, you can use `@imports` and this task will concatenate
     // only those paths.
     styles: {
       // Out the concatenated contents of the following styles into the below
       // development file path.
-      "dist/debug/app/styles/index.css": {
+      "<%= dist.debug %>app/styles/index.css": {
         // Point this to where your `index.css` file is location.
         src: "app/styles/index.css",
 
@@ -44,13 +50,13 @@ module.exports = function(grunt) {
     // modules and concatenate them into a single file.
     requirejs: {
       debug: {
-        // Merge the Jam configuration options into the output build.
+        // Merge the Jam ration options into the output build.
         options: {
-          // Include the main configuration file.
+          // Include the main ration file.
           mainConfigFile: "app/config.js",
 
           // Output file.
-          out: "dist/debug/source.js",
+          out: "<%= dist.debug %>source.js",
 
           // Root application module.
           name: "config",
@@ -73,11 +79,11 @@ module.exports = function(grunt) {
       dist: {
         src: [
           "vendor/bower/almond/almond.js",
-          "dist/debug/templates.js",
-          "dist/debug/source.js"
+          "<%= dist.debug %>templates.js",
+          "<%= dist.debug %>source.js"
         ],
 
-        dest: "dist/debug/source.js",
+        dest: "<%= dist.debug %>source.js",
 
         separator: ";"
       }
@@ -87,11 +93,11 @@ module.exports = function(grunt) {
     // order and concatenate them into a single CSS file named index.css.  It
     // also minifies all the CSS as well.  This is named index.css, because we
     // only want to load one stylesheet in index.html.
-    mincss: {
+    cssmin: {
       release: {
         files: {
-          "dist/release/app/styles/index.css": [
-            "dist/debug/app/styles/index.css"
+          "<%= dist.release %>app/styles/index.css": [
+            "<%= dist.debug %>app/styles/index.css"
           ]
         }
       }
@@ -101,7 +107,7 @@ module.exports = function(grunt) {
     // the original debug build.
     uglify: {
       options: {
-        sourceMap: "dist/release/source.js.map",
+        sourceMap: "<%= dist.release %>source.js.map",
         sourceMapRoot: "",
         sourceMapPrefix: 1,
         preserveComments: "some"
@@ -109,7 +115,7 @@ module.exports = function(grunt) {
 
       release: {
         files: {
-          "dist/release/source.js": ["dist/debug/source.js"]
+          "<%= dist.release %>source.js": ["<%= dist.debug %>source.js"]
         }
       }
     },
@@ -138,19 +144,19 @@ module.exports = function(grunt) {
 
       debug: {
         map: {
-          "source.js": "dist/debug/source.js",
-          "app/styles/index.css": "dist/debug/app/styles/index.css"
+          "source.js": "<%= dist.debug %>source.js",
+          "app/styles/index.css": "<%= dist.debug %>app/styles/index.css"
         }
       },
 
       release: {
         map: {
-          "debug/source.js": "dist/release/debug/source.js",
-          "source.js": "dist/release/source.js",
-          "app/styles/index.css": "dist/release/app/styles/index.css",
+          "debug/source.js": "<%= dist.release %>debug/source.js",
+          "source.js": "<%= dist.release %>source.js",
+          "app/styles/index.css": "<%= dist.release %>app/styles/index.css",
 
           // Necessary for SourceMap debugging.
-          "source.js.map": "dist/release/source.js.map"
+          "source.js.map": "<%= dist.release %>source.js.map"
         }
       }
     },
@@ -159,18 +165,18 @@ module.exports = function(grunt) {
     copy: {
       debug: {
         files: [
-          { src: ["app/**"], dest: "dist/debug/" },
-          { src: "vendor/**", dest: "dist/debug/" },
-          { src: "index.html", dest: "dist/debug/index.html" }
+          { src: ["app/**"], dest: "<%= dist.debug %>" },
+          { src: "vendor/**", dest: "<%= dist.debug %>" },
+          { src: "index.html", dest: "<%= dist.debug %>index.html" }
         ]
       },
 
       release: {
         files: [
-          { src: ["app/**"], dest: "dist/release/" },
-          { src: "vendor/**", dest: "dist/release/" },
-          { src: "index.html", dest: "dist/release/index.html" },
-          { src: "dist/debug/source.js", dest: "dist/release/debug/source.js" }
+          { src: ["app/**"], dest: "<%= dist.release %>" },
+          { src: "vendor/**", dest: "<%= dist.release %>" },
+          { src: "index.html", dest: "<%= dist.release %>index.html" },
+          { src: "<%= dist.debug %>source.js", dest: "<%= dist.release %>debug/source.js" }
         ]
       }
     },
@@ -243,7 +249,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-contrib-jst");
   grunt.loadNpmTasks("grunt-contrib-concat");
   grunt.loadNpmTasks("grunt-contrib-uglify");
-  grunt.loadNpmTasks("grunt-contrib-mincss");
+  grunt.loadNpmTasks("grunt-contrib-cssmin");
   grunt.loadNpmTasks("grunt-contrib-clean");
   grunt.loadNpmTasks("grunt-contrib-copy");
 
@@ -263,7 +269,7 @@ module.exports = function(grunt) {
 
   // The release task will first run the debug tasks.  Following that, minify
   // the built JavaScript and then minify the built CSS.
-  grunt.registerTask("release", ["debug", "uglify", "mincss"]);
+  grunt.registerTask("release", ["debug", "uglify", "cssmin"]);
 
   // The test task take care of starting test server and running tests.
   grunt.registerTask("test", ["jshint", "server:test", "karma"]);
