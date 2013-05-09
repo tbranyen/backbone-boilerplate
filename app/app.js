@@ -51,7 +51,8 @@ app.layout = new Backbone.View({
 
   hijackLinks: function(ev) {
     // Get the absolute anchor href.
-    var href = { prop: $(this).prop("href"), attr: $(this).attr("href") };
+    var $link = $(ev.currentTarget);
+    var href = { prop: $link.prop("href"), attr: $link.attr("href") };
     // Get the absolute root.
     var root = location.protocol + "//" + location.host + app.root;
 
