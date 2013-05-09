@@ -31,8 +31,7 @@
       "backbone": "~1.0.0",
       "lodash": "~1.2.0",
       "jquery": "~2.0.0",
-      "backbone.layoutmanager": "~0.8.7",
-      "bbb-layoutmanager": "~0.1.0"
+      "backbone.layoutmanager": "~0.8.7"
     }
   }
 }
