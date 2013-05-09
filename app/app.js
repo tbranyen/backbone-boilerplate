@@ -11,9 +11,6 @@ var app = module.exports = {};
 // The root path to run the application through.
 app.root = "/";
 
-// Make sure template cache/precompilation is present
-window.JST || (window.JST = {});
-
 // Configure LayoutManager with Backbone Boilerplate defaults.
 LayoutManager.configure({
   // Allow LayoutManager to augment Backbone.View.prototype.
@@ -29,7 +26,7 @@ LayoutManager.configure({
     path = path + ".html";
 
     // If cached, use the compiled template.
-    if (window.JST[path]) {
+    if (window.JST && window.JST[path]) {
       return window.JST[path];
     }
 
