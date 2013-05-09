@@ -43,7 +43,7 @@ LayoutManager.configure({
 // The application layout handles link hijacking and can be modified to
 // handle other application global actions as well.
 app.layout = new Backbone.View({
-  el: document.body,
+  el: "#main",
 
   events: {
     "click a[href]:not([data-bypass])": "hijackLinks"
