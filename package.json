@@ -17,7 +17,6 @@
     "grunt-bbb-styles": "~0.1.0-alpha.5",
     "grunt-bbb-requirejs": "~0.1.0-alpha.4",
     "grunt-karma-0.9.1": "0.4.3",
-    "grunt-rsync": "~0.1.1",
     "karma-jasmine": "~0.0.1",
     "karma-phantomjs-launcher": "~0.0.1",
     "karma-chrome-launcher": "~0.0.1",

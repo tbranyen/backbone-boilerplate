@@ -36,13 +36,7 @@ module.exports = function(grunt) {
         src: "app/styles/index.css",
 
         // The relative path to use for the @imports.
-        paths: ["app/styles"],
-
-        // Point to where styles live.
-        prefix: "app/styles/",
-
-        // Additional production-only stylesheets here.
-        additional: []
+        paths: ["app/styles"]
       }
     },
 
@@ -50,7 +44,6 @@ module.exports = function(grunt) {
     // modules and concatenate them into a single file.
     requirejs: {
       debug: {
-        // Merge the Jam ration options into the output build.
         options: {
           // Include the main ration file.
           mainConfigFile: "app/config.js",
@@ -96,9 +89,7 @@ module.exports = function(grunt) {
     cssmin: {
       release: {
         files: {
-          "<%= dist.release %>app/styles/index.css": [
-            "<%= dist.debug %>app/styles/index.css"
-          ]
+          "<%= dist.release %>styles.css": ["<%= dist.debug %>styles.css"]
         }
       }
     },
@@ -126,14 +117,25 @@ module.exports = function(grunt) {
 
     server: {
       options: {
+        // Default server settings that are ideal for local development.
         host: "127.0.0.1",
         port: 8000,
 
-        map: {
-          // Point to the Jam `require.js` file because it includes all
-          // package paths automatically.
-          "source.js": "vendor/jam/require.js"
-        }
+        // Add any additional directories you want to automatically compile
+        // CommonJS modules in.
+        moduleDirs: [
+          // Source.
+          "app",
+
+          // Testing directories.
+          "test/jasmine/spec",
+          "test/mocha/tests",
+          "test/qunit/tests"
+        ],
+
+        // Root entry point during development is RequireJS, this loads the rest
+        // of the application.
+        map: { "source.js": "vendor/jam/require.js" }
       },
 
       development: {
@@ -143,8 +145,11 @@ module.exports = function(grunt) {
       debug: {
         options: {
           map: {
+            // Source.
             "source.js": "<%= dist.debug %>source.js",
-            "app/styles/index.css": "<%= dist.debug %>app/styles/index.css"
+
+            // Styles.
+            "app/styles/index.css": "<%= dist.debug %>styles.css"
           }
         }
       },
@@ -152,12 +157,15 @@ module.exports = function(grunt) {
       release: {
         options: {
           map: {
+            // Debugging.
+            "source.js.map": "<%= dist.release %>source.js.map",
             "debug/source.js": "<%= dist.release %>debug/source.js",
-            "source.js": "<%= dist.release %>source.js",
-            "app/styles/index.css": "<%= dist.release %>app/styles/index.css",
 
-            // Necessary for SourceMap debugging.
-            "source.js.map": "dist/release/source.js.map"
+            // Source.
+            "source.js": "<%= dist.release %>source.js",
+
+            // Styles.
+            "app/styles/index.css": "<%= dist.release %>styles.css"
           }
         }
       },
@@ -191,6 +199,15 @@ module.exports = function(grunt) {
       }
     },
 
+    compress: {
+      release: {
+        files: {
+          "<%= dist.release %>source.js.gz": "<%= dist.release %>source.js",
+          "<%= dist.release %>styles.css.gz": "<%= dist.release %>styles.css"
+        }
+      }
+    },
+
     karma: {
       options: {
         basePath: process.cwd(),
@@ -213,7 +230,7 @@ module.exports = function(grunt) {
         ],
 
         proxies: {
-          "/base": "http://localhost:<%=server.test.port%>"
+          "/base": "http://localhost:<%=server.test.options.port%>"
         }
       },
 
@@ -262,6 +279,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-contrib-cssmin");
   grunt.loadNpmTasks("grunt-contrib-clean");
   grunt.loadNpmTasks("grunt-contrib-copy");
+  grunt.loadNpmTasks("grunt-contrib-compress");
 
   // Third-party tasks.
   grunt.loadNpmTasks("grunt-karma-0.9.1");
@@ -274,12 +292,14 @@ module.exports = function(grunt) {
   // This will reset the build, be the precursor to the production
   // optimizations, and serve as a good intermediary for debugging.
   grunt.registerTask("debug", [
-    "clean", "jshint", "jst", "requirejs", "concat", "copy", "styles"
+    "clean", "jshint", "jst", "requirejs", "concat", "styles"
   ]);
 
   // The release task will first run the debug tasks.  Following that, minify
   // the built JavaScript and then minify the built CSS.
-  grunt.registerTask("release", ["debug", "uglify", "cssmin"]);
+  grunt.registerTask("release", [
+    "debug", "copy:release", "uglify", "cssmin", "compress"
+  ]);
 
   // The test task take care of starting test server and running tests.
   grunt.registerTask("test", ["jshint", "server:test", "karma"]);

@@ -1,56 +1,60 @@
-test("one tautology", function() {
-  ok(true);
-});
+define(function(require) {
 
-module("simple tests");
+  test("one tautology", function() {
+    ok(true);
+  });
 
-test("increments", function() {
-  var mike = 0;
+  module("simple tests");
 
-  ok(mike++ === 0);
-  ok(mike === 1);
-});
+  test("increments", function() {
+    var mike = 0;
 
-test("increments (improved)", function() {
-  var mike = 0;
+    ok(mike++ === 0);
+    ok(mike === 1);
+  });
 
-  equal(mike++, 0);
-  equal(mike, 1);
-});
+  test("increments (improved)", function() {
+    var mike = 0;
+
+    equal(mike++, 0);
+    equal(mike, 1);
+  });
 
 
-module("setUp/tearDown", {
-  setup: function() {
-    expect(0);
-    //console.log("Before");
-  },
+  module("setUp/tearDown", {
+    setup: function() {
+      expect(0);
+      //console.log("Before");
+    },
 
-  teardown: function() {
-    expect(0);
-    //console.log("After");
-  }
-});
+    teardown: function() {
+      expect(0);
+      //console.log("After");
+    }
+  });
 
-test("example", function() {
-  //console.log("During");
-});
+  test("example", function() {
+    //console.log("During");
+  });
 
-module("async");
+  module("async");
 
-test("multiple async", function() {
-  expect(2);
+  test("multiple async", function() {
+    expect(2);
 
-  stop();
+    stop();
 
-  setTimeout( function( ) {
-    ok(true, "async operation completed");
-    start();
-  }, 500);
+    setTimeout( function( ) {
+      ok(true, "async operation completed");
+      start();
+    }, 500);
 
-  stop();
+    stop();
 
-  setTimeout(function() {
-    ok(true, "async operation completed");
-    start();
-  }, 500);
+    setTimeout(function() {
+      ok(true, "async operation completed");
+      start();
+    }, 500);
+  });
+
 });

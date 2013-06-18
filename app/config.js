@@ -3,14 +3,12 @@
 require.config({
   paths: {
     // Make vendor easier to access.
-    "vendor": "../vendor"
-  },
+    "vendor": "../vendor",
 
-  map: {
     // Opt for Lo-Dash Underscore compatibility build.
-    "*": { "underscore": "vendor/jam/lodash/dist/lodash.underscore" }
+    "underscore": "../vendor/jam/lodash/dist/lodash.underscore"
   },
 
-  // This should help with cache issues related to development.
+  // This will help with cache issues related to development.
   urlArgs: "bust=" + Number(new Date())
 });
