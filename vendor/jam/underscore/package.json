@@ -14,10 +14,14 @@
     "test": "phantomjs test/vendor/runner.js test/index.html?noglobals=true"
   },
   "jam": {
-    "include": ["underscore.js"],
-    "main": "underscore.js",
-    "shim": {
-      "exports": "_"
-    }
+      "main": "underscore.js",
+      "include": [
+          "underscore.js",
+          "README.md",
+          "LICENSE"
+      ],
+      "shim": {
+        "exports": "_"
+      }
   }
 }

@@ -125,38 +125,48 @@ module.exports = function(grunt) {
     clean: ["dist/"],
 
     server: {
-      map: {
-        // Point to the Jam `require.js` file because it includes all package
-        // paths automatically.
-        "source.js": "vendor/jam/require.js",
+      options: {
+        host: "127.0.0.1",
+        port: 8000,
 
-        // Keep the styles file generic to make running from the `dist/`
-        // directory easier.
-        "styles.css": "app/styles/index.css"
+        map: {
+          // Point to the Jam `require.js` file because it includes all
+          // package paths automatically.
+          "source.js": "vendor/jam/require.js"
+        }
       },
 
-      // Specifically used for testing the application.
-      test: {
-        map: "<%= server.map %>",
-        forever: false,
-        port: 8001
+      development: {
+        options: {}
       },
 
       debug: {
-        map: {
-          "source.js": "<%= dist.debug %>source.js",
-          "app/styles/index.css": "<%= dist.debug %>app/styles/index.css"
+        options: {
+          map: {
+            "source.js": "<%= dist.debug %>source.js",
+            "app/styles/index.css": "<%= dist.debug %>app/styles/index.css"
+          }
         }
       },
 
       release: {
-        map: {
-          "debug/source.js": "<%= dist.release %>debug/source.js",
-          "source.js": "<%= dist.release %>source.js",
-          "app/styles/index.css": "<%= dist.release %>app/styles/index.css",
+        options: {
+          map: {
+            "debug/source.js": "<%= dist.release %>debug/source.js",
+            "source.js": "<%= dist.release %>source.js",
+            "app/styles/index.css": "<%= dist.release %>app/styles/index.css",
 
-          // Necessary for SourceMap debugging.
-          "source.js.map": "<%= dist.release %>source.js.map"
+            // Necessary for SourceMap debugging.
+            "source.js.map": "dist/release/source.js.map"
+          }
+        }
+      },
+
+      // Specifically used for testing the application.
+      test: {
+        options: {
+          forever: false,
+          port: 8001
         }
       }
     },

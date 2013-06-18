@@ -1,3 +1,4 @@
 {
-  "directory": "vendor/bower"
+  "directory": "vendor/bower",
+  "post_install": "grunt bower"
 }
