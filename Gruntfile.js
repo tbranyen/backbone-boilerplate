@@ -13,13 +13,12 @@ module.exports = function(grunt) {
     // This task uses James Burke's excellent r.js AMD builder to take all
     // modules and concatenate them into a single file.
     requirejs: {
-      debug: {
+      release: {
         options: {
           // Include the main ration file.
           mainConfigFile: "app/config.js",
 
-          // Output file.
-          out: "dist/source.js",
+          baseUrl: "dist/app",
 
           // Include Almond to slim down the built filesize.
           name: "almond",
@@ -33,74 +32,65 @@ module.exports = function(grunt) {
           findNestedDependencies: true,
 
           // Wrap everything in an IIFE.
-          wrap: true
+          wrap: true,
+
+          // Output file.
+          out: "dist/source.js",
+
+          // Enable Source Map generation.
+          generateSourceMaps: true,
+
+          // Do not preserve any license comments when working with source maps.
+          // These options are incompatible.
+          preserveLicenseComments: false,
+
+          // Minify using UglifyJS.
+          optimize: "uglify2"
         }
       }
     },
 
     // This task simplifies working with CSS inside Backbone Boilerplate
     // projects.  Instead of manually specifying your stylesheets inside the
-    // ration, you can use `@imports` and this task will concatenate
-    // only those paths.
+    // HTML, you can use `@imports` and this task will concatenate only those
+    // paths.
     styles: {
       // Out the concatenated contents of the following styles into the below
       // development file path.
-      "<%= dist.debug %>app/styles/index.css": {
+      "dist/styles.css": {
         // Point this to where your `index.css` file is location.
         src: "app/styles/index.css",
 
         // The relative path to use for the @imports.
-        paths: ["app/styles"]
+        paths: ["app/styles"],
+
+        // Rewrite image paths during release to be relative to the `img`
+        // directory.
+        forceRelative: "/app/img/"
       }
     },
 
-    // This task uses the MinCSS Node.js project to take all your CSS files in
-    // order and concatenate them into a single CSS file named index.css.  It
-    // also minifies all the CSS as well.  This is named index.css, because we
-    // only want to load one stylesheet in index.html.
+    // Minfiy the distribution CSS.
     cssmin: {
       release: {
         files: {
-          "<%= dist.release %>styles.css": ["<%= dist.debug %>styles.css"]
+          "dist/styles.min.css": ["dist/styles.css"]
         }
       }
     },
 
     server: {
       options: {
-        // Default server settings that are ideal for local development.
-        host: "127.0.0.1",
-        port: 8000,
-
-        // Add any additional directories you want to automatically compile
-        // CommonJS modules in.
-        moduleDirs: [
-          // Source.
-          "app",
-
-          // Testing directories.
-          "test/jasmine/spec",
-          "test/mocha/tests",
-          "test/qunit/tests"
-        ],
-
-        // Root entry point during development is RequireJS, this loads the rest
-        // of the application.
-        map: { "source.js": "vendor/jam/require.js" }
+        // Ideal default server settings for development.
+        host: "0.0.0.0",
+        port: 8000
       },
 
       development: {
-        options: {}
-      },
-
-      debug: {
         options: {
           map: {
             // Source.
-            "source.js": "<%= dist.debug %>source.js",
-
-            // Styles.
-            "app/styles/index.css": "<%= dist.debug %>styles.css"
+            "source.js": "vendor/bower/requirejs/require.js",
           }
         }
       },
@@ -109,14 +99,13 @@ module.exports = function(grunt) {
         options: {
           map: {
             // Debugging.
-            "source.js.map": "<%= dist.release %>source.js.map",
-            "debug/source.js": "<%= dist.release %>debug/source.js",
+            "source.js.map": "dist/source.js.map",
 
             // Source.
-            "source.js": "<%= dist.release %>source.js",
+            "source.js": "dist/source.js",
 
             // Styles.
-            "app/styles/index.css": "<%= dist.release %>styles.css"
+            "app/styles/index.css": "dist/styles.min.css"
           }
         }
       },
@@ -132,29 +121,21 @@ module.exports = function(grunt) {
 
     // Move vendor and app logic during a build.
     copy: {
-      debug: {
-        files: [
-          { src: ["app/**"], dest: "<%= dist.debug %>" },
-          { src: "vendor/**", dest: "<%= dist.debug %>" },
-          { src: "index.html", dest: "<%= dist.debug %>index.html" }
-        ]
-      },
-
       release: {
         files: [
-          { src: ["app/**"], dest: "<%= dist.release %>" },
-          { src: "vendor/**", dest: "<%= dist.release %>" },
-          { src: "index.html", dest: "<%= dist.release %>index.html" },
-          { src: "<%= dist.debug %>source.js", dest: "<%= dist.release %>debug/source.js" }
+          { src: ["app/**"], dest: "dist/" },
+          { src: "vendor/**", dest: "dist/" },
+          { src: "index.html", dest: "dist/index.html" }
         ]
       }
     },
 
+    // Provide a static GZip build that can be used with compatible servers.
     compress: {
       release: {
         files: {
-          "<%= dist.release %>source.js.gz": "<%= dist.release %>source.js",
-          "<%= dist.release %>styles.css.gz": "<%= dist.release %>styles.css"
+          "dist/source.js.gz": "dist/source.js",
+          "dist/styles.min.css.gz": "dist/styles.min.css"
         }
       }
     },
@@ -239,7 +220,7 @@ module.exports = function(grunt) {
 
   // When running the default Grunt command, just lint the code.
   grunt.registerTask("default", [
-    "clean", "jshint", "requirejs", "styles", "cssmin", "copy", "compress"
+    "clean", "jshint", "copy", "requirejs", "styles", "cssmin", "compress"
   ]);
 
   // The test task take care of starting test server and running tests.
