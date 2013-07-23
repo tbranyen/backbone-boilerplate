@@ -21,11 +21,12 @@ module.exports = function(grunt) {
           // Output file.
           out: "dist/source.js",
 
-          // Root application module.
+          // Include Almond to slim down the built filesize.
           name: "almond",
 
           // Set the Bootstrap as the main entry point.
-          main: "bootstrap",
+          include: ["bootstrap"],
+          insertRequire: ["bootstrap"],
 
           // Since we bootstrap with nested `require` calls this option allows
           // R.js to find them.
