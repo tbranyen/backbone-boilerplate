@@ -10,6 +10,33 @@ module.exports = function(grunt) {
     // Run your source code through JSHint's defaults.
     jshint: ["app/**/*.js"],
 
+    // This task uses James Burke's excellent r.js AMD builder to take all
+    // modules and concatenate them into a single file.
+    requirejs: {
+      debug: {
+        options: {
+          // Include the main ration file.
+          mainConfigFile: "app/config.js",
+
+          // Output file.
+          out: "dist/source.js",
+
+          // Root application module.
+          name: "almond",
+
+          // Set the Bootstrap as the main entry point.
+          main: "bootstrap",
+
+          // Since we bootstrap with nested `require` calls this option allows
+          // R.js to find them.
+          findNestedDependencies: true,
+
+          // Wrap everything in an IIFE.
+          wrap: true
+        }
+      }
+    },
+
     // This task simplifies working with CSS inside Backbone Boilerplate
     // projects.  Instead of manually specifying your stylesheets inside the
     // ration, you can use `@imports` and this task will concatenate
@@ -23,32 +50,6 @@ module.exports = function(grunt) {
 
         // The relative path to use for the @imports.
         paths: ["app/styles"]
-      }
-    },
-
-    // This task uses James Burke's excellent r.js AMD builder to take all
-    // modules and concatenate them into a single file.
-    requirejs: {
-      debug: {
-        options: {
-          // Include the main ration file.
-          mainConfigFile: "app/config.js",
-
-          // Output file.
-          out: "<%= dist.debug %>source.js",
-
-          // Root application module.
-          name: "config",
-
-          // Include the main application.
-          insertRequire: ["main"],
-
-          // This will ensure the application runs after being built.
-          include: ["app", "main", "router"],
-
-          // Wrap everything in an IIFE.
-          wrap: true
-        }
       }
     },
 

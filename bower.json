@@ -1,5 +1,6 @@
 {
   "name": "backbone-boilerplate",
+
   "dependencies": {
     "html5-boilerplate": "~4.2.0",
     "almond": "~0.2.5",
