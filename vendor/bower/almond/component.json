@@ -1,8 +1,0 @@
-{
-  "name": "almond",
-  "version": "0.2.5",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/jrburke/almond.git"
-  }
-}

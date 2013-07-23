@@ -1,28 +1,14 @@
-// Grunt ration updated to latest Grunt.  That means your minimum
+// Grunt configuration updated to latest Grunt.  That means your minimum
 // version necessary to run these tasks is Grunt 0.4.
 module.exports = function(grunt) {
+  "use strict";
 
   grunt.initConfig({
-    // Easier location to change the default debug and release folders.
-    dist: {
-      debug: "dist/debug/",
-      release: "dist/release/"
-    },
+    // Empty and remove `dist/` directory.
+    clean: ["dist/"],
 
-    // Runs the application JavaScript through JSHint with the defaults.
-    jshint: {
-      files: ["app/**/*.js"]
-    },
-
-    // The jst task compiles all application templates into JavaScript
-    // functions with the Lo-Dash template function.
-    jst: {
-      debug: {
-        files: {
-          "<%= dist.debug %>templates.js": ["app/templates/**/*.*"]
-        }
-      }
-    },
+    // Run your source code through JSHint's defaults.
+    jshint: ["app/**/*.js"],
 
     // This task simplifies working with CSS inside Backbone Boilerplate
     // projects.  Instead of manually specifying your stylesheets inside the
@@ -66,22 +52,6 @@ module.exports = function(grunt) {
       }
     },
 
-    // Combine the Almond AMD loader and precompiled templates with the
-    // application source code.
-    concat: {
-      dist: {
-        src: [
-          "vendor/bower/almond/almond.js",
-          "<%= dist.debug %>templates.js",
-          "<%= dist.debug %>source.js"
-        ],
-
-        dest: "<%= dist.debug %>source.js",
-
-        separator: ";"
-      }
-    },
-
     // This task uses the MinCSS Node.js project to take all your CSS files in
     // order and concatenate them into a single CSS file named index.css.  It
     // also minifies all the CSS as well.  This is named index.css, because we
@@ -93,27 +63,6 @@ module.exports = function(grunt) {
         }
       }
     },
-
-    // Minify the application built source and generate source maps back to
-    // the original debug build.
-    uglify: {
-      options: {
-        sourceMap: "<%= dist.release %>source.js.map",
-        sourceMapRoot: "",
-        sourceMapPrefix: 1,
-        preserveComments: "some"
-      },
-
-      release: {
-        files: {
-          "<%= dist.release %>source.js": ["<%= dist.debug %>source.js"]
-        }
-      }
-    },
-
-    // The clean task ensures all files are removed from the dist/ directory so
-    // that no files linger from previous builds.
-    clean: ["dist/"],
 
     server: {
       options: {
@@ -272,39 +221,25 @@ module.exports = function(grunt) {
   });
 
   // Grunt contribution tasks.
-  grunt.loadNpmTasks("grunt-contrib-jshint");
-  grunt.loadNpmTasks("grunt-contrib-jst");
-  grunt.loadNpmTasks("grunt-contrib-concat");
-  grunt.loadNpmTasks("grunt-contrib-uglify");
-  grunt.loadNpmTasks("grunt-contrib-cssmin");
   grunt.loadNpmTasks("grunt-contrib-clean");
+  grunt.loadNpmTasks("grunt-contrib-jshint");
+  grunt.loadNpmTasks("grunt-contrib-cssmin");
   grunt.loadNpmTasks("grunt-contrib-copy");
   grunt.loadNpmTasks("grunt-contrib-compress");
 
   // Third-party tasks.
-  grunt.loadNpmTasks("grunt-karma-0.9.1");
+  grunt.loadNpmTasks("grunt-karma");
 
   // Grunt BBB tasks.
   grunt.loadNpmTasks("grunt-bbb-server");
   grunt.loadNpmTasks("grunt-bbb-requirejs");
   grunt.loadNpmTasks("grunt-bbb-styles");
 
-  // This will reset the build, be the precursor to the production
-  // optimizations, and serve as a good intermediary for debugging.
-  grunt.registerTask("debug", [
-    "clean", "jshint", "jst", "requirejs", "concat", "styles"
-  ]);
-
-  // The release task will first run the debug tasks.  Following that, minify
-  // the built JavaScript and then minify the built CSS.
-  grunt.registerTask("release", [
-    "debug", "copy:release", "uglify", "cssmin", "compress"
+  // When running the default Grunt command, just lint the code.
+  grunt.registerTask("default", [
+    "clean", "jshint", "requirejs", "styles", "cssmin", "copy", "compress"
   ]);
 
   // The test task take care of starting test server and running tests.
   grunt.registerTask("test", ["jshint", "server:test", "karma"]);
-
-  // When running the default Grunt command, just lint the code.
-  grunt.registerTask("default", ["jshint"]);
-
 };
