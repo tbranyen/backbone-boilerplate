@@ -8,16 +8,13 @@
   <title>Backbone Boilerplate Jasmine Test Suite</title>
 
   <!-- Jasmine styles. -->
-  <link rel="stylesheet" href="vendor/jasmine.css">
+  <link rel="stylesheet"
+    href="../../vendor/bower/jasmine/lib/jasmine-core/jasmine.css">
 </head>
 
 <body>
-  <!-- Testing libraries. -->
-  <script src="vendor/jasmine.js"></script>
-  <script src="vendor/jasmine-html.js"></script>
-  <script src="../../vendor/jam/require.js"></script>
-
-  <!-- Declare your spec files to be run inside this file. -->
-  <script src="test-runner.js"></script>
+  <!-- Declare your spec files to be run inside `test-runner.js`. -->
+  <script data-main="test-runner.js"
+    src="../../vendor/bower/requirejs/require.js"></script>
 </body>
 </html>

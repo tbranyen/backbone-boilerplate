@@ -14,12 +14,26 @@ if (window.__karma__) {
 }
 
 // Set the application endpoint and load the configuration.
-require({
-  paths: { spec: "../test/jasmine/spec" },
+require.config({
+  paths: {
+    // Testing libraries.
+    "jasmine": "../vendor/bower/jasmine/lib/jasmine-core/jasmine",
+    "jasmine-html": "../vendor/bower/jasmine/lib/jasmine-core/jasmine-html",
+  
+    // Location of tests.
+    spec: "../test/jasmine/spec"
+  },
+
+  shim: {
+    "jasmine-html": ["jasmine"]
+  },
 
   // Determine the baseUrl if we are in Karma or not.
   baseUrl: window.__karma__ ? "base/app" : "../../app"
-}, ["config", "../vendor/jam/require.config"], function() {
+});
+
+// Load the configuration and testing libraries first.
+require(["config", "jasmine", "jasmine-html"], function() {
   // Load all specs.
   require(specs, function() {
 

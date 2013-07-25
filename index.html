@@ -8,7 +8,9 @@
   <title>Backbone Boilerplate</title>
 
   <!-- Application styles. -->
+  <!-- build:[href] /styles.css -->
   <link rel="stylesheet" href="/app/styles/index.css">
+  <!-- /build -->
 </head>
 
 <body>
@@ -16,6 +18,8 @@
   <main role="main" id="main"></main>
 
   <!-- Application source. -->
-  <script data-main="/app/bootstrap" src="/source.js"></script>
+  <!-- build:[src] /source.js -->
+  <script data-main="/app/bootstrap" src="/vendor/bower/requirejs/require.js"></script>
+  <!-- /build -->
 </body>
 </html>

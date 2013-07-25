@@ -81,40 +81,30 @@ module.exports = function(grunt) {
 
     server: {
       options: {
-        // Ideal default server settings for development.
         host: "0.0.0.0",
         port: 8000
       },
 
-      development: {
-        options: {
-          map: {
-            // Source.
-            "source.js": "vendor/bower/requirejs/require.js",
-          }
-        }
-      },
+      development: {},
 
       release: {
         options: {
-          map: {
-            // Debugging.
-            "source.js.map": "dist/source.js.map",
-
-            // Source.
-            "source.js": "dist/source.js",
-
-            // Styles.
-            "app/styles/index.css": "dist/styles.min.css"
-          }
+          prefix: "dist"
         }
       },
 
-      // Specifically used for testing the application.
       test: {
         options: {
           forever: false,
           port: 8001
+        }
+      }
+    },
+
+    processhtml: {
+      release: {
+        files: {
+          "dist/index.html": ["index.html"]
         }
       }
     },
@@ -124,19 +114,8 @@ module.exports = function(grunt) {
       release: {
         files: [
           { src: ["app/**"], dest: "dist/" },
-          { src: "vendor/**", dest: "dist/" },
-          { src: "index.html", dest: "dist/index.html" }
+          { src: "vendor/**", dest: "dist/" }
         ]
-      }
-    },
-
-    // Provide a static GZip build that can be used with compatible servers.
-    compress: {
-      release: {
-        files: {
-          "dist/source.js.gz": "dist/source.js",
-          "dist/styles.min.css.gz": "dist/styles.min.css"
-        }
       }
     },
 
@@ -145,7 +124,7 @@ module.exports = function(grunt) {
         basePath: process.cwd(),
         runnerPort: 9999,
         port: 9876,
-        singleRun: true,
+        singleRun: false,
         colors: true,
         captureTimeout: 7000,
 
@@ -156,8 +135,6 @@ module.exports = function(grunt) {
           "karma-jasmine",
           "karma-mocha",
           "karma-qunit",
-          "karma-chrome-launcher",
-          "karma-firefox-launcher",
           "karma-phantomjs-launcher"
         ],
 
@@ -167,15 +144,7 @@ module.exports = function(grunt) {
       },
 
       jasmine: {
-        options: {
-          frameworks: ["jasmine"],
-
-          files: [
-            "test/jasmine/vendor/jasmine-html.js",
-            "vendor/jam/require.js",
-            "test/jasmine/test-runner.js"
-          ]
-        }
+        configFile: "test/jasmine/karma.conf.js",
       },
 
       mocha: {
@@ -208,10 +177,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-contrib-jshint");
   grunt.loadNpmTasks("grunt-contrib-cssmin");
   grunt.loadNpmTasks("grunt-contrib-copy");
-  grunt.loadNpmTasks("grunt-contrib-compress");
 
   // Third-party tasks.
   grunt.loadNpmTasks("grunt-karma");
+  grunt.loadNpmTasks("grunt-processhtml");
 
   // Grunt BBB tasks.
   grunt.loadNpmTasks("grunt-bbb-server");
@@ -220,7 +189,7 @@ module.exports = function(grunt) {
 
   // When running the default Grunt command, just lint the code.
   grunt.registerTask("default", [
-    "clean", "jshint", "copy", "requirejs", "styles", "cssmin", "compress"
+    "clean", "jshint", "processhtml", "copy", "requirejs", "styles", "cssmin"
   ]);
 
   // The test task take care of starting test server and running tests.
