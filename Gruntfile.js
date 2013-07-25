@@ -18,6 +18,9 @@ module.exports = function(grunt) {
           // Include the main ration file.
           mainConfigFile: "app/config.js",
 
+          // Setting the base url to the distribution directory allows the
+          // Uglify minification process to correctly map paths for Source
+          // Maps.
           baseUrl: "dist/app",
 
           // Include Almond to slim down the built filesize.
@@ -35,7 +38,7 @@ module.exports = function(grunt) {
           wrap: true,
 
           // Output file.
-          out: "dist/source.js",
+          out: "dist/source.min.js",
 
           // Enable Source Map generation.
           generateSourceMaps: true,
