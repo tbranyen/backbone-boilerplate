@@ -8,7 +8,7 @@ let us know.  Issues are how the project moves forward; by letting us know
 what's bothering you.
 
 * Search the [issues
-  list](https://github.com/tbranyen/backbone-boilerplate/issues)
+  list](https://github.com/backbone-boilerplate/backbone-boilerplate/issues)
   for existing similar issues.  Consider adding to an existing issue if you
   find one.
 * Choose an applicable title.  This will be used for a corresponding unit test.
@@ -56,8 +56,8 @@ is outdated or incorrect, please file an issue, pull request, or make the
 change yourself in the Wiki.
 
 * Add documentation to the
-  [Wiki](https://github.com/tbranyen/backbone-boilerplate/wiki) if
+  [Wiki](https://github.com/backbone-boilerplate/backbone-boilerplate/wiki) if
   applicable.
 * Release notes are added to the
-  [readme.md](https://github.com/tbranyen/backbone-boilerplate/blob/master/readme.md)
+  [README.md](https://github.com/backbone-boilerplate/backbone-boilerplate/blob/master/readme.md)
   if applicable.

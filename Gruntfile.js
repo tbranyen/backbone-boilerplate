@@ -15,9 +15,6 @@ module.exports = function(grunt) {
     requirejs: {
       release: {
         options: {
-          // Include the main ration file.
-          mainConfigFile: "app/config.js",
-
           // Setting the base url to the distribution directory allows the
           // Uglify minification process to correctly map paths for Source
           // Maps.
@@ -147,7 +144,7 @@ module.exports = function(grunt) {
       },
 
       jasmine: {
-        configFile: "test/jasmine/karma.conf.js",
+        configFile: "test/jasmine/karma.conf.js"
       },
 
       mocha: {
