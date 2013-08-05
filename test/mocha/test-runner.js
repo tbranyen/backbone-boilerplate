@@ -14,7 +14,6 @@ if (window.__karma__) {
 require.config({
   paths: {
     // Testing libraries.
-    "chai": "../vendor/bower/chai/chai",
     "mocha": "../vendor/bower/mocha/mocha",
 
     // Location of tests.
