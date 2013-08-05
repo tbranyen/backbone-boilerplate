@@ -127,7 +127,7 @@ module.exports = function(grunt) {
         basePath: process.cwd(),
         runnerPort: 9999,
         port: 9876,
-        singleRun: false,
+        singleRun: true,
         colors: true,
         captureTimeout: 7000,
 
@@ -151,26 +151,11 @@ module.exports = function(grunt) {
       },
 
       mocha: {
-        options: {
-          frameworks: ["mocha"],
-
-          files: [
-            "test/mocha/vendor/chai.js",
-            "vendor/jam/require.js",
-            "test/mocha/test-runner.js"
-          ]
-        }
+        configFile: "test/mocha/karma.conf.js"
       },
 
       qunit: {
-        options: {
-          frameworks: ["qunit"],
-
-          files: [
-            "vendor/jam/require.js",
-            "test/qunit/test-runner.js"
-          ]
-        }
+        configFile: "test/qunit/karma.conf.js"
       }
     }
   });
