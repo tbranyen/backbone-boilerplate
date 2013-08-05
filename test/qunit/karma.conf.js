@@ -4,10 +4,6 @@ module.exports = function(config) {
     files: [
       "vendor/bower/requirejs/require.js",
       "test/qunit/test-runner.js"
-    ],
-    plugins: [
-      "karma-qunit",
-      "karma-phantomjs-launcher"
     ]
   });
 };

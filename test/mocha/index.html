@@ -8,18 +8,15 @@
   <title>Backbone Boilerplate Mocha Test Suite</title>
 
   <!-- Mocha styles. -->
-  <link rel="stylesheet" href="vendor/mocha.css">
+  <link rel="stylesheet"
+    href="../../vendor/bower/mocha/mocha.css">
 </head>
 
 <body>
   <div id="mocha"></div>
 
-  <!-- Testing libraries. -->
-  <script src="vendor/chai.js"></script>
-  <script src="vendor/mocha.js"></script>
-  <script src="../../vendor/jam/require.js"></script>
-
-  <!-- Declare your spec files to be run inside this file. -->
-  <script src="test-runner.js"></script>
+  <!-- Declare your spec files to be run inside `test-runner.js`. -->
+  <script data-main="test-runner.js"
+    src="../../vendor/bower/requirejs/require.js"></script>
 </body>
 </html>
