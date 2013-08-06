@@ -4,13 +4,11 @@
 
   "devDependencies": {
     "grunt": "~0.4.1",
+    "bbb": "~0.2.0",
     "grunt-contrib-jshint": "~0.6.0",
     "grunt-contrib-cssmin": "~0.6.1",
     "grunt-contrib-copy": "~0.4.1",
     "grunt-contrib-clean": "~0.5.0",
-    "grunt-bbb-server": "~0.1.0-alpha.13",
-    "grunt-bbb-styles": "~0.1.0-alpha.5",
-    "grunt-bbb-requirejs": "~0.1.0-alpha.4",
     "grunt-processhtml": "~0.1.0",
     "grunt-karma": "~0.5.1",
     "karma-jasmine": "~0.0.3",
