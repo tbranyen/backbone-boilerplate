@@ -11,15 +11,6 @@ The Backbone Boilerplate is a way of organizing a web application with some
 opinionated defaults: such as Backbone, Lo-Dash, jQuery, RequireJS, Bower,
 Grunt, and the HTML5 Boilerplate styles.
 
-There are some tricks up the Boilerplate's sleeves though and that includes
-features like:
-
-  * ES6 and CommonJS module support that seamlessly integrates and compiles to
-    AMD.
-  * Source Map support that will map directly to the module file.
-  * Proxies that allow you to map your remote API and work locally without
-    needing a cross domain proxy.
-
 Organize your application with a logical file structure, develop your
 Models/Collections/Views/Routers inside modules, and build knowing you have
 efficient code that will not bottleneck your users.
