@@ -8,8 +8,17 @@ boilerplates freely modify Backbone core, lack a build process, and are very
 prescriptive; Backbone Boilerplate changes that.
 
 The Backbone Boilerplate is a way of organizing a web application with some
-opinionated defaults: such as Backbone, Lo-Dash, jQuery, RequireJS, JamJS,
+opinionated defaults: such as Backbone, Lo-Dash, jQuery, RequireJS, Bower,
 Grunt, and the HTML5 Boilerplate styles.
+
+There are some tricks up the Boilerplate's sleeves though and that includes
+features like:
+
+  * ES6 and CommonJS module support that seamlessly integrates and compiles to
+    AMD.
+  * Source Map support that will map directly to the module file.
+  * Proxies that allow you to map your remote API and work locally without
+    needing a cross domain proxy.
 
 Organize your application with a logical file structure, develop your
 Models/Collections/Views/Routers inside modules, and build knowing you have
@@ -37,12 +46,9 @@ View the Backbone Boilerplate documentation here:
 The easiest way to get started is to install Git and clone the repository:
 
 ``` bash
-# Create a new project directory and enter it.
-mkdir myproject && cd myproject
-
 # Using Git, fetch only the latest commits.  You won't need the full history
 # for your project.
-git clone --depth 0 git@github.com:tbranyen/backbone-boilerplate.git .
+git clone --depth 1 git@github.com:tbranyen/backbone-boilerplate.git my-project
 ```
 
 You will need to download and install [Node.js](http://nodejs.org/) if you want
@@ -55,18 +61,12 @@ good idea to update after fetching.  There are two different package managers
 that you need to install and call update on.
 
 ``` bash
-# Install latest Grunt & useful Grunt plugins.
-npm install
-
-# Install Jam and Bower.  Depending on your user account you may need to gain
+# Install Bower.  Depending on your user account you may need to gain
 # elevated privileges using something like `sudo`.
-npm install jamjs bower -g
+npm install bower -g
 
-# Updating the JamJS packages.
-jam upgrade
-
-# Updating the Bower packages.
-bower update
+# Install NPM and Bower dependencies (Bower is hooked up in package.json).
+npm install
 ```
 
 ## Build process ##
@@ -79,8 +79,11 @@ to optimize your application.
 # may need to gain elevated privileges using something like `sudo`.
 npm install grunt-cli -g
 
-# To test the build process works, try running the following command.
-grunt release
+# To run the build process, run the default Grunt task.
+grunt
+
+# To test that the build process works.
+grunt server:release
 ```
 
 ## License ##
