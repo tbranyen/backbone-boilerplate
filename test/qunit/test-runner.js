@@ -15,7 +15,15 @@ require.config({
   },
 
   shim: {
-    "qunit": { exports: "qunit" }
+    "qunit": {
+      init: function() {
+        // Disable auto start.  We'll call start once the async modules have
+        // loaded.
+        this.QUnit.init();
+
+        return this.QUnit;
+      }
+    }
   },
 
   // Determine the baseUrl if we are in Karma or not.
@@ -24,24 +32,22 @@ require.config({
 
 require([
   "config",
-  "specs",
   "qunit"
 ],
 
-function(config, specs, qunit) {
-  // Disable auto start.  We'll call start once the async modules have
-  // loaded.
-  QUnit.config.autostart = false;
+function(config, QUnit) {
+  require(["specs"], function(specs) {
+    // Load all specs.
+    require(specs.specs, function() {
 
-  // Load all specs.
-  require(specs.specs, function() {
-    if (window.__karma__) {
-      // This will start Karma if it exists.
-      window.__karma__.start();
-    } else {
+      if (window.__karma__) {
+        // This will start Karma if it exists.
+        return window.__karma__.start();
+      }
+
       // Only once the dependencies have finished loading, call Qunit.start.
       QUnit.start();
-    }
 
+    });
   });
 });

@@ -26,23 +26,24 @@ require.config({
 
 require([
   "config",
-  "specs",
   "jasmine",
   "jasmine-html"
 ],
 
-function(config, specs, jasmine) {
-  // Load all specs.
-  require(specs.specs, function() {
+function(config, jasmine) {
+  require(["specs"], function(specs) {
+    // Load all specs.
+    require(specs.specs, function() {
 
-    if (window.__karma__) {
-      // This will start Karma if it exists.
-      window.__karma__.start();
-    } else {
-      // Set up the jasmine reporters once each spec has been loaded.
-      jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
-      jasmine.getEnv().execute();
-    }
+      if (window.__karma__) {
+        // This will start Karma if it exists.
+        window.__karma__.start();
+      } else {
+        // Set up the jasmine reporters once each spec has been loaded.
+        jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
+        jasmine.getEnv().execute();
+      }
 
+    });
   });
 });

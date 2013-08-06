@@ -147,15 +147,36 @@ module.exports = function(grunt) {
       },
 
       jasmine: {
-        configFile: "test/jasmine/karma.conf.js"
+        options: {
+          frameworks: ["jasmine"],
+
+          files: [
+            "vendor/bower/requirejs/require.js",
+            "test/jasmine/test-runner.js"
+          ]
+        }
       },
 
       mocha: {
-        configFile: "test/mocha/karma.conf.js"
+        options: {
+          frameworks: ["mocha"],
+
+          files: [
+            "vendor/bower/requirejs/require.js",
+            "test/mocha/test-runner.js"
+          ] 
+        }
       },
 
       qunit: {
-        configFile: "test/qunit/karma.conf.js"
+        options: {
+          frameworks: ["qunit"],
+
+          files: [
+            "vendor/bower/requirejs/require.js",
+            "test/qunit/test-runner.js"
+          ]
+        }
       }
     }
   });

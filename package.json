@@ -12,7 +12,7 @@
     "grunt-bbb-styles": "~0.1.0-alpha.5",
     "grunt-bbb-requirejs": "~0.1.0-alpha.4",
     "grunt-processhtml": "~0.1.0",
-    "grunt-karma": "~0.5.0",
+    "grunt-karma": "~0.5.1",
     "karma-jasmine": "~0.0.3",
     "karma-mocha": "~0.0.4",
     "karma-qunit": "~0.0.3",

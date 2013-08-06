@@ -1,10 +1,3 @@
-// Prefer the BDD testing style.
-mocha.setup("bdd");
-
-// Set up the assertion library.
-// Compatible libraries: http://visionmedia.github.io/mocha/#assertions
-window.expect = chai.expect;
-
 // Make async.
 if (window.__karma__) {
   window.__karma__.loaded = function() {};
@@ -15,6 +8,7 @@ require.config({
   paths: {
     // Testing libraries.
     "mocha": "../vendor/bower/mocha/mocha",
+    "chai": "../vendor/bower/chai/chai",
 
     // Location of tests.
     spec: "../test/mocha/spec",
@@ -22,7 +16,7 @@ require.config({
   },
 
   shim: {
-    "mocha": { exports: "mocha" }
+    "mocha": { exports: "mocha", deps: ["chai"] }
   },
 
   // Determine the baseUrl if we are in Karma or not.
@@ -31,21 +25,29 @@ require.config({
 
 require([
   "config",
-  "specs",
   "mocha"
 ],
 
-function(config, specs, mocha) {
-  // Load all specs.
-  require(specs.specs, function() {
+function(config, mocha) {
+  // Set up the assertion library.
+  // Compatible libraries: http://visionmedia.github.io/mocha/#assertions
+  window.expect = require("chai").expect;
 
-    if (window.__karma__) {
-      // This will start Karma if it exists.
-      window.__karma__.start();
-    } else {
+  // Prefer the BDD testing style.
+  mocha.setup("bdd");
+
+  require(["specs"], function(specs) {
+    // Load all specs.
+    require(specs.specs, function() {
+
+      if (window.__karma__) {
+        // This will start Karma if it exists.
+        return window.__karma__.start();
+      }
+
       // Only once the dependencies have finished loading, call mocha.run.
       mocha.run();
-    }
 
+    });
   });
 });
