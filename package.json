@@ -1,7 +1,6 @@
 {
   "name": "backbone-boilerplate",
   "version": "1.0.0-wip",
-  "private": true,
 
   "devDependencies": {
     "grunt": "~0.4.1",
@@ -27,6 +26,6 @@
   },
 
   "scripts": {
-    "postinstall": "bower install"
+    "postinstall": "bower install -s"
   }
 }
