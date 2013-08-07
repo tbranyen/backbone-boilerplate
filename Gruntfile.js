@@ -26,9 +26,9 @@ module.exports = function(grunt) {
           // Include Almond to slim down the built filesize.
           name: "almond",
 
-          // Set the Bootstrap as the main entry point.
-          include: ["bootstrap"],
-          insertRequire: ["bootstrap"],
+          // Set main.js as the main entry point.
+          include: ["main"],
+          insertRequire: ["main"],
 
           // Since we bootstrap with nested `require` calls this option allows
           // R.js to find them.
