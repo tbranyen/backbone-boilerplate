@@ -17,9 +17,14 @@ require.config({
   shim: {
     "qunit": {
       init: function() {
-        // Disable auto start.  We'll call start once the async modules have
-        // loaded.
-        this.QUnit.config.autostart = false;
+        if (window.__karma__) {
+          // Disable auto start.  We'll call start once the async modules have
+          // loaded.
+          this.QUnit.config.autostart = false;
+        } else {
+          // If we're running in the browser, we can initialize QUnit now.
+          this.QUnit.init();
+        }
 
         return this.QUnit;
       }
