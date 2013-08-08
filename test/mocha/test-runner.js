@@ -33,6 +33,11 @@ function(config, mocha) {
   // Compatible libraries: http://visionmedia.github.io/mocha/#assertions
   window.expect = require("chai").expect;
 
+  // Prefer the BDD testing style outside of Karma's runner.
+  if (!window.__karma__) {
+    mocha.setup("bdd");
+  }
+
   require(["specs"], function(specs) {
     // Load all specs.
     require(specs.specs, function() {
