@@ -19,7 +19,7 @@ require.config({
       init: function() {
         // Disable auto start.  We'll call start once the async modules have
         // loaded.
-        this.QUnit.init();
+        this.QUnit.config.autostart = false;
 
         return this.QUnit;
       }
