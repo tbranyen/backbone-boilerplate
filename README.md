@@ -76,5 +76,5 @@ grunt server:release
 ```
 
 ## License ##
-Copyright (c) 2013 Tim Branyen (@tbranyen)  
+Copyright © 2013 Tim Branyen (@tbranyen)  
 Licensed under the MIT license.
