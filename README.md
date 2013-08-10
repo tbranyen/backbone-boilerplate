@@ -47,8 +47,7 @@ to use the commands in the following sections.
 ## Updating dependencies ##
 
 Third party packages may update independently from this main repo, so it's a
-good idea to update after fetching.  There are two different package managers
-that you need to install and call update on.
+good idea to update after fetching.
 
 ``` bash
 # Install Bower.  Depending on your user account you may need to gain
