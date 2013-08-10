@@ -164,7 +164,7 @@ module.exports = function(grunt) {
           files: [
             "vendor/bower/requirejs/require.js",
             "test/mocha/test-runner.js"
-          ] 
+          ]
         }
       },
 

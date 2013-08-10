@@ -9,7 +9,7 @@ require.config({
     // Testing libraries.
     "jasmine": "../vendor/bower/jasmine/lib/jasmine-core/jasmine",
     "jasmine-html": "../vendor/bower/jasmine/lib/jasmine-core/jasmine-html",
-  
+
     // Location of tests.
     spec: "../test/jasmine/spec",
     specs: "../test/jasmine/specs"
