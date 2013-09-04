@@ -7,36 +7,16 @@
 
   <title>Backbone Boilerplate QUnit Test Suite</title>
 
-  <!-- QUnit styles -->
-  <link rel="stylesheet" href="vendor/qunit.css">
+  <!-- QUnit styles. -->
+  <link rel="stylesheet" href="../../vendor/bower/qunit/qunit/qunit.css">
 </head>
 
 <body>
-  <!-- QUnit stucture -->
-  <div class="dataset-test">
-    <h1 id="qunit-header">Backbone Boilerplate QUnit Test Suite</h1>
-    <h2 id="qunit-banner"></h2>
-    <h2 id="qunit-userAgent"></h2>
-    <ol id="qunit-tests"></ol>
-  </div>
+  <div id="qunit"></div>
+  <div id="qunit-fixture"></div>
 
-  <!-- Testing libs -->
-  <script src="vendor/qunit.js"></script>
-
-  <!-- Load application -->
-  <script data-main="../../app/config"
-    src="../../vendor/jam/require.js"></script>
-
-  <!-- Declare your test files to be run here -->
-  <script>
-    // Ensure you point to where your tests are, base directory is app/, which
-    // is why ../test is necessary
-    require({ paths: { tests: "../test/qunit/tests" } }, [
-
-      // Load the example tests, replace this and add your own tests
-      "tests/example"
-
-    ]);
-  </script>
+  <!-- Declare your spec files to be run inside `test-runner.js`. -->
+  <script data-main="test-runner.js"
+    src="../../vendor/bower/requirejs/require.js"></script>
 </body>
 </html>

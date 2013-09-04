@@ -1,21 +1,29 @@
 {
   "name": "backbone-boilerplate",
-  "version": "0.1.0",
+  "version": "1.0.0-wip",
 
-  "dependencies": {
-    "grunt": "~0.4",
-    "grunt-bbb-server": "0.1.0-alpha"
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "bbb": "~0.2.0",
+    "grunt-contrib-jshint": "~0.6.0",
+    "grunt-contrib-cssmin": "~0.6.1",
+    "grunt-contrib-copy": "~0.4.1",
+    "grunt-contrib-clean": "~0.5.0",
+    "grunt-processhtml": "~0.1.0",
+    "grunt-karma": "~0.5.1",
+    "karma-jasmine": "~0.0.3",
+    "karma-mocha": "~0.0.4",
+    "karma-qunit": "~0.0.3",
+    "karma-phantomjs-launcher": "~0.0.1"
   },
 
-  "jam": {
-    "packageDir": "./vendor/jam",
-    "baseUrl": "./app",
+  "peerDepenencies": {
+    "grunt-cli": "*",
+    "bower": "*",
+    "generator-bbb": "*"
+  },
 
-    "dependencies": {
-      "backbone": "*",
-      "jquery": "*",
-      "lodash": "*",
-      "backbone.layoutmanager": "*"
-    }
+  "scripts": {
+    "postinstall": "bower install -s"
   }
 }

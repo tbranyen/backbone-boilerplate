@@ -1,0 +1,16 @@
+{
+  "name": "backbone-boilerplate",
+
+  "dependencies": {
+    "html5-boilerplate": "~4.2.0",
+    "almond": "~0.2.5",
+    "lodash": "~1.3.1",
+    "backbone": "~1.0.0",
+    "jquery": "~2.0.3",
+    "requirejs": "~2.1.8",
+    "qunit": "~1.12.0",
+    "jasmine": "~1.3.1",
+    "mocha": "~1.12.0",
+    "chai": "~1.7.2"
+  }
+}

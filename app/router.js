@@ -1,21 +1,17 @@
-define([
-  // Application.
-  "app"
-],
+define(function(require, exports, module) {
 
-function(app) {
+  // External dependencies.
+  var Backbone = require("backbone");
 
-  // Defining the application router, you can attach sub routers here.
-  var Router = Backbone.Router.extend({
+  // Defining the application router.
+  module.exports = Backbone.Router.extend({
     routes: {
       "": "index"
     },
 
     index: function() {
-
+      console.log("Welcome to your / route.");
     }
   });
-
-  return Router;
 
 });
