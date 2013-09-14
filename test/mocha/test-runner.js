@@ -1,55 +1,38 @@
-// Make async.
-if (window.__karma__) {
-  window.__karma__.loaded = function() {};
-}
+window.__karma__.loaded = function() {};
 
 // Set the application endpoint and load the configuration.
 require.config({
   paths: {
-    // Testing libraries.
-    "mocha": "../vendor/bower/mocha/mocha",
-    "chai": "../vendor/bower/chai/chai",
+    chai: "../vendor/bower/chai/chai",
+    underscore: "../vendor/bower/lodash/dist/lodash.underscore",
 
-    // Location of tests.
-    spec: "../test/mocha/spec",
-    specs: "../test/mocha/specs"
+    spec: "../test/mocha/spec"
   },
 
-  shim: {
-    "mocha": { exports: "mocha", deps: ["chai"] }
-  },
-
-  // Determine the baseUrl if we are in Karma or not.
-  baseUrl: window.__karma__ ? "base/app" : "../../app"
+  baseUrl: "base/app"
 });
 
 require([
   "config",
-  "mocha"
+  "chai",
+  "underscore"
 ],
 
-function(config, mocha) {
-  // Set up the assertion library.
-  // Compatible libraries: http://visionmedia.github.io/mocha/#assertions
-  window.expect = require("chai").expect;
+function(config, chai, _) {
+  window.expect = chai.expect;
 
-  // Prefer the BDD testing style outside of Karma's runner.
-  if (!window.__karma__) {
-    mocha.setup("bdd");
-  }
+  // Store all located tests in a global cache.
+  var specs = _.reduce(window.__karma__.files, function(memo, id, file) {
+    if (/\.spec\.js$/.test(file)) {
+      memo.push(file);
+    }
 
-  require(["specs"], function(specs) {
-    // Load all specs.
-    require(specs.specs, function() {
+    return memo;
+  }, []);
 
-      if (window.__karma__) {
-        // This will start Karma if it exists.
-        return window.__karma__.start();
-      }
-
-      // Only once the dependencies have finished loading, call mocha.run.
-      mocha.run();
-
-    });
+  // Load all specs.
+  require(specs, function() {
+    // This will start Karma if it exists.
+    window.__karma__.start();
   });
 });

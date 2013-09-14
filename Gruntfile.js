@@ -1,11 +1,9 @@
-// Grunt configuration updated to latest Grunt.  That means your minimum
-// version necessary to run these tasks is Grunt 0.4.
 module.exports = function(grunt) {
   "use strict";
 
   grunt.initConfig({
-    // Empty and remove `dist/` directory.
-    clean: ["dist/"],
+    // Wipe out previous builds and test reporting.
+    clean: ["dist/", "test/reports"],
 
     // Run your source code through JSHint's defaults.
     jshint: ["app/**/*.js"],
@@ -125,24 +123,27 @@ module.exports = function(grunt) {
     karma: {
       options: {
         basePath: process.cwd(),
-        runnerPort: 9999,
-        port: 9876,
         singleRun: true,
-        colors: true,
         captureTimeout: 7000,
 
-        reporters: ["progress"],
+        reporters: ["progress", "coverage"],
         browsers: ["PhantomJS"],
 
         plugins: [
           "karma-jasmine",
           "karma-mocha",
           "karma-qunit",
-          "karma-phantomjs-launcher"
+          "karma-phantomjs-launcher",
+          "karma-coverage"
         ],
 
-        proxies: {
-          "/base": "http://localhost:<%=server.test.options.port%>"
+        preprocessors: {
+          "app/**/*.js": "coverage"
+        },
+
+        coverageReporter: {
+          type: "html",
+          dir: "test/reports/coverage"
         }
       },
 
@@ -163,7 +164,11 @@ module.exports = function(grunt) {
 
           files: [
             "vendor/bower/requirejs/require.js",
-            "test/mocha/test-runner.js"
+            "test/mocha/test-runner.js",
+
+            { pattern: "app/**/*.*", included: false },
+            { pattern: "test/mocha/**/*.js", included: false },
+            { pattern: "vendor/**/*.js", included: false }
           ]
         }
       },
