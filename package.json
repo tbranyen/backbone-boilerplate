@@ -4,8 +4,10 @@
 
   "devDependencies": {
     "grunt": "~0.4.1",
-    "bower": "~1.2.6",
     "bbb": "~0.2.0",
+    "bower": "~1.2.6",
+    "grunt-cli": "~0.1.9",
+    "coveralls": "~2.2.0",
     "grunt-contrib-jshint": "~0.6.0",
     "grunt-contrib-cssmin": "~0.6.1",
     "grunt-contrib-copy": "~0.4.1",
@@ -21,13 +23,11 @@
   },
 
   "peerDependencies": {
-    "grunt-cli": "*",
-    "bower": "*",
     "generator-bbb": "*"
   },
 
   "scripts": {
-    "test": "grunt karma:run",
+    "test": "grunt karma:run && cat test/**/lcov.info | coveralls",
     "postinstall": "bower install -s"
   }
 }
