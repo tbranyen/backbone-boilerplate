@@ -1,4 +1,6 @@
 define(function(require) {
+  "use strict";
+
   describe("Simple tests examples", function() {
     it("should detect true", function() {
       expect(true).to.be.true;
@@ -47,5 +49,4 @@ define(function(require) {
       }, 500);
     });
   });
-
 });

@@ -1,4 +1,5 @@
 define(function(require) {
+  "use strict";
 
   test("one tautology", function() {
     ok(true);
@@ -56,5 +57,4 @@ define(function(require) {
       start();
     }, 500);
   });
-
 });

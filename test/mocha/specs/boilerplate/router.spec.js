@@ -1,4 +1,5 @@
 define(function(require) {
+  "use strict";
 
   var Backbone = require("backbone");
   var Router = require("router");
@@ -14,5 +15,4 @@ define(function(require) {
       Backbone.history.start();
     });
   });
-
 });

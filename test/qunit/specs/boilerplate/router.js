@@ -1,4 +1,5 @@
 define(function(require) {
+  "use strict";
 
   var Backbone = require("backbone");
   var Router = require("router");
@@ -13,5 +14,4 @@ define(function(require) {
     ok(Router.prototype instanceof Backbone.Router,
       "Router is a Backbone.Router");
   });
-
 });

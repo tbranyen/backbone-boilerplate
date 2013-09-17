@@ -1,4 +1,5 @@
 define(function(require, exports, module) {
+  "use strict";
 
   // External dependencies.
   var Backbone = require("backbone");
@@ -13,5 +14,4 @@ define(function(require, exports, module) {
       console.log("Welcome to your / route.");
     }
   });
-
 });

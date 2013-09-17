@@ -1,4 +1,5 @@
 define(function(require) {
+  "use strict";
 
   describe("one tautology", function() {
     it("is a tautology", function() {
@@ -73,5 +74,4 @@ define(function(require) {
       waitsFor(function() { return semaphore === 0 });
     });
   });
-
 });
