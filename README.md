@@ -52,7 +52,7 @@ good idea to update after fetching.
 ``` bash
 # Install Bower.  Depending on your user account you may need to gain
 # elevated privileges using something like `sudo`.
-npm install bower -gq
+npm install -gq bower
 
 # Install NPM and Bower dependencies (Bower is hooked up in package.json).
 npm install -q

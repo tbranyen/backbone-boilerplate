@@ -4,6 +4,7 @@
 
   "devDependencies": {
     "grunt": "~0.4.1",
+    "bower": "~1.2.6",
     "bbb": "~0.2.0",
     "grunt-contrib-jshint": "~0.6.0",
     "grunt-contrib-cssmin": "~0.6.1",
@@ -19,7 +20,7 @@
     "karma-coverage": "~0.1.0"
   },
 
-  "peerDepenencies": {
+  "peerDependencies": {
     "grunt-cli": "*",
     "bower": "*",
     "generator-bbb": "*"
