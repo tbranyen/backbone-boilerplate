@@ -27,6 +27,7 @@
   },
 
   "scripts": {
+    "test": "grunt karma:run",
     "postinstall": "bower install -s"
   }
 }
