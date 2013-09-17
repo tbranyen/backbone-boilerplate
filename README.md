@@ -33,12 +33,12 @@ View the Backbone Boilerplate documentation here:
 The easiest way to get started is to install Git and clone the repository:
 
 ``` bash
-# Make a project directory and enter it.
-mkdir my-project ; cd my-project
-
 # Using Git, fetch only the latest commits.  You won't need the full history
 # for your project.
-git clone --depth 1 git@github.com:backbone-boilerplate/backbone-boilerplate.git .
+git clone --depth 1 git@github.com:backbone-boilerplate/backbone-boilerplate.git
+
+# Move the repository to your own project name.
+mv backbone-boilerplate my-project
 ```
 
 You will need to download and install [Node.js](http://nodejs.org/) if you want
@@ -66,13 +66,13 @@ to optimize your application.
 ``` bash
 # Make sure you install grunt-cli globally.  Depending on your user account you
 # may need to gain elevated privileges using something like `sudo`.
-npm install grunt-cli -gq
+npm install -gq grunt-cli
 
 # To run the build process, run the default Grunt task.
 grunt
 
-# To test that the build process works.
-grunt server:release
+# Run a build and test the now optimized assets.
+grunt default server:release
 ```
 
 ## License ##
