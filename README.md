@@ -77,6 +77,31 @@ grunt
 grunt default server:release
 ```
 
+## Running tests ##
+
+To run tests, simply add `.spec.js` files throughout your application and they
+will be automatically picked up by the runner.  You can find example test specs
+in the `test` directory.
+
+To run Karma as a daemon:
+*Which will automatically run your tests after you save.*
+
+``` bash
+grunt karma:daemon
+```
+
+To run Karma tests once and output the results:
+
+``` bash
+grunt karma:run
+```
+
+After either above command is run, code coverage reports will be available in
+the `test/coverage` folder.
+
+By default, the test runner is Mocha and Chai.  You can easily change this by
+editting the commented regions of the karma configuration in `Gruntfile.js`.
+
 ## License ##
 Copyright © 2013 Tim Branyen (@tbranyen)  
 Licensed under the MIT license.
