@@ -9,12 +9,14 @@
     "grunt-contrib-cssmin": "~0.6.1",
     "grunt-contrib-copy": "~0.4.1",
     "grunt-contrib-clean": "~0.5.0",
+    "grunt-contrib-compress": "~0.5.2",
     "grunt-processhtml": "~0.1.0",
-    "grunt-karma": "~0.5.1",
-    "karma-jasmine": "~0.0.3",
-    "karma-mocha": "~0.0.4",
-    "karma-qunit": "~0.0.3",
-    "karma-phantomjs-launcher": "~0.0.1"
+    "grunt-karma": "~0.7.1",
+    "karma-jasmine": "~0.1.0",
+    "karma-mocha": "~0.1.0",
+    "karma-qunit": "~0.1.0",
+    "karma-phantomjs-launcher": "~0.1.0",
+    "karma-coverage": "~0.1.0"
   },
 
   "peerDepenencies": {
