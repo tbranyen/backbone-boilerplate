@@ -150,7 +150,7 @@ module.exports = function(grunt) {
 
         coverageReporter: {
           type: "lcov",
-          dir: "test/reports/coverage"
+          dir: "test/coverage"
         },
 
         files: [

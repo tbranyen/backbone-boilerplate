@@ -1,4 +1,4 @@
 /dist/
 /node_modules/
 /vendor/bower/
-/test/reports/
+/test/coverage/
