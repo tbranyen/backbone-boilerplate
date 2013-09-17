@@ -134,7 +134,7 @@ module.exports = function(grunt) {
         browsers: ["PhantomJS"],
 
         // Change this to the framework you want to use.
-        frameworks: ["qunit"],
+        frameworks: ["mocha"],
 
         plugins: [
           "karma-jasmine",
@@ -161,7 +161,7 @@ module.exports = function(grunt) {
 
           { pattern: "app/**/*.*", included: false },
           // This directory must also be changed if you switch frameworks.
-          { pattern: "test/qunit/**/*.spec.js", included: false },
+          { pattern: "test/mocha/**/*.spec.js", included: false },
           { pattern: "vendor/**/*.js", included: false }
         ]
       },
