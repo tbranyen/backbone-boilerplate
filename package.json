@@ -27,7 +27,7 @@
   },
 
   "scripts": {
-    "test": "grunt karma:run && cat test/coverage/PhantomJS\\ 1.9.2\\ \\(Linux\\)/lcov.info | coveralls",
+    "test": "bower install -s && grunt karma:run && cat test/coverage/PhantomJS\\ 1.9.2\\ \\(Linux\\)/lcov.info | coveralls",
     "postinstall": "bower install -s"
   }
 }
