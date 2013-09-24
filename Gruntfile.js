@@ -183,21 +183,8 @@ module.exports = function(grunt) {
     }
   });
 
-  // Grunt contribution tasks.
-  grunt.loadNpmTasks("grunt-contrib-clean");
-  grunt.loadNpmTasks("grunt-contrib-jshint");
-  grunt.loadNpmTasks("grunt-contrib-cssmin");
-  grunt.loadNpmTasks("grunt-contrib-copy");
-  grunt.loadNpmTasks("grunt-contrib-compress");
-
-  // Third-party tasks.
-  grunt.loadNpmTasks("grunt-karma");
-  grunt.loadNpmTasks("grunt-processhtml");
-
-  // Grunt BBB tasks.
-  grunt.loadNpmTasks("grunt-bbb-server");
-  grunt.loadNpmTasks("grunt-bbb-requirejs");
-  grunt.loadNpmTasks("grunt-bbb-styles");
+  // Load Grunt plugins (every node module prefixed with `grunt-`)
+  require("load-grunt-tasks")(grunt);
 
   // When running the default Grunt command, just lint the code.
   grunt.registerTask("default", [
