@@ -15,6 +15,7 @@
     "grunt-contrib-compress": "~0.5.2",
     "grunt-processhtml": "~0.2.0",
     "grunt-karma": "~0.6.2",
+    "load-grunt-tasks": "~0.1.0",
     "karma-jasmine": "~0.1.0",
     "karma-mocha": "~0.1.0",
     "karma-qunit": "~0.1.0",
