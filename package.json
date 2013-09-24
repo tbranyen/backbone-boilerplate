@@ -13,7 +13,7 @@
     "grunt-contrib-copy": "~0.4.1",
     "grunt-contrib-clean": "~0.5.0",
     "grunt-contrib-compress": "~0.5.2",
-    "grunt-processhtml": "~0.1.0",
+    "grunt-processhtml": "~0.2.0",
     "grunt-karma": "~0.6.2",
     "karma-jasmine": "~0.1.0",
     "karma-mocha": "~0.1.0",
