@@ -11,7 +11,8 @@ prescriptive; Backbone Boilerplate changes that.
 
 The Backbone Boilerplate is a way of organizing a web application with some
 opinionated defaults: such as Backbone, Lo-Dash (Underscore compatibility
-build), jQuery, RequireJS, Bower, Grunt, and the HTML5 Boilerplate styles.
+build), jQuery, RequireJS, Bower, Grunt, Karma, and the HTML5 Boilerplate
+styles.  Built in testing support for: QUnit, Jasmine, and Mocha with Chai.
 
 Organize your application with a logical file structure, develop your
 Models/Collections/Views/Routers inside modules, and build knowing you have
