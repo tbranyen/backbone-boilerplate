@@ -28,7 +28,7 @@
   },
 
   "scripts": {
-    "test": "grunt test",
+    "test": "grunt test coveralls",
     "postinstall": "bower install -s"
   }
 }
