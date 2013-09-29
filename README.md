@@ -10,8 +10,8 @@ boilerplates freely modify Backbone core, lack a build process, and are very
 prescriptive; Backbone Boilerplate changes that.
 
 The Backbone Boilerplate is a way of organizing a web application with some
-opinionated defaults: such as Backbone, Lo-Dash, jQuery, RequireJS, Bower,
-Grunt, and the HTML5 Boilerplate styles.
+opinionated defaults: such as Backbone, Lo-Dash (Underscore compatibility
+build), jQuery, RequireJS, Bower, Grunt, and the HTML5 Boilerplate styles.
 
 Organize your application with a logical file structure, develop your
 Models/Collections/Views/Routers inside modules, and build knowing you have
@@ -52,12 +52,15 @@ Third party packages may update independently from this main repo, so it's a
 good idea to update after fetching.
 
 ``` bash
-# Install Bower.  Depending on your user account you may need to gain
-# elevated privileges using something like `sudo`.
-npm install -gq bower
+# Install global dependencies.  Depending on your user account you may need to
+# gain elevated privileges using something like `sudo`.
+npm i -gq grunt-cli bower
+
+# Optionally install coveralls (integration is baked in with Travis CI).
+npm i -gq coveralls
 
 # Install NPM and Bower dependencies (Bower is hooked up in package.json).
-npm install -q
+npm i -q
 ```
 
 ## Build process ##
@@ -66,10 +69,6 @@ The build process consists of numerous Grunt plugin tasks that work together
 to optimize your application.
 
 ``` bash
-# Make sure you install grunt-cli globally.  Depending on your user account you
-# may need to gain elevated privileges using something like `sudo`.
-npm install -gq grunt-cli
-
 # To run the build process, run the default Grunt task.
 grunt
 

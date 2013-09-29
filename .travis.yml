@@ -5,3 +5,7 @@ node_js:
 branches:
   only:
     - master
+
+before_script:
+  - npm i -gq grunt-cli bower coveralls
+  - npm i -q

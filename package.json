@@ -5,9 +5,6 @@
   "devDependencies": {
     "grunt": "~0.4.1",
     "bbb": "~0.2.0",
-    "bower": "~1.2.6",
-    "grunt-cli": "~0.1.9",
-    "coveralls": "~2.3.0",
     "grunt-contrib-jshint": "~0.6.0",
     "grunt-contrib-cssmin": "~0.6.1",
     "grunt-contrib-copy": "~0.4.1",
@@ -23,7 +20,10 @@
   },
 
   "peerDependencies": {
-    "generator-bbb": "*"
+    "generator-bbb": "*",
+    "bower": "*",
+    "grunt-cli": "*",
+    "coveralls": "*"
   },
 
   "scripts": {
