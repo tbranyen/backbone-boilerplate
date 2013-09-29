@@ -35,8 +35,8 @@ module.exports = function(grunt) {
           // Wrap everything in an IIFE.
           wrap: true,
 
-          // Do not preserve any license comments when working with source maps.
-          // These options are incompatible.
+          // Do not preserve any license comments when working with source
+          // maps.  These options are incompatible.
           preserveLicenseComments: false
         }
       }
@@ -161,7 +161,10 @@ module.exports = function(grunt) {
 
           { pattern: "app/**/*.*", included: false },
           // Derives test framework from Karma configuration.
-          { pattern: "test/<%= karma.options.frameworks[0] %>/**/*.js", included: false },
+          {
+            pattern: "test/<%= karma.options.frameworks[0] %>/**/*.spec.js",
+            included: false
+          },
           { pattern: "vendor/**/*.js", included: false }
         ]
       },
