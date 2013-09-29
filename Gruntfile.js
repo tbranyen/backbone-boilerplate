@@ -160,8 +160,8 @@ module.exports = function(grunt) {
           "test/runner.js",
 
           { pattern: "app/**/*.*", included: false },
-          // This directory must also be changed if you switch frameworks.
-          { pattern: "test/mocha/**/*.spec.js", included: false },
+          // Derives test framework from Karma configuration.
+          { pattern: "test/<%= karma.options.frameworks[0] %>/**/*.js", included: false },
           { pattern: "vendor/**/*.js", included: false }
         ]
       },
