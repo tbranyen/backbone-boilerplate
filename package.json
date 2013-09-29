@@ -12,6 +12,7 @@
     "grunt-contrib-compress": "~0.5.2",
     "grunt-processhtml": "~0.2.0",
     "grunt-karma": "~0.6.2",
+    "grunt-karma-coveralls": "~2.0.2",
     "karma-jasmine": "~0.1.0",
     "karma-mocha": "~0.1.0",
     "karma-qunit": "~0.1.0",
@@ -27,7 +28,7 @@
   },
 
   "scripts": {
-    "test": "grunt karma:run && cat test/coverage/PhantomJS\\ 1.9.2\\ \\(Linux\\)/lcov.info | coveralls",
+    "test": "grunt test",
     "postinstall": "bower install -s"
   }
 }

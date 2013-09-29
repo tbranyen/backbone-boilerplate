@@ -180,6 +180,12 @@ module.exports = function(grunt) {
           singleRun: true
         }
       }
+    },
+
+    coveralls: {
+      options: {
+        coverage_dir: "test/coverage/PhantomJS 1.9.2 (Linux)/"
+      }
     }
   });
 
@@ -192,12 +198,16 @@ module.exports = function(grunt) {
 
   // Third-party tasks.
   grunt.loadNpmTasks("grunt-karma");
+  grunt.loadNpmTasks("grunt-karma-coveralls");
   grunt.loadNpmTasks("grunt-processhtml");
 
   // Grunt BBB tasks.
   grunt.loadNpmTasks("grunt-bbb-server");
   grunt.loadNpmTasks("grunt-bbb-requirejs");
   grunt.loadNpmTasks("grunt-bbb-styles");
+
+  // Create an aliased test task.
+  grunt.registerTask("test", ["karma:run", "coveralls"]);
 
   // When running the default Grunt command, just lint the code.
   grunt.registerTask("default", [
