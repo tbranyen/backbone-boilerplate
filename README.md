@@ -60,8 +60,11 @@ npm i -gq grunt-cli bower
 # Optionally install coveralls (integration is baked in with Travis CI).
 npm i -gq coveralls
 
-# Install NPM and Bower dependencies (Bower is hooked up in package.json).
+# Install NPM dependencies.
 npm i -q
+
+# Install Bower dependencies.
+bower i -s
 ```
 
 ## Build process ##
