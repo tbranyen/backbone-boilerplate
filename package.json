@@ -28,6 +28,6 @@
   },
 
   "scripts": {
-    "test": "grunt test coveralls"
+    "test": "grunt karma:run coveralls"
   }
 }

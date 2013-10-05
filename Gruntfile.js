@@ -209,9 +209,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-bbb-requirejs");
   grunt.loadNpmTasks("grunt-bbb-styles");
 
-  // Create an aliased test task.
-  grunt.registerTask("test", ["karma:run"]);
-
   // When running the default Grunt command, just lint the code.
   grunt.registerTask("default", [
     "clean",
