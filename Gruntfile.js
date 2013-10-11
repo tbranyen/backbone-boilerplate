@@ -129,6 +129,7 @@ module.exports = function(grunt) {
         singleRun: true,
         captureTimeout: 7000,
         autoWatch: true,
+        logLevel: "ERROR",
 
         reporters: ["progress", "coverage"],
         browsers: ["PhantomJS"],
