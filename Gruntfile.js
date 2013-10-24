@@ -131,7 +131,7 @@ module.exports = function(grunt) {
         autoWatch: true,
         logLevel: "ERROR",
 
-        reporters: ["progress", "coverage"],
+        reporters: ["dots", "coverage"],
         browsers: ["PhantomJS"],
 
         // Change this to the framework you want to use.
