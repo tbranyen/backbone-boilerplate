@@ -18,6 +18,7 @@ module.exports = function(grunt) {
           include: ["main"],
           out: "dist/source.min.js",
           optimize: "uglify2",
+          baseUrl: "app",
 
           // Since we bootstrap with nested `require` calls this option allows
           // R.js to find them.
@@ -25,11 +26,6 @@ module.exports = function(grunt) {
 
           // Include a minimal AMD implementation shim.
           name: "almond",
-
-          // Setting the base url to the distribution directory allows the
-          // Uglify minification process to correctly map paths for Source
-          // Maps.
-          baseUrl: "dist/app",
 
           // Wrap everything in an IIFE.
           wrap: true,
@@ -104,8 +100,7 @@ module.exports = function(grunt) {
     copy: {
       release: {
         files: [
-          { src: "vendor/**", dest: "dist/" },
-          { src: "app/**", dest: "dist/" }
+          { src: "vendor/**", dest: "dist/" }
         ]
       }
     },
