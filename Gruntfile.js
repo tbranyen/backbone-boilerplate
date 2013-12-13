@@ -16,7 +16,6 @@ module.exports = function(grunt) {
           mainConfigFile: "app/config.js",
           generateSourceMaps: true,
           include: ["main"],
-          insertRequire: ["main"],
           out: "dist/source.min.js",
           optimize: "uglify2",
 
