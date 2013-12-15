@@ -55,16 +55,16 @@ good idea to update after fetching.
 ``` bash
 # Install global dependencies.  Depending on your user account you may need to
 # gain elevated privileges using something like `sudo`.
-npm i -gq grunt-cli bower
+npm install -g grunt-cli bower
 
 # Optionally install coveralls (integration is baked in with Travis CI).
-npm i -gq coveralls
+npm install -g coveralls
 
 # Install NPM dependencies.
-npm i -q
+npm install
 
 # Install Bower dependencies.
-bower i -s
+bower install
 ```
 
 ## Build process ##
