@@ -38,7 +38,7 @@ The easiest way to get started is to install Git and clone the repository:
 ``` bash
 # Using Git, fetch only the latest commits.  You won't need the full history
 # for your project.
-git clone --depth 1 git@github.com:backbone-boilerplate/backbone-boilerplate.git
+git clone --depth 1 https://github.com/backbone-boilerplate/backbone-boilerplate
 
 # Move the repository to your own project name.
 mv backbone-boilerplate my-project
