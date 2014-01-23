@@ -61,7 +61,7 @@ module.exports = function(grunt) {
       }
     },
 
-    // Minfiy the distribution CSS.
+    // Minify the distribution CSS.
     cssmin: {
       release: {
         files: {
