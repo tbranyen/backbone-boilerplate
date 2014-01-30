@@ -26,4 +26,4 @@ module.exports = ->
         # These options are incompatible.
         preserveLicenseComments: false
 
-  @loadNpmTasks "grunt-bbb-requirejs"
+  @loadNpmTasks "grunt-contrib-requirejs"
