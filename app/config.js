@@ -5,7 +5,7 @@ require.config({
     "vendor": "../vendor",
     "almond": "../vendor/bower/almond/almond",
     "underscore": "../vendor/bower/lodash/dist/lodash.underscore",
-    "jquery": "../vendor/bower/jquery/jquery",
+    "jquery": "../vendor/bower/jquery/dist/jquery",
     "backbone": "../vendor/bower/backbone/backbone"
   }
 });
