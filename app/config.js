@@ -1,11 +1,11 @@
 require.config({
   paths: {
-    "vendor": "../vendor",
-    "almond": "../vendor/bower/almond/almond",
-    "underscore": "../vendor/bower/lodash/dist/lodash.underscore",
-    "lodash": "../vendor/bower/lodash/dist/lodash",
-    "ldsh": "../vendor/bower/lodash-template-loader/loader",
-    "jquery": "../vendor/bower/jquery/dist/jquery",
-    "backbone": "../vendor/bower/backbone/backbone"
-  }
+    "underscore": "../bower_components/lodash/dist/lodash.underscore",
+    "lodash": "../bower_components/lodash/dist/lodash",
+    "template": "../bower_components/lodash-template-loader/loader",
+    "jquery": "../bower_components/jquery/dist/jquery",
+    "backbone": "../bower_components/backbone/backbone"
+  },
+
+  deps: ["main"]
 });

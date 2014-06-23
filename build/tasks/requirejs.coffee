@@ -13,9 +13,8 @@ module.exports = ->
         optimize: "uglify2"
         baseUrl: "app"
 
-        # Since we bootstrap with nested `require` calls this option allows
-        # R.js to find them.
-        findNestedDependencies: true
+        paths:
+          "almond": "../bower_components/almond/almond"
 
         # Include a minimal AMD implementation shim.
         name: "almond"

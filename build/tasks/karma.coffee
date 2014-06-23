@@ -36,8 +36,8 @@ module.exports = ->
 
       files: [
         # You can optionally remove this or swap out for a different expect.
-        "vendor/bower/assert/assert.js"
-        "vendor/bower/requirejs/require.js"
+        "bower_components/assert/assert.js"
+        "bower_components/requirejs/require.js"
         "test/runner.js"
 
         { pattern: "app/**/*.*", included: false }
@@ -45,7 +45,7 @@ module.exports = ->
           pattern: "test/#{framework}/**/*.spec.js",
           included: false
         }
-        { pattern: "vendor/**/*.js", included: false }
+        { pattern: "bower_components/**/*.js", included: false }
       ]
 
     # This creates a server that will automatically run your tests when you
