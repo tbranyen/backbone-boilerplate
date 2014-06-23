@@ -1,4 +1,5 @@
 module.exports = ->
+  @loadNpmTasks "grunt-bbb-styles"
 
   # This task simplifies working with CSS inside Backbone Boilerplate projects.
   # Instead of manually specifying your stylesheets inside the HTML, you can
@@ -18,5 +19,3 @@ module.exports = ->
       # Rewrite image paths during release to be relative to the `img`
       # directory.
       forceRelative: "/app/img/"
-
-  @loadNpmTasks "grunt-bbb-styles"

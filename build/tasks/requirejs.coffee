@@ -1,4 +1,5 @@
 module.exports = ->
+  @loadNpmTasks "grunt-contrib-requirejs"
 
   # This task uses James Burke's excellent r.js AMD builder to take all modules
   # and concatenate them into a single file.
@@ -25,5 +26,3 @@ module.exports = ->
         # Do not preserve any license comments when working with source maps.
         # These options are incompatible.
         preserveLicenseComments: false
-
-  @loadNpmTasks "grunt-contrib-requirejs"

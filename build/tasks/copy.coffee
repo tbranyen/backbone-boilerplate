@@ -1,4 +1,5 @@
 module.exports = ->
+  @loadNpmTasks "grunt-contrib-copy"
 
   # Move vendor and app logic during a build.
   @config "copy",
@@ -6,5 +7,3 @@ module.exports = ->
       files: [
         src: "vendor/**", dest: "dist/"
       ]
-
-  @loadNpmTasks "grunt-contrib-copy"

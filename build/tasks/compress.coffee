@@ -1,4 +1,5 @@
 module.exports = ->
+  @loadNpmTasks "grunt-contrib-compress"
   
   @config "compress",
     release:
@@ -8,5 +9,3 @@ module.exports = ->
       files: [
         "dist/source.min.js"
       ]
-
-  @loadNpmTasks "grunt-contrib-compress"

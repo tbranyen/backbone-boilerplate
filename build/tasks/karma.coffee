@@ -1,4 +1,5 @@
 module.exports = ->
+  @loadNpmTasks "grunt-karma"
 
   # Change this to the framework you want to use.
   framework = "mocha"
@@ -35,7 +36,7 @@ module.exports = ->
 
       files: [
         # You can optionally remove this or swap out for a different expect.
-        "vendor/bower/chai/chai.js"
+        "vendor/bower/assert/assert.js"
         "vendor/bower/requirejs/require.js"
         "test/runner.js"
 
@@ -57,5 +58,3 @@ module.exports = ->
     run:
       options:
         singleRun: true
-
-  @loadNpmTasks "grunt-karma"

@@ -1,4 +1,5 @@
 module.exports = ->
+  @loadNpmTasks "grunt-bbb-server"
 
   @config "server",
     options:
@@ -15,5 +16,3 @@ module.exports = ->
       options:
         forever: false
         port: 8001
-
-  @loadNpmTasks "grunt-bbb-server"
