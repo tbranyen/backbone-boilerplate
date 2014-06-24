@@ -1,17 +1,20 @@
 {
   "name": "backbone-boilerplate",
-
   "dependencies": {
-    "html5-boilerplate": "~4.3.0",
+    "pure": "~0.4.2",
     "almond": "~0.2.9",
     "lodash": "~2.4.1",
-    "backbone": "~1.1.1",
-    "jquery": "~2.1.0",
-    "requirejs": "~2.1.10",
+    "lodash-template-loader": "~0.1.6",
+    "backbone": "~1.1.2",
+    "jquery": "~2.1.1",
+    "requirejs": "~2.1.14",
     "qunit": "~1.14.0",
     "jasmine": "~2.0.0",
-    "mocha": "~1.17.1",
-    "chai": "~1.9.0",
-    "sinon": "~1.8.2"
+    "mocha": "~1.19.0",
+    "sinon": "~1.10.0",
+    "assert": "~0.1.0"
+  },
+  "devDependencies": {
+    "layoutmanager": "~0.9.5"
   }
 }

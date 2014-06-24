@@ -27,9 +27,7 @@ for giving me usage rights to his fantastic Boilerplate character.
 
 ## Documentation ##
 
-View the Backbone Boilerplate documentation here:
-
-[GitHub Wiki](https://github.com/backbone-boilerplate/backbone-boilerplate/wiki)
+[Backbone Boilerplate Wiki](https://github.com/backbone-boilerplate/backbone-boilerplate/wiki)
 
 ## Getting started ##
 

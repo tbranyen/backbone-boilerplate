@@ -6,13 +6,9 @@ define(function(require) {
 
   // Test that the Router exists.
   describe("Router", function() {
-    it("should exist", function() {
-      expect(Router).to.exist;
-      expect(new Router()).to.be.an.instanceof(Backbone.Router);
-    });
-
-    it("should run index method when history is started", function() {
-      Backbone.history.start();
+    it("is a Backbone Router", function() {
+      assert(Router);
+      assert(new Router() instanceof Backbone.Router);
     });
   });
 });
