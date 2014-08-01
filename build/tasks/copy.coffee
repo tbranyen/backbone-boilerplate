@@ -1,9 +1,9 @@
 module.exports = ->
   @loadNpmTasks "grunt-contrib-copy"
 
-  # Move vendor and app logic during a build.
+  # Move bower_components and app logic during a build.
   @config "copy",
     release:
       files: [
-        src: "vendor/**", dest: "dist/"
+        src: "bower_components/**", dest: "dist/"
       ]
