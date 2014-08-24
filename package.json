@@ -27,5 +27,9 @@
   },
   "scripts": {
     "test": "grunt test coveralls"
+  },
+  "repository": {
+    "type": "",
+    "url": ""
   }
 }
