@@ -27,5 +27,9 @@
   },
   "scripts": {
     "test": "grunt test coveralls"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/backbone-boilerplate/backbone-boilerplate.git"
   }
 }
