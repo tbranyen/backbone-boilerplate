@@ -19,12 +19,6 @@
     "karma-phantomjs-launcher": "~0.1.4",
     "karma-coverage": "~0.2.4"
   },
-  "peerDependencies": {
-    "generator-bbb": "*",
-    "bower": "*",
-    "grunt-cli": "*",
-    "coveralls": "*"
-  },
   "scripts": {
     "test": "grunt test coveralls"
   },
