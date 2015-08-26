@@ -16,7 +16,7 @@ module.exports = ->
     "karma:run"
     "processhtml"
     "copy"
-    "requirejs"
+    "browserify"
     "styles"
     "cssmin"
   ]
