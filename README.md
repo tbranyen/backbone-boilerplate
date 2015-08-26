@@ -1,10 +1,8 @@
 ![Boilerplate](https://github.com/tbranyen/backbone-boilerplate/raw/assets/header.png)
 
-[![Build
-Status](https://travis-ci.org/tbranyen/backbone-boilerplate.svg?branch=master)](https://travis-ci.org/backbone-boilerplate/backbone-boilerplate)
-[![Coverage
-Status](https://coveralls.io/repos/backbone-boilerplate/backbone-boilerplate/badge.png)](https://coveralls.io/r/backbone-boilerplate/backbone-boilerplate)
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/backbone-boilerplate/backbone-boilerplate?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Build status][travis-image]][travis-url] 
+[![Code coverage][coveralls-image]][coveralls-url] 
+[![Gitter][gitter-image]][gitter-url]
 
 Backbone Boilerplate
 ====================
@@ -98,3 +96,10 @@ By default, the test runner is BDD Mocha and uses Node's assert.
 ## License ##
 Copyright © 2015 Tim Branyen (@tbranyen)  
 Licensed under the MIT license.
+
+[travis-url]: http://travis-ci.org/tbranyen/backbone-boilerplate
+[travis-image]: https://img.shields.io/travis/tbranyen/backbone-boilerplate.svg
+[coveralls-url]: https://coveralls.io/r/backbone-boilerplate/backbone-boilerplate
+[coveralls-image]: https://img.shields.io/coveralls/backbone-boilerplate/backbone-boilerplate.svg
+[gitter-url]: https://gitter.im/backbone-boilerplate/backbone-boilerplate
+[gitter-image]: https://img.shields.io/badge/GITTER-join%20chat-green.svg
