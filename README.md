@@ -14,9 +14,11 @@ boilerplates freely modify Backbone core, lack a build process, and are very
 prescriptive; Backbone Boilerplate changes that.
 
 The Backbone Boilerplate is a way of organizing a web application with some
-opinionated defaults: such as Backbone, jquery, Lodash, Grunt, Babel, Intern,
-PostCSS, and the PureCSS styles.  Built in assert testing support for: QUnit,
-Jasmine, and Mocha.
+opinionated defaults, such as: [Backbone](http://backbonejs.org),
+[jQuery](http://jquery.com), [Lodash](http://lodash.com),
+[Grunt](http://gruntjs.com), [Babel](https://babeljs.io/),
+[Combyne](https://github.com/tbranyen/combyne), Intern, PostCSS,
+[Mocha](https://mochajs.org), and [PureCSS](http://purecss.io/) styles.
 
 Organize your application with a logical file structure, develop your
 Models/Collections/Views/Routers inside modules, and build knowing you have
@@ -72,33 +74,26 @@ to optimize your application.
 npm start
 
 # Run a build and test the now optimized assets.
-npm run build && npm run prod
+npm run test-prod
 ```
 
-## Running tests ##
+## Working with tests ##
 
-To run tests, simply add `.spec.js` files throughout your application and they
-will be automatically picked up by the runner.  You can find example test specs
-in the `test` directory.
+Ceate an ES6 module in the `test/tests` directory and add an
+import in the `test/runner.js` file. You'll see existing examples in there to
+make it easy to follow.
 
-To run Karma as a daemon:
-*Which will automatically run your tests after you save.*
+Run the tests with:
 
 ``` bash
-grunt karma:daemon
+npm test
 ```
 
-To run Karma tests once and output the results:
+If you want to continuously test, run `npm start` and open the
+`test/index.html` file in your browser. The tests will re-run whenever you
+change source files.
 
-``` bash
-grunt karma:run
-```
-
-After either above command is run, code coverage reports will be available in
-the `test/coverage` folder.
-
-By default, the test runner is Mocha and Chai.  You can easily change this by
-editting the commented regions of the karma configuration in `Gruntfile.js`.
+By default, the test runner is BDD Mocha and uses Node's assert.
 
 ## License ##
 Copyright © 2015 Tim Branyen (@tbranyen)  

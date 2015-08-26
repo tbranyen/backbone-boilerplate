@@ -9,6 +9,12 @@ module.exports = ->
         spawn: false
         livereload: true
 
-      files: ["dist/development.js", "index.html", "package.json"]
       tasks: ["jshint"]
+
+      files: [
+        "dist/source.js"
+        "dist/test-runner.js"
+        "index.html"
+        "package.json"
+      ]
 

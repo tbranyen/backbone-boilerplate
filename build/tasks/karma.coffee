@@ -1,9 +1,6 @@
 module.exports = ->
   @loadNpmTasks "grunt-karma"
 
-  # Change this to the framework you want to use.
-  framework = "mocha"
-
   # Unit testing is provided by Karma.  Change the two commented locations
   # below to either: mocha, jasmine, or qunit.
   @config "karma",
@@ -17,12 +14,10 @@ module.exports = ->
       reporters: ["dots"]
       browsers: ["PhantomJS"]
 
-      frameworks: [framework]
+      frameworks: ["mocha"]
 
       plugins: [
-        "karma-jasmine"
         "karma-mocha"
-        "karma-qunit"
         "karma-phantomjs-launcher"
       ]
 

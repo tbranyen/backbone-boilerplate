@@ -1,8 +1,8 @@
 module.exports = ->
   @loadNpmTasks 'grunt-browserify'
 
-  # This task uses James Burke's excellent r.js AMD builder to take all modules
-  # and concatenate them into a single file.
+  # This task uses the Browserify optimizer and the Babelify transform to
+  # optimize the ES6 modules.
   @config 'browserify',
     options:
       transform: ['babelify']
@@ -10,7 +10,11 @@ module.exports = ->
 
     development:
       src: 'app/index.js'
-      dest: 'dist/development.js'
+      dest: 'dist/source.js'
+
+    production:
+      src: 'app/index.js'
+      dest: 'dist/source.min.js'
 
     testing:
       src: 'test/runner.js'

@@ -11,7 +11,7 @@ module.exports = ->
     release:
       options:
         keepalive: true
-        prefix: "dist"
+        base: "dist"
 
     test:
       options:

@@ -6,17 +6,33 @@ module.exports = ->
   # Run JSHint and a quick test.
   @registerTask "test", [
     "jshint"
+    "browserify:testing"
     "karma:run"
   ]
 
-  # When running the default Grunt command, just lint the code.
-  @registerTask "default", [
+  # During development: lint the code, build out the development bundle, run
+  # the connect server, and watch for changes.
+  @registerTask "development", [
+    "jshint"
+    "browserify:development"
+    "browserify:testing"
+    "connect:development"
+    "watch"
+  ]
+
+  # During production: lint, build out assets, and run tests.
+  @registerTask "production", [
     "clean"
     "jshint"
-    "karma:run"
+    "browserify:production"
     "processhtml"
     "copy"
     "browserify"
     "styles"
     "cssmin"
+    "browserify:testing"
+    "karma:run"
   ]
+
+  # Alias to development.
+  @registerTask "default", ["development"]

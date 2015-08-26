@@ -9,6 +9,9 @@
 
   <!-- Mocha styles. -->
   <link rel="stylesheet" href="../node_modules/mocha/mocha.css">
+
+  <!-- This fails to load if grunt watch isn't running, this is fine. -->
+  <script src="http://localhost:35729/livereload.js"></script>
 </head>
 
 <body>
@@ -18,8 +21,9 @@
   <!-- Testing libraries. -->
   <script src="./assert.js"></script>
   <script src="../node_modules/mocha/mocha.js"></script>
+  <script>mocha.setup('bdd');</script>
 
-  <!-- Run the test harness. -->
-  <script src="./dist/tests.js"></script>
+  <!-- Run the tests. -->
+  <script src="../dist/test-runner.js"></script>
 </body>
 </html>

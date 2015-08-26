@@ -3,6 +3,7 @@
   "version": "2.0.0",
   "devDependencies": {
     "babelify": "^6.2.0",
+    "combynify": "^2.0.1",
     "grunt": "~0.4.5",
     "grunt-bbb-styles": "~0.1.0-alpha.5",
     "grunt-browserify": "^4.0.0",
@@ -21,10 +22,10 @@
     "karma-phantomjs-launcher": "~0.1.4"
   },
   "scripts": {
-    "start": "grunt jshint browserify:development connect:development watch",
-    "build": "grunt",
-    "prod": "grunt connect:release",
-    "test": "grunt browserify:testing test"
+    "start": "grunt",
+    "build": "grunt production",
+    "test-prod": "grunt production && grunt connect:release",
+    "test": "grunt test"
   },
   "repository": {
     "type": "git",
@@ -36,7 +37,6 @@
     "jquery": "^2.1.4",
     "layoutmanager": "0.0.0",
     "lodash": "^3.10.1",
-    "lodash-template-loader": "^1.0.1",
     "mocha": "^2.2.5",
     "purecss": "^0.6.0",
     "sinon": "^1.16.1"
