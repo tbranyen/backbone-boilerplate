@@ -14,7 +14,7 @@ module.exports = ->
       autoWatch: true
       logLevel: "ERROR"
 
-      reporters: ["dots", "coverage"]
+      reporters: ["dots"]
       browsers: ["PhantomJS"]
 
       frameworks: [framework]
@@ -24,27 +24,11 @@ module.exports = ->
         "karma-mocha"
         "karma-qunit"
         "karma-phantomjs-launcher"
-        "karma-coverage"
       ]
-
-      preprocessors:
-        "app/**/*.js": "coverage"
-
-      coverageReporter:
-        type: "lcov"
-        dir: "test/coverage"
 
       files: [
         "test/assert.js"
-        "node_modules/requirejs/require.js"
-        "test/runner.js"
-
-        { pattern: "app/**/*.*", included: false }
-        {
-          pattern: "test/#{framework}/**/*.spec.js",
-          included: false
-        }
-        { pattern: "node_modules/**/*.js", included: false }
+        "dist/test-runner.js"
       ]
 
     # This creates a server that will automatically run your tests when you
