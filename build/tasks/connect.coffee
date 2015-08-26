@@ -1,18 +1,18 @@
 module.exports = ->
-  @loadNpmTasks "grunt-bbb-server"
+  @loadNpmTasks "grunt-contrib-connect"
 
-  @config "server",
+  @config "connect",
     options:
-      host: "0.0.0.0"
+      hostname: "0.0.0.0"
       port: 8000
 
     development: {}
 
     release:
       options:
+        keepalive: true
         prefix: "dist"
 
     test:
       options:
-        forever: false
         port: 8001

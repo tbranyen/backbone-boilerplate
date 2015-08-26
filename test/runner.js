@@ -19,7 +19,7 @@
   // Set the application endpoint and load the configuration.
   require.config({
     paths: {
-      underscore: "../bower_components/lodash/dist/lodash.underscore"
+      lodash: "../node_modules/lodash/index"
     },
 
     baseUrl: "base/app"
@@ -27,7 +27,7 @@
 
   require([
     "config",
-    "underscore"
+    "lodash"
   ],
 
   function(config, _) {

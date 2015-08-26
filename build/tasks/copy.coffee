@@ -1,9 +1,10 @@
 module.exports = ->
   @loadNpmTasks "grunt-contrib-copy"
 
-  # Move bower_components and app logic during a build.
+  # Copy node_modules to the distribution folder during a build to ensure that
+  # third-party resources are available.
   @config "copy",
     release:
       files: [
-        src: "bower_components/**", dest: "dist/"
+        src: "node_modules/**", dest: "dist/"
       ]

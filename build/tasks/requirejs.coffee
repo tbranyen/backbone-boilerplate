@@ -14,7 +14,7 @@ module.exports = ->
         baseUrl: "app"
 
         paths:
-          "almond": "../bower_components/almond/almond"
+          "almond": "../node_modules/almond/almond"
 
         # Include a minimal AMD implementation shim.
         name: "almond"
