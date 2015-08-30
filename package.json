@@ -1,6 +1,7 @@
 {
   "name": "backbone-boilerplate",
   "version": "2.0.0",
+  "license": "MIT",
   "devDependencies": {
     "babelify": "^6.2.0",
     "combynify": "^2.0.1",
@@ -34,8 +35,9 @@
   "dependencies": {
     "almond": "^0.3.1",
     "backbone": "^1.2.2",
+    "combyne": "^0.8.1",
     "jquery": "^2.1.4",
-    "layoutmanager": "0.0.0",
+    "layoutmanager": "0.9.7",
     "lodash": "^3.10.1",
     "mocha": "^2.2.5",
     "purecss": "^0.6.0",

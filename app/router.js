@@ -1,5 +1,5 @@
-// External dependencies.
 import Backbone from 'backbone';
+import HomePage from './pages/home';
 
 // Defining the application router.
 var Router = Backbone.Router.extend({
@@ -8,7 +8,7 @@ var Router = Backbone.Router.extend({
   },
 
   index: function() {
-    console.log("Welcome to your / route.");
+    new HomePage().render();
   }
 });
 

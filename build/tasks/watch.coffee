@@ -14,6 +14,7 @@ module.exports = ->
       files: [
         "dist/source.js"
         "dist/test-runner.js"
+        "app/styles/**/*.css"
         "index.html"
         "package.json"
       ]

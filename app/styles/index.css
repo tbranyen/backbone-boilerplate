@@ -1,5 +1,69 @@
-/*-- Pure CSS (http://purecss.io/). -----------------------------------------*/
-
 @import "../../node_modules/purecss/build/pure.css";
+@import "./logo.css";
+@import url(https://fonts.googleapis.com/css?family=Roboto);
 
 /*-- Application stylesheets. -----------------------------------------------*/
+
+html, body {
+  position: relative;
+  height: 100%;
+  background-color: #4A86C1;
+}
+
+main {
+  position: relative;
+  max-width: 960px;
+  height: 100%;
+  margin: 0 auto;
+  background-color: #FFF;
+}
+
+nav {
+  background: #003d88;
+  height: 100%;
+  width: 288px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+}
+
+nav h1 {
+  color: #FFF;
+  font-family: 'Roboto', sans-serif;
+  text-transform: uppercase;
+  background-color: #000;
+  margin: 0;
+  padding: 15px;
+  padding-left: 30px;
+}
+
+nav hr {
+  border-bottom-color: #4A86C1;
+  border-top-width: 0;
+  margin-bottom: 30px;
+  margin-top: 0;
+}
+
+nav a {
+  color: #FFF;
+  text-align: left;
+  display: block;
+  padding: 10px;
+  padding-left: 30px;
+}
+
+nav a:hover {
+  color: #000000;
+  background: #FFF;
+}
+
+nav .header {
+  border-bottom: 9px solid #000000;
+  height: 185px;
+}
+
+header {
+  height: 185px;
+  margin-left: 300px;
+}

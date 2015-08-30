@@ -9,6 +9,10 @@ module.exports = ->
       watch: true
 
     development:
+      options:
+        browserifyOptions:
+          debug: true
+
       src: 'app/index.js'
       dest: 'dist/source.js'
 
