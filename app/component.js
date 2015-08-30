@@ -3,7 +3,7 @@ import $ from 'jquery';
 import _ from 'underscore';
 
 // Cache registered components into this object.
-var components = {};
+const components = {};
 
 class Component extends LayoutManager {
   constructor() {
@@ -16,7 +16,7 @@ class Component extends LayoutManager {
     this.dataset = this.$el.data();
 
     // Activate new components found after rendering.
-    this.listenTo(this, 'afterRender', function() {
+    this.listenTo(this, 'afterRender', () => {
       Component.activateAll(this);
     });
   }
@@ -62,7 +62,7 @@ class Component extends LayoutManager {
   }
 
   static augment(cb) {
-    _.each(this.__pointer__.instances, function(instance) {
+    _.each(this.__pointer__.instances, (instance) => {
       cb.call(instance, instance);
     });
   }
@@ -71,7 +71,7 @@ class Component extends LayoutManager {
     var CurrentComponent = this;
 
     // Convert all attributes on the Element into View properties.
-    var attrs = _.reduce($el[0].attributes, function(attrs, attr) {
+    var attrs = _.reduce($el[0].attributes, (attrs, attr) => {
       var name = attr.name;
 
       // Optionally consume data attributes.
@@ -114,8 +114,6 @@ class Component extends LayoutManager {
 }
 
 // Activate all components on DOM ready.
-$(function() {
-  Component.activateAll();
-});
+$(Component.activateAll);
 
 export default Component;

@@ -1,7 +1,7 @@
 import Component from '../../component';
 import template from './sample-component.html';
 
-var SampleComponent = Component.extend({
+const SampleComponent = Component.extend({
   template,
 
   events: {

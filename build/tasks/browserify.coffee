@@ -6,7 +6,7 @@ module.exports = ->
   @config 'browserify',
     options:
       transform: [
-        ['combynify', root: 'app/views']
+        ['combynify', root: './app/views']
         'babelify'
       ]
       watch: true

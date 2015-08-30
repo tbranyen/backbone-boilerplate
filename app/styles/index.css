@@ -4,8 +4,11 @@
 /*-- Temporary styles. ------------------------------------------------------*/
 
 .placeholder {
-  background: #CCC;
-  height: 320px;
+  color: #333;
+  background-color: #E8E8E8;
+  font-size: 36px;
+  text-align: center;
+  line-height: 275px;
 }
 
 /*-- Application stylesheets. -----------------------------------------------*/
