@@ -1,9 +1,9 @@
 module.exports = ->
-  @loadNpmTasks "grunt-contrib-connect"
+  @loadNpmTasks 'grunt-contrib-connect'
 
-  @config "connect",
+  @config 'connect',
     options:
-      hostname: "0.0.0.0"
+      hostname: '0.0.0.0'
       port: 8000
 
     development: {}
@@ -11,7 +11,7 @@ module.exports = ->
     release:
       options:
         keepalive: true
-        base: "dist"
+        base: 'dist'
 
     test:
       options:

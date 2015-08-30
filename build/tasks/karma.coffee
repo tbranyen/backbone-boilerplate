@@ -1,29 +1,29 @@
 module.exports = ->
-  @loadNpmTasks "grunt-karma"
+  @loadNpmTasks 'grunt-karma'
 
   # Unit testing is provided by Karma.  Change the two commented locations
   # below to either: mocha, jasmine, or qunit.
-  @config "karma",
+  @config 'karma',
     options:
       basePath: process.cwd()
       singleRun: true
       captureTimeout: 7000
       autoWatch: true
-      logLevel: "ERROR"
+      logLevel: 'ERROR'
 
-      reporters: ["dots"]
-      browsers: ["PhantomJS"]
+      reporters: ['dots']
+      browsers: ['PhantomJS']
 
-      frameworks: ["mocha"]
+      frameworks: ['mocha']
 
       plugins: [
-        "karma-mocha"
-        "karma-phantomjs-launcher"
+        'karma-mocha'
+        'karma-phantomjs-launcher'
       ]
 
       files: [
-        "test/assert.js"
-        "dist/test-runner.js"
+        'test/assert.js'
+        'dist/test-runner.js'
       ]
 
     # This creates a server that will automatically run your tests when you

@@ -25,11 +25,10 @@ module.exports = ->
     "clean"
     "jshint"
     "browserify:production"
+    "browserify:testing"
     "processhtml"
     "copy"
-    "browserify"
     "cssmin"
-    "browserify:testing"
     "karma:run"
   ]
 

@@ -1,5 +1,4 @@
-@import "../../node_modules/purecss/build/pure.css";
-@import "./logo.css";
+@import '../../node_modules/purecss/build/pure.css';
 @import url(https://fonts.googleapis.com/css?family=Roboto);
 
 /*-- Temporary styles. ------------------------------------------------------*/
@@ -82,6 +81,7 @@ nav a:hover {
 nav .header {
   border-bottom: 9px solid #000000;
   height: 185px;
+	background: #4a86c1 url(../img/logo.png) no-repeat 34px 33px;
 }
 
 header {

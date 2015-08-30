@@ -1,11 +1,11 @@
 module.exports = ->
-  @loadNpmTasks "grunt-contrib-jshint"
+  @loadNpmTasks 'grunt-contrib-jshint'
 
   # Run your source code through JSHint's defaults.
-  @config "jshint",
+  @config 'jshint',
     options:
       jshintrc: true
 
     development: [
-      "app/**/*.js"
+      'app/**/*.js'
     ]
