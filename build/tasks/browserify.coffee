@@ -5,7 +5,10 @@ module.exports = ->
   # optimize the ES6 modules.
   @config 'browserify',
     options:
-      transform: ['babelify']
+      transform: [
+        ['combynify', root: 'app/views']
+        'babelify'
+      ]
       watch: true
 
     development:
@@ -17,6 +20,10 @@ module.exports = ->
       dest: 'dist/source.js'
 
     production:
+      options:
+        configure: (bundler) ->
+          bundler.transform(global: true, 'uglifyify')
+
       src: 'app/index.js'
       dest: 'dist/source.min.js'
 

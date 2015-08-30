@@ -2,6 +2,13 @@
 @import "./logo.css";
 @import url(https://fonts.googleapis.com/css?family=Roboto);
 
+/*-- Temporary styles. ------------------------------------------------------*/
+
+.placeholder {
+  background: #CCC;
+  height: 320px;
+}
+
 /*-- Application stylesheets. -----------------------------------------------*/
 
 html, body {
@@ -12,26 +19,35 @@ html, body {
 
 main {
   position: relative;
-  max-width: 960px;
   height: 100%;
   margin: 0 auto;
   background-color: #FFF;
 }
 
+section.content {
+  padding-top: 26px;
+  width: calc(100% - 15%);
+  padding-left: calc(15% + 350px);
+  box-sizing: border-box;
+}
+
 nav {
-  background: #003d88;
+  background-color: #4A86C1;
   height: 100%;
   width: 288px;
   position: absolute;
   top: 0;
   left: 0;
   bottom: 0;
+  border-right: 10px solid #000;
+  padding-left: 15%;
 }
 
 nav h1 {
   color: #FFF;
   font-family: 'Roboto', sans-serif;
   text-transform: uppercase;
+  text-align: right;
   background-color: #000;
   margin: 0;
   padding: 15px;
@@ -47,15 +63,20 @@ nav hr {
 
 nav a {
   color: #FFF;
-  text-align: left;
+  text-align: right;
   display: block;
-  padding: 10px;
-  padding-left: 30px;
+  font-weight: bold;
+  text-decoration: none;
+  font-size: 19px;
+  padding: 15px;
+}
+
+nav a:not(:last-child) {
+  border-bottom: 1px dotted rgba(0, 0, 0, 0.2);
 }
 
 nav a:hover {
-  color: #000000;
-  background: #FFF;
+  background: #000;
 }
 
 nav .header {

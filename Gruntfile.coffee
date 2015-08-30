@@ -28,7 +28,6 @@ module.exports = ->
     "processhtml"
     "copy"
     "browserify"
-    "styles"
     "cssmin"
     "browserify:testing"
     "karma:run"

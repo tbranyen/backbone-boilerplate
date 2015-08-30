@@ -1,9 +1,15 @@
 import LayoutManager from 'layoutmanager';
 import $ from 'jquery';
-import _ from 'lodash';
+import _ from 'underscore';
 
-var Component = LayoutManager.extend({
-  constructor: function() {
+// Cache registered components into this object.
+var components = {};
+
+class Component extends LayoutManager {
+  constructor() {
+    super();
+
+    // Not sure why super doesn't call the correct constructor :-/
     LayoutManager.prototype.constructor.apply(this, arguments);
 
     // Attach the dataset.
@@ -13,21 +19,24 @@ var Component = LayoutManager.extend({
     this.listenTo(this, 'afterRender', function() {
       Component.activateAll(this);
     });
-  },
+  }
 
   // Allow function templates to pass through.
-  fetchTemplate: _.identity,
+  fetchTemplate(template) {
+    return template;
+  }
 
-  serialize: function() {
+  // Render out Combyne template's, override to use a different template
+  // engine.
+  renderTemplate(template, data) {
+    return template.render(data);
+  }
+
+  serialize() {
     return this.dataset;
   }
-});
 
-// Mixin the component layer.
-_.assign(Component, {
-  components: {},
-
-  register: function(identifier, Component) {
+  static register(identifier, Component) {
     // Allow a manual override of the selector to use.
     identifier = identifier || Component.prototype.selector;
 
@@ -37,28 +46,28 @@ _.assign(Component, {
     }
 
     // Register a Component constructor, not an instance.
-    this.components[identifier] = {
+    components[identifier] = {
       ctor: Component,
       instances: []
     };
 
     // Save a pointer for easier lookup.
-    Component.__pointer__ = this.components[identifier];
+    Component.__pointer__ = components[identifier];
 
     return Component;
-  },
+  }
 
-  unregister: function(identifier) {
-    delete this.components[identifier];
-  },
+  static unregister(identifier) {
+    delete components[identifier];
+  }
 
-  augment: function(cb) {
+  static augment(cb) {
     _.each(this.__pointer__.instances, function(instance) {
       cb.call(instance, instance);
     });
-  },
+  }
 
-  activate: function($el, instances) {
+  static activate($el, instances) {
     var CurrentComponent = this;
 
     // Convert all attributes on the Element into View properties.
@@ -89,26 +98,20 @@ _.assign(Component, {
     // Add to the internal cache.
     instances.push(component);
 
-    // By default use the template property provided, otherwise pull the
-    // template contents from the DOM.
-    if (!component.template) {
-      component.template = _.template(_.unescape($el.html()));
-    }
-
     // Render and apply to the Document.
     component.render();
-  },
+  }
 
-  activateAll: function(component) {
+  static activateAll(component) {
     var el = component ? component.el : document.body;
 
-    _.each(this.components, function(Component, selector) {
+    _.each(components, function(Component, selector) {
       $(el).find(selector).each(function() {
         Component.ctor.activate($(this), Component.instances);
       });
     });
   }
-});
+}
 
 // Activate all components on DOM ready.
 $(function() {

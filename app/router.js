@@ -1,5 +1,5 @@
 import Backbone from 'backbone';
-import HomePage from './pages/home';
+import HomePage from './views/pages/home';
 
 // Defining the application router.
 var Router = Backbone.Router.extend({
@@ -8,7 +8,7 @@ var Router = Backbone.Router.extend({
   },
 
   index: function() {
-    new HomePage().render();
+    new HomePage({ el: 'main' }).render();
   }
 });
 
