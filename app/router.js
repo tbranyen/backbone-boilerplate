@@ -1,15 +1,19 @@
 import Backbone from 'backbone';
 import HomePage from './views/pages/home';
 
-// Defining the application router.
-var Router = Backbone.Router.extend({
-  routes: {
-    "": "index"
-  },
+const routes = {
+  '': 'index'
+};
 
-  index: function() {
+// Defining the application router.
+class Router extends Backbone.Router {
+  constructor() {
+    super({ routes });
+  }
+
+  index() {
     new HomePage({ el: 'main' }).render();
   }
-});
+}
 
 export default Router;

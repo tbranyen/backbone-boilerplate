@@ -16,7 +16,7 @@ class Component extends LayoutManager {
     this.dataset = this.$el.data();
 
     // Activate new components found after rendering.
-    this.listenTo(this, 'afterRender', () => {
+    this.listenTo(this, 'afterRender', function() {
       Component.activateAll(this);
     });
   }
@@ -36,9 +36,9 @@ class Component extends LayoutManager {
     return this.dataset;
   }
 
-  static register(identifier, Component) {
+  static register(identifier, Ctor) {
     // Allow a manual override of the selector to use.
-    identifier = identifier || Component.prototype.selector;
+    identifier = identifier || Ctor.prototype.selector;
 
     // Shim the element for older browsers.
     if (identifier.slice(0, 1).match(/[A-Za-z]/)) {
@@ -47,14 +47,14 @@ class Component extends LayoutManager {
 
     // Register a Component constructor, not an instance.
     components[identifier] = {
-      ctor: Component,
+      ctor: Ctor,
       instances: []
     };
 
     // Save a pointer for easier lookup.
-    Component.__pointer__ = components[identifier];
+    Ctor.__pointer__ = components[identifier];
 
-    return Component;
+    return Ctor;
   }
 
   static unregister(identifier) {
@@ -68,14 +68,14 @@ class Component extends LayoutManager {
   }
 
   static activate($el, instances) {
-    var CurrentComponent = this;
+    var Ctor = this;
 
     // Convert all attributes on the Element into View properties.
     var attrs = _.reduce($el[0].attributes, (attrs, attr) => {
       var name = attr.name;
 
       // Optionally consume data attributes.
-      if (attr.name.indexOf("data-") === 0) {
+      if (attr.name.indexOf('data-') === 0) {
         name = attr.name.slice(5);
       }
 
@@ -88,10 +88,10 @@ class Component extends LayoutManager {
     attrs.el = $el;
 
     // Create a new Component.
-    var component = new CurrentComponent(attrs);
+    var component = new Ctor(attrs);
 
     // Trigger the standard `createdCallback`.
-    if (typeof component.createdCallback === "function") {
+    if (typeof component.createdCallback === 'function') {
       component.createdCallback();
     }
 
@@ -105,9 +105,9 @@ class Component extends LayoutManager {
   static activateAll(component) {
     var el = component ? component.el : document.body;
 
-    _.each(components, function(Component, selector) {
+    _.each(components, function(current, selector) {
       $(el).find(selector).each(function() {
-        Component.ctor.activate($(this), Component.instances);
+        Component.activate.call(current.ctor, $(this), current.instances);
       });
     });
   }

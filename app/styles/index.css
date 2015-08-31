@@ -1,22 +1,11 @@
 @import '../../node_modules/purecss/build/pure.css';
 @import url(https://fonts.googleapis.com/css?family=Roboto);
 
-/*-- Temporary styles. ------------------------------------------------------*/
-
-.placeholder {
-  color: #333;
-  background-color: #E8E8E8;
-  font-size: 36px;
-  text-align: center;
-  line-height: 275px;
-}
-
 /*-- Application stylesheets. -----------------------------------------------*/
 
 html, body {
   position: relative;
   height: 100%;
-  background-color: #4A86C1;
 }
 
 main {
@@ -28,20 +17,32 @@ main {
 
 section.content {
   padding-top: 26px;
-  width: calc(100% - 15%);
-  padding-left: calc(15% + 350px);
+  width: 95%;
+  padding-left: calc(15% + 288px);
   box-sizing: border-box;
 }
 
+section.content h2 {
+  background-color: #E0E0E0;
+  padding: 25px;
+  margin-top: 159px;
+  height: 83px;
+  color: #616161;
+  font-variant: small-caps;
+  font-size: 41px;
+  padding-top: 10px;
+  width: 594px;
+  font-weight: bold;
+}
+
 nav {
-  background-color: #4A86C1;
+  background-color: #333;
   height: 100%;
   width: 288px;
   position: absolute;
   top: 0;
   left: 0;
   bottom: 0;
-  border-right: 10px solid #000;
   padding-left: 15%;
 }
 
@@ -50,7 +51,7 @@ nav h1 {
   font-family: 'Roboto', sans-serif;
   text-transform: uppercase;
   text-align: right;
-  background-color: #000;
+  background-color: #4A86C1;
   margin: 0;
   padding: 15px;
   padding-left: 30px;
@@ -78,13 +79,12 @@ nav a:not(:last-child) {
 }
 
 nav a:hover {
-  background: #000;
+  background: #4A86C1;
 }
 
 nav .header {
-  border-bottom: 9px solid #000000;
   height: 185px;
-	background: #4a86c1 url(../img/logo.png) no-repeat 34px 33px;
+	background: #333 url(../img/logo.png) no-repeat 34px 33px;
 }
 
 header {
