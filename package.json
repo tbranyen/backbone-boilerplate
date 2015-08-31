@@ -37,6 +37,7 @@
     "jquery": "^2.1.4",
     "layoutmanager": "0.9.7",
     "mocha": "^2.2.5",
-    "purecss": "^0.6.0"
+    "purecss": "^0.6.0",
+    "underscore": "^1.8.3"
   }
 }

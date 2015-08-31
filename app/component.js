@@ -5,6 +5,19 @@ import _ from 'underscore';
 // Cache registered components into this object.
 const components = {};
 
+class ComponentError extends Error {
+  constructor(message) {
+    super({ message });
+
+    this.message = message;
+  }
+}
+
+/**
+ * Represents a Component
+ *
+ * @class
+ */
 class Component extends LayoutManager {
   constructor() {
     super();
@@ -36,35 +49,33 @@ class Component extends LayoutManager {
     return this.dataset;
   }
 
-  static register(identifier, Ctor) {
+  static register(identifier, ctor) {
     // Allow a manual override of the selector to use.
-    identifier = identifier || Ctor.prototype.selector;
+    identifier = identifier || ctor.prototype.selector;
+
+    if (!identifier) {
+      throw new ComponentError('Invalid component selector');
+    }
+
+    if (components[identifier]) {
+      throw new ComponentError('Component is already registered');
+    }
 
     // Shim the element for older browsers.
     if (identifier.slice(0, 1).match(/[A-Za-z]/)) {
       document.createElement(identifier);
     }
 
-    // Register a Component constructor, not an instance.
-    components[identifier] = {
-      ctor: Ctor,
-      instances: []
-    };
+    let instances = [];
 
-    // Save a pointer for easier lookup.
-    Ctor.__pointer__ = components[identifier];
+    // Cache this component into the existing list.
+    components[identifier] = { ctor, instances };
 
-    return Ctor;
+    return ctor;
   }
 
   static unregister(identifier) {
     delete components[identifier];
-  }
-
-  static augment(cb) {
-    _.each(this.__pointer__.instances, (instance) => {
-      cb.call(instance, instance);
-    });
   }
 
   static activate($el, instances) {
