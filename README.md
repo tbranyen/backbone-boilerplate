@@ -15,8 +15,9 @@ The Backbone Boilerplate is a way of organizing a web application with some
 opinionated defaults, such as: [Backbone](http://backbonejs.org),
 [jQuery](http://jquery.com), [Lodash](http://lodash.com),
 [Grunt](http://gruntjs.com), [Babel](https://babeljs.io/),
-[Combyne](https://github.com/tbranyen/combyne), Intern, PostCSS,
-[Mocha](https://mochajs.org), and [PureCSS](http://purecss.io/) styles.
+[Combyne](https://github.com/tbranyen/combyne),
+[Karma](http://karma-runner.github.io/0.12/index.html),
+[Mocha](https://mochajs.org), and [PureCSS](http://purecss.io/) for styles.
 
 Organize your application with a logical file structure, develop your
 Models/Collections/Views/Routers inside modules, and build knowing you have
