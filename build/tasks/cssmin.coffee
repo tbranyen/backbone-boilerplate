@@ -1,8 +1,8 @@
 module.exports = ->
-  @loadNpmTasks "grunt-contrib-cssmin"
+  @loadNpmTasks 'grunt-contrib-cssmin'
 
   # Minify the distribution CSS.
-  @config "cssmin",
+  @config 'cssmin',
     release:
       files:
-        "dist/styles.min.css": ["dist/styles.css"]
+        'dist/styles.min.css': ['app/styles/index.css']

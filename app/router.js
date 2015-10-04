@@ -1,19 +1,19 @@
-define(function(require, exports, module) {
-  "use strict";
+import Backbone from 'backbone';
+import HomePage from './views/pages/home';
 
-  // External dependencies.
-  var Backbone = require("backbone");
+const routes = {
+  '': 'index'
+};
 
-  // Defining the application router.
-  var Router = Backbone.Router.extend({
-    routes: {
-      "": "index"
-    },
+// Defining the application router.
+class Router extends Backbone.Router {
+  constructor() {
+    super({ routes });
+  }
 
-    index: function() {
-      console.log("Welcome to your / route.");
-    }
-  });
+  index() {
+    new HomePage({ el: 'main' }).render();
+  }
+}
 
-  module.exports = Router;
-});
+export default Router;
