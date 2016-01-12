@@ -19,11 +19,8 @@ class ComponentError extends Error {
  * @class
  */
 class Component extends LayoutManager {
-  constructor() {
-    super();
-
-    // Not sure why super doesn't call the correct constructor :-/
-    LayoutManager.prototype.constructor.apply(this, arguments);
+  constructor(instanceProperties, classProperties) {
+    super(instanceProperties, classProperties);
 
     // Attach the dataset.
     this.dataset = this.$el.data();
