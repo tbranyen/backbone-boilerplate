@@ -78,7 +78,7 @@ npm run test-prod
 
 ## Working with tests ##
 
-Ceate an ES6 module in the `test/tests` directory and add an
+Create an ES6 module in the `test/tests` directory and add an
 import in the `test/runner.js` file. You'll see existing examples in there to
 make it easy to follow.
 
