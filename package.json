@@ -3,7 +3,8 @@
   "version": "2.0.0",
   "license": "MIT",
   "devDependencies": {
-    "babelify": "^6.2.0",
+    "babelify": "^7.3.0",
+    "babel-preset-latest": "^6.24.0",
     "combynify": "^3.0.0",
     "grunt": "^1.0.1",
     "grunt-browserify": "^5.0.0",
