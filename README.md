@@ -100,7 +100,7 @@ Licensed under the MIT license.
 
 [travis-url]: http://travis-ci.org/tbranyen/backbone-boilerplate
 [travis-image]: https://img.shields.io/travis/tbranyen/backbone-boilerplate.svg
-[coveralls-url]: https://coveralls.io/r/backbone-boilerplate/backbone-boilerplate
-[coveralls-image]: https://img.shields.io/coveralls/backbone-boilerplate/backbone-boilerplate.svg
-[gitter-url]: https://gitter.im/backbone-boilerplate/backbone-boilerplate
+[coveralls-url]: https://coveralls.io/r/tbranyen/backbone-boilerplate
+[coveralls-image]: https://img.shields.io/coveralls/tbranyen/backbone-boilerplate.svg
+[gitter-url]: https://gitter.im/tbranyen/backbone-boilerplate
 [gitter-image]: https://img.shields.io/badge/GITTER-join%20chat-green.svg
